@@ -38,7 +38,6 @@ require plugin_dir_path( __FILE__ ) . '/includes/init-template.php';
 /* hooks and filters */
 
 // enqueue-scripts.php.
-// add_action( 'wp_enqueue_scripts', 'wa_mapvuespa_enqueue_styles' ); // Do not import BS CSS & SCRIPT because already loaded
 add_action( 'wp_enqueue_scripts', 'wa_mapvuespa_enqueue_spa_scripts' );
 
 // extend-api.php.

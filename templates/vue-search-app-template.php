@@ -11,11 +11,8 @@
 // Start the Loop.
 while ( have_posts() ) :
 	the_post();
-    // Regular page print
-    get_template_part( 'partials/content', 'page' );
-    // Custom page template print
-    echo '<h3>VueJS Map !</h3>';
 
+    // Custom page template print SPA
 	?>
 	<div class="wrap">
 		<div id="primary" class="content-area">
@@ -27,6 +24,8 @@ while ( have_posts() ) :
 		</div><!-- #primary -->
 	</div><!-- .wrap -->
 	<?php
+    // Regular page print
+    get_template_part( 'partials/content', 'page' );
 
 	// If comments are open or we have at least one comment, load up the comment template.
 	if ( comments_open() || get_comments_number() ) {
