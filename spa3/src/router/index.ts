@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
-import AppQuickSearch from '../components/AppQuickSearch.vue';
-import AppCustomSearch from '../components/AppCustomSearch.vue';
+// import AppQuickSearch from '../components/AppQuickSearch.vue';
+import AppMap from '../components/AppMap.vue';
 
 /*global wpData:true*/
 /*eslint no-undef: "error"*/
@@ -37,18 +37,18 @@ const appPath = `/${window.wpData.app_path}`;
  */
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/quick',
-    name: 'QuickSearch',
-    component: AppQuickSearch,
+    path: '/map',
+    name: 'Map',
+    component: AppMap,
   },
-  {
-    path: '/advanced',
-    name: 'CustomSearch',
-    component: AppCustomSearch,
-  },
+  // {
+  //   path: '/advanced',
+  //   name: 'CustomSearch',
+  //   component: AppCustomSearch,
+  // },
   {
     path: '/:catchAll(.*)', // Updated to use the Vue Router 4 syntax for catch all routes
-    redirect: { name: 'QuickSearch' },
+    redirect: { name: 'Map' },
   },
 ];
 
