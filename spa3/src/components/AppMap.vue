@@ -1,5 +1,9 @@
 <template>
   <div>
+MAP =
+{{  zoom }}
+{{  center }}
+{{  mapIsReady }}
 
 	Les thematiques =
 	{{  wpThematic  }}
@@ -123,7 +127,39 @@
 					</div>
 
 					<div class="row f-w px-4">
-						<div class="col-9 bg-color-bg rounded-start-4">#MAP</div>
+						<div class="col-9 bg-color-bg rounded-start-4">
+							1#
+							<!-- <l-map ref="map" v-model:zoom="zoom" :center="[47.41322, -1.219482]">
+							<l-tile-layer
+								url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+								layer-type="base"
+								name="OpenStreetMap"
+							></l-tile-layer>
+							</l-map> -->
+2#
+							<!-- <l-map :useGlobalLeaflet="false">
+							<l-geo-json :geojson="geojson" />
+							</l-map> -->
+
+							3#
+							<!-- <l-map ref="map" v-if="mapIsReady" v-model:zoom="zoom" :center="center">
+    <l-tile-layer
+      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      layer-type="base"
+      name="OpenStreetMap"
+    ></l-tile-layer>
+    <l-geo-json :geojson="geojson" ></l-geo-json>
+  </l-map> -->
+
+#4
+  <l-map ref="map" v-if="mapIsReady" :zoom="zoom" :center="center" style="height: 100%; width: 100%;">
+    <!-- Omit the <l-tile-layer> to not display the base map -->
+    <l-geo-json :geojson="geojson" :options="options"
+        :options-style="styleFunction"></l-geo-json>
+		<l-marker :lat-lng="marker" />
+
+  </l-map>
+						</div>
 						<div class="col-3 bg-action-3 rounded-end-4 p-4 pb-10">
 
 
@@ -266,10 +302,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed} from 'vue';
+import { ref, computed, onBeforeMount} from 'vue';
 import AppFilterSwitches from './AppFilterSwitches.vue';
 import AppGetPosts from './AppGetPosts.vue';
 import AppGetThematics from './AppGetThematics.vue';
+
+import "leaflet/dist/leaflet.css";
+import { LMap, LGeoJson, LMarker} from "@vue-leaflet/vue-leaflet";
+import { latLng } from 'leaflet';
+
+
 // import { wpData } from './path-to-wpData'; // You need to import wpData or declare it globally
 
 // Assuming wpData is available here, either imported or declared globally
@@ -290,6 +332,62 @@ const wpThematic = ref(window.wpData.thematic.map((term: string) => term.toLower
 const mergedFilters = computed(() => {
   return [...categoryFilter.value, ...geographyFilter.value, ...productionFilter.value, ...thematicFilter.value];
 });
+
+// Map
+const franceDepartments = 'https://rawgit.com/gregoiredavid/france-geojson/master/departements-version-simplifiee.geojson';
+const zoom = ref<number>(6);
+const center = ref<[number, number]>([47.41322, -1.219482])
+const mapIsReady = ref<Boolean>(false)
+const geojson = ref(undefined);
+const marker = ref(latLng(47.41322, -1.219482));
+
+
+const fillColor = ref("#e4ce7f");
+const options = computed(() => {
+  return {
+    onEachFeature: onEachFeatureFunction.value
+  };
+});
+
+const styleFunction = computed(() => {
+  return () => {
+    return {
+      weight: 2,
+      color: "#ECEFF1",
+      opacity: 1,
+      fillColor: fillColor.value,
+      fillOpacity: 1
+    };
+  };
+});
+
+const onEachFeatureFunction = computed(() => {
+  return (feature:any, layer:any) => {
+    layer.bindTooltip(
+      `<div>code:${feature.properties.code}</div><div>nom: ${feature.properties.nom}</div>`,
+      { permanent: false, sticky: true }
+    );
+  };
+});
+
+
+onBeforeMount(async () => {
+  // Fetch GeoJSON data from GitHub
+  try {
+    const response = await fetch(franceDepartments);
+    if (response.ok) {
+      const data = await response.json();
+	  console.info('Success loading the GeoJSON data.', data);
+      geojson.value = data;
+      mapIsReady.value = true;
+    } else {
+      console.error('Failed to load the GeoJSON data.');
+    }
+  } catch (error) {
+    console.error('Error fetching the GeoJSON data:', error);
+  }
+});
+
 
 </script>
 
@@ -342,4 +440,4 @@ const mergedFilters = computed(() => {
 	-ms-transform: translateX(26px);
 	transform: translateX(26px);
 }
-</style>./AppGetThematics.vue
+</style>
