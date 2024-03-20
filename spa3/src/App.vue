@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import HelloWorld from "./components/HelloWorld.vue";
 import AppNavigation from "./components/AppNavigation.vue";
 import AppMap from "./components/AppMap.vue";
 </script>
@@ -19,8 +18,6 @@ import AppMap from "./components/AppMap.vue";
 			<!-- Load the App Map Component-->
 		</AppMap>
 
-		DEV =
-		<HelloWorld msg="Vite + Vue" />
 	</div>
 	<!-- #vue-search-app -->
 </template>
