@@ -2,52 +2,96 @@
 
   <div
     v-if="isDataAvailable"
-    class="container--">
+    class="rest-data">
 
-    <!-- Number of Posts -->
-    <small v-if="filteredResults.length === wpPosts.length">
-      {{ wpPosts.length }} Posts
-    </small>
-    <small v-else>
-      Found {{ filteredResults.length }} of {{ wpPosts.length }}
-    </small>
+		<!-- Template considering route -->
+		<!-- Directory -->
+		<template v-if="route === 'directory'">
 
-    <div class="card-group--">
+			<!-- Title + number of Posts -->
+			<h6 class="fw-bold">Savoir-faire <span class="text-muted" v-if="filteredResults.length === wpPosts.length">{{ wpPosts.length }}</span><span class="text-muted" v-else>{{ filteredResults.length }}+</span></h6>
 
-			<!-- AppDisplayPost Component -->
-			<app-display-post
-			v-if="route === 'posts'"
-			v-for="postType in filteredResults"
-			:key="postType.id"
-			:search-term="searchTerm"
-			:post-type="postType"
-			role="article" >
-			<!-- AppDisplayPost is called for each post in the filteredResults -->
-			</app-display-post>
+			<!-- Results -->
+			<div class="h-300-px overflow-y-scroll scrollbar-white me-n3 pe-3">
+				<ul class="list-unstyled card-items d-flex flex-column align-items-center mb-2">
 
-			<!-- AppDisplayDirectory Component -->
-			<app-display-directory
-			v-if="route === 'directory'"
-			v-for="postType in filteredResults"
-			:key="postType.id"
-			:search-term="searchTerm"
-			:post-type="postType"
-			role="article" >
-			<!-- AppDisplayDirectory is called for each post in the filteredResults -->
-			</app-display-directory>
+						<!-- AppDisplayDirectory Component -->
+						<app-display-directory
+						v-if="route === 'directory'"
+						v-for="postType in filteredResults"
+						:key="postType.id"
+						:search-term="searchTerm"
+						:post-type="postType"
+						role="article" >
+						<!-- AppDisplayDirectory is called for each post in the filteredResults -->
+						</app-display-directory>
 
-    </div><!-- .card-group -->
-  </div><!-- .container -->
+					<li><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></li>
+				</ul>
+			</div>
+
+		</template>
+
+		<!-- Farm -->
+		<template v-else-if="route === 'farm'">
+
+			<!-- Title + number of Posts -->
+			<h6 class="fw-bold">Ferme <span class="text-muted" v-if="filteredResults.length === wpPosts.length">{{ wpPosts.length }}</span><span class="text-muted" v-else>{{ filteredResults.length }}+</span></h6>
+
+			<ul class="list-unstyled card-items d-flex align-items-center justify-content-between mb-4">
+
+					<!-- AppDisplayFarm Component -->
+					<app-display-farm
+					v-if="route === 'farm'"
+					v-for="postType in filteredResults"
+					:key="postType.id"
+					:search-term="searchTerm"
+					:post-type="postType"
+					role="article" >
+					<!-- AppDisplayFarm is called for each post in the filteredResults -->
+					</app-display-farm>
+
+				<li><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></li>
+			</ul>
+		</template>
+
+		<!-- Posts -->
+		<template v-else>
+
+					<!-- Number of Posts -->
+					<small v-if="filteredResults.length === wpPosts.length">
+						{{ wpPosts.length }} Posts
+					</small>
+					<small v-else>
+						Found {{ filteredResults.length }} of {{ wpPosts.length }}
+					</small>
+
+					<div class="card-group">
+
+						<!-- AppDisplayPost Component -->
+						<app-display-post
+						v-if="route === 'posts'"
+						v-for="postType in filteredResults"
+						:key="postType.id"
+						:search-term="searchTerm"
+						:post-type="postType"
+						role="article" >
+						<!-- AppDisplayPost is called for each post in the filteredResults -->
+						</app-display-post>
+
+					</div><!-- .card-group -->
+		</template>
+
+  </div><!-- .rest-data -->
   <div v-else>
     <p
       class="text-center"
       v-html="apiResponse" />
   </div>
 
-<code>DEBUG : {{ route }}</code>
-<code>wpPosts = {{ wpPosts }}</code>
+<!-- <code>DEBUG : {{ route }}</code>
+<code>wpPosts = {{ wpPosts }}</code> -->
 <!-- <pre>wpData = {{ wpData }}</pre> -->
-
 
 </template>
 
@@ -56,6 +100,7 @@ import { ref, watch, computed, onMounted } from 'vue';
 import axios from 'axios';
 import AppDisplayPost from './AppDisplayPost.vue';
 import AppDisplayDirectory from './AppDisplayDirectory.vue';
+import AppDisplayFarm from './AppDisplayFarm.vue';
 import { WpPosts } from '../types/wpTypes'; // Assuming you have a type definition for posts
 
 // Define props with TypeScript
@@ -124,7 +169,7 @@ async function getPosts(route = 'posts', namespace = 'wp/v2') {
   try {
     const postsPerPage = 100;
     const restURL = window.wpData.rest_url;
-    const fields = 'id,title,link,vue_meta';
+    const fields = 'id,title,content,link,vue_meta'; //content,author,parent,menu_order
 
     const response = await axios(`${restURL}/${namespace}/${route}?per_page=${postsPerPage}&page=1&_fields=${fields}`);
 

@@ -17,7 +17,6 @@ import AppMap from "./components/AppMap.vue";
 		<AppMap>
 			<!-- Load the App Map Component-->
 		</AppMap>
-
 	</div>
 	<!-- #vue-search-app -->
 </template>

@@ -1,6 +1,33 @@
 <template>
   <div>
 
+	Les thematiques =
+	{{  wpThematic  }}
+
+    <!-- Filter Buttons -->
+    <app-filter-switches
+      :app-filters="wpCategories"
+      @onFilterToggle="categoryFilter = $event"
+    />
+	{{  categoryFilter  }}
+	<app-filter-switches
+      :app-filters="wpGeography"
+      @onFilterToggle="geographyFilter = $event"
+    />
+		{{  geographyFilter  }}
+	<app-filter-switches
+      :app-filters="wpProduction"
+      @onFilterToggle="productionFilter = $event"
+    />
+		{{  productionFilter  }}
+	<app-filter-switches
+      :app-filters="wpThematic"
+      @onFilterToggle="thematicFilter = $event"
+    />
+		{{  thematicFilter  }}
+
+		MERGED ===
+		{{  mergedFilters }}
 
 
 		<!-- #Map integration -->
@@ -66,10 +93,10 @@
 												<label class="form-label f-12 font-weight-bold text-uppercase mb-3 color-gray" for="Options"><i class="icon icon-filter"></i> Options</label>
 												<fieldset>
 													<div class="form-check mb-1">
-														<input class="form-check-input" id="flexCheckDefault" type="checkbox" value=""> <label class="form-check-label" for="flexCheckDefault">Default checkbox</label>
+														<input class="form-check-input" id="flexCheckDefault" type="checkbox" value=""> <label class="form-check-label" for="flexCheckDefault">Ouvert aux stages</label>
 													</div>
 													<div class="form-check mb-1">
-														<input class="form-check-input" id="flexCheckDefault" type="checkbox" value=""> <label class="form-check-label" for="flexCheckDefault">Default checkbox</label>
+														<input class="form-check-input" id="flexCheckDefault" type="checkbox" value=""> <label class="form-check-label" for="flexCheckDefault">Ouvert aux visites</label>
 													</div>
 												</fieldset>
 											</form>
@@ -84,7 +111,8 @@
 						<div class="col-3 px-0 pt-1">
 
 							<div class="form-floating mb-3">
-								<input type="text" class="form-control --form-control-lg border-action-3 focus-action-3 px-4" id="floatingInput" placeholder="Sujet">
+								<!-- Search Box -->
+								<input  v-model="searchTerm" type="text" class="form-control --form-control-lg border-action-3 focus-action-3 px-4" id="floatingInput" placeholder="Rechercher..." aria-label="Search">
 								<label for="floatingInput" class="ms-3 fs-18">Rechercher...</label>
 								<div class="input__search-toggle position-absolute top-50 end-0 translate-middle-y pe-4">
 									<svg role="img" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="m18.0553691 9.08577774c0-4.92630404-4.02005-8.94635404-8.94635408-8.94635404-4.92630404 0-8.96959132 4.02005-8.96959132 8.94635404 0 4.92630406 4.02005 8.94635406 8.94635404 8.94635406 2.13783006 0 4.08976186-.7435931 5.64665986-1.9984064l3.8109144 3.8109145 1.3245252-1.3245252-3.8341518-3.7876771c1.2548133-1.5336607 2.0216437-3.5088298 2.0216437-5.64665986zm-8.96959136 7.11060866c-3.90386358 0-7.08737138-3.1835078-7.08737138-7.08737138s3.1835078-7.08737138 7.08737138-7.08737138c3.90386356 0 7.08737136 3.1835078 7.08737136 7.08737138s-3.1602705 7.08737138-7.08737136 7.08737138z"></path></svg>
@@ -98,85 +126,34 @@
 						<div class="col-9 bg-color-bg rounded-start-4">#MAP</div>
 						<div class="col-3 bg-action-3 rounded-end-4 p-4 pb-10">
 
-							<h6 class="fw-bold">Savoir-faire <span class="text-muted">950+</span></h6>
 
-							<div class="h-300-px overflow-y-scroll scrollbar-white me-n3 pe-3">
-								<ul class="list-unstyled card-items d-flex flex-column align-items-center mb-2">
+							<app-get-posts
+								:search-term="searchTerm"
+								:app-filters="mergedFilters"
+								:route="'directory'"
+							/>
 
+							<app-get-posts
+								:search-term="searchTerm"
+								:route="'farm'"
+							/>
 
-									<app-get-posts
-										:search-term="searchTerm"
-										:app-filters="categoryFilter"
-										:route="'directory'"
-									/>
+							<!-- <app-get-posts
+								:search-term="searchTerm"
+								:app-filters="thematicFilter"
+								:route="'operation'"
+							/>
 
+							<app-get-posts
+								:search-term="searchTerm"
+								:app-filters="geographyFilter"
+								:route="'structure'"
+							/> -->
 
-									<li><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></li>
-								</ul>
-							</div>
-
-							<h6 class="fw-bold">Ferme <span class="text-muted">150+</span></h6>
-
-							<ul class="list-unstyled card-items d-flex align-items-center justify-content-between mb-4">
-								<li class="list-item me-2 flex-fill">
-									<div class="card my-0 border-0 bg-transparent">
-										<img src="https://placehold.co/300x300/FFF/AAA" class="img-fluid rounded-4 img-transition-scale">
-										<div class="card-body py-2 px-0">
-											<p class="card-text fs-xs fw-bold">Ferme BIO du beau cottage</p>
-										</div>
-									</div>
-								</li>
-								<li class="list-item me-2 flex-fill">
-									<div class="card my-0 border-0 bg-transparent">
-										<img src="https://placehold.co/300x300/FFF/AAA" class="img-fluid rounded-4 img-transition-scale">
-										<div class="card-body py-2 px-0">
-											<p class="card-text fs-xs fw-bold">Ferme BIO du beau cottage</p>
-										</div>
-									</div>
-								</li>
-								<li class="list-item me-2 flex-fill">
-									<div class="card my-0 border-0 bg-transparent">
-										<img src="https://placehold.co/300x300/FFF/AAA" class="img-fluid rounded-4 img-transition-scale">
-										<div class="card-body py-2 px-0">
-											<p class="card-text fs-xs fw-bold">Ferme BIO du beau cottage</p>
-										</div>
-									</div>
-								</li>
-								<li><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></li>
-							</ul>
-
-							<h6 class="fw-bold">Thématique <span class="text-muted">8</span></h6>
-							<div class="h-200-px overflow-y-scroll scrollbar-white me-n3 pe-3">
-								<ul class="list-unstyled card-items">
-									<li class="list-item my-2">
-										<div class="card card-cover overflow-hidden rounded-4 shadow-sm border-0 text-bg-action-2 ---- bg-cover bg-position-center-center" style="background-image: url('https://placehold.co/600x200/333/999');">
-											<div class="d-flex justify-content-between align-items-center text-white text-shadow-1 p-4 z-2">
-												<p class="text-white m-0 fw-bold">Lorem ipsum dolor</p>
-												<span class="badge text-bg-secondary fw-bold py-2">30</span>
-											</div>
-											<div class="overlay card-overlay bg-image bg-action-2 op-2 z-0"></div>
-										</div>
-									</li>
-									<li class="list-item my-2">
-										<div class="card card-cover overflow-hidden rounded-4 shadow-sm border-0 text-bg-action-2 ---- bg-cover bg-position-center-center" style="background-image: url('https://placehold.co/600x200/333/999');">
-											<div class="d-flex justify-content-between align-items-center text-white text-shadow-1 p-4 z-2">
-												<p class="text-white m-0 fw-bold">Lorem ipsum dolor</p>
-												<span class="badge text-bg-secondary fw-bold py-2">30</span>
-											</div>
-											<div class="overlay card-overlay bg-image bg-action-2 op-2 z-0"></div>
-										</div>
-									</li>
-									<li class="list-item my-2">
-										<div class="card card-cover overflow-hidden rounded-4 shadow-sm border-0 text-bg-action-2 ---- bg-cover bg-position-center-center" style="background-image: url('https://placehold.co/600x200/333/999');">
-											<div class="d-flex justify-content-between align-items-center text-white text-shadow-1 p-4 z-2">
-												<p class="text-white m-0 fw-bold">Lorem ipsum dolor</p>
-												<span class="badge text-bg-secondary fw-bold py-2">30</span>
-											</div>
-											<div class="overlay card-overlay bg-image bg-action-2 op-2 z-0"></div>
-										</div>
-									</li>
-								</ul>
-							</div>
+							<app-get-thematics
+									:search-term="searchTerm"
+									:app-filters="thematicFilter"
+    />
 
 						</div>
 				</div>
@@ -248,73 +225,40 @@
 
 
 
-    <!-- Search Box -->
-    <div class="input-group my-4">
-      <input
-        v-model="searchTerm"
-        type="text"
-        class="form-control p-2"
-        placeholder="search titles or excerpts for ..."
-        aria-label="Search" >
-      <div class="input-group-append">
-        <span class="input-group-text bg-light">Search</span>
-      </div>
-    </div> <!-- .input-search -->
-	{{  searchTerm }}
-
-    <!-- Filter Buttons -->
-    <app-filter-switches
-      :app-filters="wpCategories"
-      @onFilterToggle="categoryFilter = $event"
-    />
-	{{  categoryFilter  }}
-
-	<app-filter-switches
-      :app-filters="wpGeography"
-      @onFilterToggle="categoryFilter = $event"
-    />
-	<app-filter-switches
-      :app-filters="wpProduction"
-      @onFilterToggle="categoryFilter = $event"
-    />
-	<app-filter-switches
-      :app-filters="wpThematic"
-      @onFilterToggle="categoryFilter = $event"
-    />
 
     <!-- AppGetPosts Component -->
 	Posts=
     <app-get-posts
       :search-term="searchTerm"
-      :app-filters="categoryFilter"
+      :app-filters="mergedFilters"
       :route="cptSelected"
     />
 
 	Directory=
     <app-get-posts
       :search-term="searchTerm"
-      :app-filters="categoryFilter"
+      :app-filters="mergedFilters"
       :route="'directory'"
     />
 
 	Farm=
 	<app-get-posts
       :search-term="searchTerm"
-      :app-filters="categoryFilter"
+      :app-filters="mergedFilters"
       :route="'farm'"
     />
 
 	Operation=
 	<app-get-posts
       :search-term="searchTerm"
-      :app-filters="categoryFilter"
+      :app-filters="mergedFilters"
       :route="'operation'"
     />
 
 	Structure=
 	<app-get-posts
       :search-term="searchTerm"
-      :app-filters="categoryFilter"
+      :app-filters="mergedFilters"
       :route="'structure'"
     />
 
@@ -322,19 +266,31 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed} from 'vue';
 import AppFilterSwitches from './AppFilterSwitches.vue';
 import AppGetPosts from './AppGetPosts.vue';
+import AppGetThematics from './AppGetThematics.vue';
 // import { wpData } from './path-to-wpData'; // You need to import wpData or declare it globally
 
 // Assuming wpData is available here, either imported or declared globally
 const cptSelected = ref('posts'); // default post type
 const searchTerm = ref('');
+
 const categoryFilter = ref([]);
+const geographyFilter = ref([]);
+const productionFilter = ref([]);
+const thematicFilter = ref([]);
+
 const wpCategories = ref(window.wpData.post_categories.map((term: string) => term.toLowerCase())); // Default
 const wpGeography = ref(window.wpData.geography.map((term: string) => term.toLowerCase()));
 const wpProduction = ref(window.wpData.production.map((term: string) => term.toLowerCase()));
 const wpThematic = ref(window.wpData.thematic.map((term: string) => term.toLowerCase()));
+
+// Merge arrays reactively
+const mergedFilters = computed(() => {
+  return [...categoryFilter.value, ...geographyFilter.value, ...productionFilter.value, ...thematicFilter.value];
+});
+
 </script>
 
 <style scoped>
@@ -386,4 +342,4 @@ const wpThematic = ref(window.wpData.thematic.map((term: string) => term.toLower
 	-ms-transform: translateX(26px);
 	transform: translateX(26px);
 }
-</style>
+</style>./AppGetThematics.vue

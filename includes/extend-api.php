@@ -12,11 +12,22 @@
  */
 function wa_mapvuespa_extend_api_response() {
 
+	// Posts
 	register_rest_field(
 		array( 'post', 'directory', 'farm', 'operation', 'structure' ), // post types.
 		'vue_meta', // name of the new key.
 		array(
 			'get_callback' => 'vue_get_post_meta_fields',
+			'update_callback' => null,
+			'schema' => null,
+		)
+	);
+
+	register_rest_field(
+		array( 'geography', 'thematic', 'production' ), // taxonomies.
+		'vue_meta', // name of the new key.
+		array(
+			'get_callback' => 'vue_get_taxonomy_meta_fields',
 			'update_callback' => null,
 			'schema' => null,
 		)
@@ -114,16 +125,16 @@ function vue_get_post_meta_fields( $post_object, $field_name, $request ) {
 		'terms_data' => $terms_data,
 		'terms' => $terms,
 		'term_links' => $term_links,
-		'featuredmedia_alt' => get_post_meta(
+		'media_alt' => get_post_meta(
 			get_post_thumbnail_id( $post_id ),
 			'_wp_attachment_image_alt',
 			true
 		),
-		'featuredmedia_url' => get_the_post_thumbnail_url(
+		'media_url' => get_the_post_thumbnail_url(
 			$post_id,
 			'full'
 		),
-		'thumbnailmedia_url' => get_the_post_thumbnail_url(
+		'thumbnail_url' => get_the_post_thumbnail_url(
 			$post_id,
 			'thumbnail'
 		),
@@ -133,4 +144,45 @@ function vue_get_post_meta_fields( $post_object, $field_name, $request ) {
 	// return data to the get_callback.
 	// this data will be made available in the key "vue_meta".
 	return $additional_post_data;
+}
+
+
+function vue_get_taxonomy_meta_fields( $post_object, $field_name, $request ) {
+
+	// make additional fields available in the response using an associative array.
+	$additional_taxonomy_data = array();
+	$errors = array();
+
+	$term_id = $post_object['id']; // get the taxonomy id.
+
+
+	//Content : t_general_content
+	$t_general_content = get_term_meta( $term_id, 't_general_content', true );
+	//Image : t_general_image
+	$t_general_image = get_term_meta( $term_id, 't_general_image', true );
+
+	// add categories, custom excerpt, featured image to the api response.
+	// Render
+	$additional_taxonomy_data = array(
+		'content' => $t_general_content,
+		't_general_image' => $t_general_image,
+		'media_alt' => get_post_meta(
+			$t_general_image,
+			'_wp_attachment_image_alt',
+			true
+		),
+		'media_url' => wp_get_attachment_image_url(
+			$t_general_image,
+			'large' // full
+		),
+		'thumbnail_url' => wp_get_attachment_image_url(
+			$t_general_image,
+			'thumbnail' // medium = 300x300
+		),
+		'errors' => $errors,
+	);
+
+	// return data to the get_callback.
+	// this data will be made available in the key "vue_meta".
+	return $additional_taxonomy_data;
 }

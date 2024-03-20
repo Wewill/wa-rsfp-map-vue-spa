@@ -16,32 +16,43 @@ export interface WpPost {
 		post_terms: [number],
 		post_type: string,
 		post_object: object,
-		terms_data: [
-			{
-				term_id: number,
-				name: string,
-				slug: string,
-				term_group: number,
-				term_taxonomy_id: number,
-				taxonomy: string,
-				description: string,
-				parent: number,
-				count: number,
-				filter: string,
-				link: string
-			},
-		],
+		terms_data: [WpTerm],
 		terms:[string],
 		term_links:[string],
-		featuredmedia_url:string,
-		thumbnailmedia_url:string,
-		featuredmedia_alt:string
+		media_alt:string
+		media_url:string,
+		thumbnail_url:string,
+		errors:[string]
 	};
 	link: string;
 	// Add any custom fields or other fields you use here
 }
 
 export type WpPosts = WpPost[];
+
+export interface WpTerm {
+	id?: number,
+	term_id: number,
+	name: string,
+	slug: string,
+	term_group: number,
+	term_taxonomy_id: number,
+	taxonomy: string,
+	description: string,
+	parent: number,
+	count: number,
+	filter: string,
+	link: string,
+	vue_meta: {
+		content: string,
+		media_alt:string
+		media_url:string,
+		thumbnail_url:string,
+		errors:[string]
+	};
+}
+
+export type WpTerms = WpTerm[];
 
 // WpUser.ts
 export interface WpUser {

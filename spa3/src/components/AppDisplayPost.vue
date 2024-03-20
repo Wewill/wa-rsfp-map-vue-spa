@@ -2,9 +2,9 @@
 
   <div class="card">
     <img
-      v-if="postType.vue_meta.featuredmedia_url"
-      :src="postType.vue_meta.featuredmedia_url"
-      :alt="postType.vue_meta.featuredmedia_alt || 'post thumbnail'"
+      v-if="postType.vue_meta.media_url"
+      :src="postType.vue_meta.media_url"
+      :alt="postType.vue_meta.media_alt || 'post thumbnail'"
       class="card-img-top">
 
     <div class="card-body">
@@ -69,7 +69,7 @@ function highlightData(data: string, searchTerm: string): string {
 }
 </script>
 
-<style>
+<style scoped>
 .card {
 	min-width: 33%;
 }

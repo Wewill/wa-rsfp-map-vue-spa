@@ -3,8 +3,8 @@
 	<li class="list-item card-item p-0 bg-transparent">
 		<div class="card my-0 border-0 bg-transparent">
 			<div class="row g-0 align-items-center">
-			<div class="col-md-3 order-first" v-if="postType.vue_meta.thumbnailmedia_url">
-				<img :src="postType.vue_meta.thumbnailmedia_url" :alt="postType.vue_meta.featuredmedia_alt || 'post thumbnail'" class="img-fluid rounded-4 img-transition-scale">
+			<div class="col-md-3 order-first" v-if="postType.vue_meta.thumbnail_url">
+				<img :src="postType.vue_meta.thumbnail_url" :alt="postType.vue_meta.media_alt || 'post thumbnail'" class="img-fluid rounded-4 img-transition-scale">
 			</div>
 			<div class="col-md-9">
 				<div class="card-body py-2 pe-0">
@@ -69,29 +69,5 @@ function highlightData(data: string, searchTerm: string): string {
 }
 </script>
 
-<style>
-.card {
-	min-width: 33%;
-}
-
-.card-img-top {
-	height: 15vw;
-	object-fit: cover;
-}
-
-.card .hl-search {
-	background-color: yellow;
-}
-
-@media only screen and (max-width: 768px) {
-	.card {
-		min-width: 50%;
-	}
-}
-
-@media only screen and (max-width: 480px) {
-	.card {
-		min-width: 100%;
-	}
-}
+<style scoped>
 </style>
