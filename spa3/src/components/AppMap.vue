@@ -5,7 +5,7 @@ zoom:: {{  zoom }}
 center:: {{  center }}
 mapLoaded:: {{  mapLoaded }}
 leafletReady:: {{  leafletReady }}
-selectedDepartmentId: {{ selectedDepartmentId }}
+selectedDepartmentIds: {{ selectedDepartmentIds }}
 
 	Les thematiques =
 	{{  wpThematic  }}
@@ -411,10 +411,8 @@ const styleFunction = computed(() => {
   };
 });
 
-// Store the previous layer
-let previousLayer: L.Layer | null = null;
 // Define a reactive constant to store the clicked department's ID
-const selectedDepartmentId = ref<string | null>(null);
+const selectedDepartmentIds = ref<string[]>([]);
 // Function to bind to each feature on geojson map
 const onEachFeatureFunction = computed(() => {
   return (feature:any, layer:L.Layer) => {
@@ -429,33 +427,18 @@ const onEachFeatureFunction = computed(() => {
 	// Click
     layer.on({
       click: (e: L.LeafletMouseEvent) => {
-		const currentDepartmentId = feature.properties.code; // Assuming 'code' is the property for department ID
+		const departmentId = feature.properties.code; // Assuming 'code' is the department ID property
+		const index = selectedDepartmentIds.value.indexOf(departmentId);
 
-		if (selectedDepartmentId.value === currentDepartmentId) {
-			// If the same department is clicked again, unset the ID
-			selectedDepartmentId.value = null;
-			(layer as L.Path).setStyle(defaultStyle); // Optional: reset the style if needed
-			previousLayer = null; // Clear the previousLayer reference
+		if (index > -1) {
+			// Department is already selected, remove it from the array (deselect)
+			selectedDepartmentIds.value.splice(index, 1);
+			(layer as L.Path).setStyle(defaultStyle); // Reset style to default
 		} else {
-			// Update the selectedDepartmentId with the new ID
-			selectedDepartmentId.value = currentDepartmentId;
+			// Department is not selected, add it to the array (select)
+			selectedDepartmentIds.value.push(departmentId);
+			(layer as L.Path).setStyle(highlightStyle); // Apply highlight style
 
-			// Highlighting logic
-			if (previousLayer) {
-			(previousLayer as L.Path).setStyle(defaultStyle);
-			}
-			(layer as L.Path).setStyle(highlightStyle);
-			previousLayer = layer;
-
-			// A
-			// Centering and zoom logic
-			// const { coordinates } = feature.geometry;
-			// if (coordinates.length > 0) {
-			//   center.value = [coordinates[0][0][1], coordinates[0][0][0]];
-			//   zoom.value = 9;
-			// }
-
-			// B
 			// Centering and zoom logic
 			// Assuming 'layer' is of type L.GeoJSON (or similar Leaflet layer type)
 			// which supports getBounds().
@@ -463,7 +446,7 @@ const onEachFeatureFunction = computed(() => {
 			const centerPoint = bounds.getCenter();
 			center.value = [centerPoint.lat, centerPoint.lng];
 			zoom.value = 9; // Adjust zoom level as needed
-			}
+		}
 
 		console.log(`Department clicked: ${feature.properties.nom} | ${e} `);
       },
