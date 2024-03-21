@@ -6,6 +6,10 @@ center:: {{  center }}
 mapLoaded:: {{  mapLoaded }}
 leafletReady:: {{  leafletReady }}
 selectedDepartmentIds: {{ selectedDepartmentIds }}
+showTileLayer: {{  showTileLayer }}
+<button @click="showTileLayer = !showTileLayer">Toggle Tile Layer</button>
+
+<div class="d-none">
 
 	Les thematiques =
 	{{  wpThematic  }}
@@ -34,6 +38,9 @@ selectedDepartmentIds: {{ selectedDepartmentIds }}
 
 		MERGED ===
 		{{  mergedFilters }}
+
+	</div>
+
 
 
 		<!-- #Map integration -->
@@ -142,6 +149,7 @@ selectedDepartmentIds: {{ selectedDepartmentIds }}
 								@ready="onLeafletReady"
 							>
 									<!-- Omit the <l-tile-layer> to not display the base map -->
+										<l-tile-layer :url="url" :attribution="attribution" v-if="showTileLayer"/>
 									<l-geo-json :geojson="geojson" :options="options" :options-style="styleFunction" @ready="onGeoJsonReady"></l-geo-json>
 									<l-marker :lat-lng="marker" :icon="markerIcon" />
 									<l-circle-marker :lat-lng="[41.89026, 12.49238]" :radius="50" />
@@ -322,7 +330,7 @@ import L from 'leaflet'
 globalThis.L = L
 
 //import type L from "leaflet";
-import { LMap, LGeoJson, LMarker, LCircleMarker, LIcon, LPopup} from "@vue-leaflet/vue-leaflet";
+import { LTileLayer, LMap, LGeoJson, LMarker, LCircleMarker, LIcon, LPopup} from "@vue-leaflet/vue-leaflet";
 import { LMarkerClusterGroup } from 'vue-leaflet-markercluster'
 import 'leaflet/dist/leaflet.css'
 import 'vue-leaflet-markercluster/dist/style.css'
@@ -349,10 +357,13 @@ const mergedFilters = computed(() => {
 });
 
 // Map
+const url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+const attribution = '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors';
+const showTileLayer = ref<Boolean>(false);
 const franceDepartments = 'https://rawgit.com/gregoiredavid/france-geojson/master/departements-version-simplifiee.geojson';
 const zoom = ref<number>(6);
 const center = ref<[number, number]>([47.665496, 2.428034])
-const mapLoaded = ref<Boolean>(false)
+const mapLoaded = ref<Boolean>(false);
 const leafletReady = ref<Boolean>(false);
 const geojson = ref(undefined);
 const marker = ref<L.LatLngExpression>([47.41322, -1.219482]);
