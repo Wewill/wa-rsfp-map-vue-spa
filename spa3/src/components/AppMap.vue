@@ -129,20 +129,17 @@ selectedDepartmentIds: {{ selectedDepartmentIds }}
 					</div>
 
 					<div class="row f-w px-4">
-						<div class="col-9 bg-color-bg rounded-start-4 p-0">
-
-							<l-map class="rounded-start-4" v-if="mapLoaded" style="height: 100%; width: 100%;"
-
-							ref="map"
-    :max-zoom="19"
-    v-model:zoom="zoom"
-    v-model:center="center"
-    :zoomAnimation="true"
-    :markerZoomAnimation="true"
-    :useGlobalLeaflet="true"
-    :options="{ zoomControl: false }"
-    @ready="onLeafletReady"
-
+						<div class="col-9 bg-color-bg rounded-start-4 p-0 d-flex --h-100 justify-content-center align-items-center">
+							<l-map class="rounded-start-4" v-if="mapLoaded" style="min-height: 800px; height: 100%; min-width: 800px; width: 100%;"
+								ref="map"
+								:max-zoom="19"
+								v-model:zoom="zoom"
+								v-model:center="center"
+								:zoomAnimation="true"
+								:markerZoomAnimation="true"
+								:useGlobalLeaflet="true"
+								:options="{ zoomControl: false }"
+								@ready="onLeafletReady"
 							>
 									<!-- Omit the <l-tile-layer> to not display the base map -->
 									<l-geo-json :geojson="geojson" :options="options" :options-style="styleFunction" @ready="onGeoJsonReady"></l-geo-json>
@@ -160,11 +157,16 @@ selectedDepartmentIds: {{ selectedDepartmentIds }}
 									<l-marker-cluster-group :icon-create-function="clusterIcon">
 									<l-marker v-for="(marker, index) in markers" :key="index" :lat-lng="marker.latLng">
 										<l-popup>{{ marker.popupContent }}</l-popup>
+										<l-icon
+											:icon-anchor="[10, 10]"
+											class-name="someExtraClass"
+											>
+											<div style="background-color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; color: #f28f43;"></div>
+										</l-icon>
 									</l-marker>
 									</l-marker-cluster-group>
 
-								</l-map>
-
+							</l-map>
 						</div>
 						<div class="col-3 bg-action-3 rounded-end-4 p-4 pb-10">
 
@@ -320,7 +322,7 @@ import L from 'leaflet'
 globalThis.L = L
 
 //import type L from "leaflet";
-import { LMap, LGeoJson, LMarker, LCircleMarker, LPopup} from "@vue-leaflet/vue-leaflet";
+import { LMap, LGeoJson, LMarker, LCircleMarker, LIcon, LPopup} from "@vue-leaflet/vue-leaflet";
 import { LMarkerClusterGroup } from 'vue-leaflet-markercluster'
 import 'leaflet/dist/leaflet.css'
 import 'vue-leaflet-markercluster/dist/style.css'
@@ -349,7 +351,7 @@ const mergedFilters = computed(() => {
 // Map
 const franceDepartments = 'https://rawgit.com/gregoiredavid/france-geojson/master/departements-version-simplifiee.geojson';
 const zoom = ref<number>(6);
-const center = ref<[number, number]>([47.41322, -1.219482])
+const center = ref<[number, number]>([47.665496, 2.428034])
 const mapLoaded = ref<Boolean>(false)
 const leafletReady = ref<Boolean>(false);
 const geojson = ref(undefined);
@@ -445,7 +447,7 @@ const onEachFeatureFunction = computed(() => {
 			const bounds = (layer as L.GeoJSON).getBounds();
 			const centerPoint = bounds.getCenter();
 			center.value = [centerPoint.lat, centerPoint.lng];
-			zoom.value = 9; // Adjust zoom level as needed
+			zoom.value = 8; // Adjust zoom level as needed
 		}
 
 		console.log(`Department clicked: ${feature.properties.nom} | ${e} `);
