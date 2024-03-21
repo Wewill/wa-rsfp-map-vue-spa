@@ -1,9 +1,11 @@
 <template>
   <div>
 MAP =
-{{  zoom }}
-{{  center }}
-{{  mapLoaded }}
+zoom:: {{  zoom }}
+center:: {{  center }}
+mapLoaded:: {{  mapLoaded }}
+leafletReady:: {{  leafletReady }}
+selectedDepartmentId: {{ selectedDepartmentId }}
 
 	Les thematiques =
 	{{  wpThematic  }}
@@ -143,8 +145,24 @@ MAP =
 
 							>
 									<!-- Omit the <l-tile-layer> to not display the base map -->
-									<l-geo-json :geojson="geojson" :options="options" :options-style="styleFunction"></l-geo-json>
-									<l-marker :lat-lng="marker" />
+									<l-geo-json :geojson="geojson" :options="options" :options-style="styleFunction" @ready="onGeoJsonReady"></l-geo-json>
+									<l-marker :lat-lng="marker" :icon="markerIcon" />
+									<l-circle-marker :lat-lng="[41.89026, 12.49238]" :radius="50" />
+
+									<l-marker-cluster-group :icon-create-function="clusterIcon">
+										<l-marker :lat-lng="[47.51322, -1.219482]" />
+										<l-marker :lat-lng="[47.41322, -2.219482]" />
+										<l-marker :lat-lng="[47.41322, -1.319482]" />
+										<l-marker :lat-lng="[47.61322, -1.119482]" />
+										<l-circle-marker :lat-lng="[44.89026, 2.49238]" :radius="10" />
+									</l-marker-cluster-group>
+
+									<l-marker-cluster-group :icon-create-function="clusterIcon">
+									<l-marker v-for="(marker, index) in markers" :key="index" :lat-lng="marker.latLng">
+										<l-popup>{{ marker.popupContent }}</l-popup>
+									</l-marker>
+									</l-marker-cluster-group>
+
 								</l-map>
 
 						</div>
@@ -289,23 +307,23 @@ MAP =
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onBeforeMount, onMounted, nextTick} from 'vue';
+import { ref, computed, onBeforeMount, onMounted, nextTick, watch} from 'vue';
 import AppFilterSwitches from './AppFilterSwitches.vue';
 import AppGetPosts from './AppGetPosts.vue';
 import AppGetThematics from './AppGetThematics.vue';
 
-import "leaflet/dist/leaflet.css";
-import { LMap, LGeoJson, LMarker} from "@vue-leaflet/vue-leaflet";
-import { latLng } from 'leaflet';
-import * as L from 'leaflet';
-import 'leaflet.markercluster/dist/leaflet.markercluster.js';
-import { MarkerClusterGroup } from 'leaflet.markercluster';
+// https://dev.to/camptocamp-geo/the-3-best-open-source-web-mapping-libraries-57o7
+// https://vue3openlayers.netlify.app
 
-// import 'leaflet.markercluster';
-// Styles
-import 'leaflet/dist/leaflet.css';
-import 'leaflet.markercluster/dist/MarkerCluster.css';
-import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+// https://github.com/veitbjarsch/vue-leaflet-markercluster?tab=readme-ov-file
+import L from 'leaflet'
+globalThis.L = L
+
+//import type L from "leaflet";
+import { LMap, LGeoJson, LMarker, LCircleMarker, LPopup} from "@vue-leaflet/vue-leaflet";
+import { LMarkerClusterGroup } from 'vue-leaflet-markercluster'
+import 'leaflet/dist/leaflet.css'
+import 'vue-leaflet-markercluster/dist/style.css'
 
 // import { wpData } from './path-to-wpData'; // You need to import wpData or declare it globally
 
@@ -335,43 +353,160 @@ const center = ref<[number, number]>([47.41322, -1.219482])
 const mapLoaded = ref<Boolean>(false)
 const leafletReady = ref<Boolean>(false);
 const geojson = ref(undefined);
-const marker = ref(latLng(47.41322, -1.219482));
+const marker = ref<L.LatLngExpression>([47.41322, -1.219482]);
 const map = ref<L.Map | null>(null);
+
+// Define your marker type
+interface Marker {
+  latLng: L.LatLngExpression;
+  popupContent: string;
+}
+
+const markers = ref<Marker[]>([
+	{ latLng: [47.413220, -4.219482], popupContent: 'Marker 1' },
+	{ latLng: [48.413220, -7.219482], popupContent: 'Marker 2' },
+	{ latLng: [46.413220, 8.219482], popupContent: 'Marker 3' },
+	{ latLng: [47.413220, 2.219482], popupContent: 'Marker 4' },
+	{ latLng: [45.413220, 4.219482], popupContent: 'Marker 5' },
+	{ latLng: [50.413220, 0.219482], popupContent: 'Marker 6' },
+	{ latLng: [47.113220, 10.219482], popupContent: 'Marker 7' },
+	{ latLng: [47.113220, 10.119482], popupContent: 'Marker 8' },
+	{ latLng: [47.013220, 10.119482], popupContent: 'Marker 9' },
+	// Add more markers here
+]);
 
 async function onLeafletReady() {
   await nextTick();
   leafletReady.value = true;
 }
 
-const fillColor = ref("#e4ce7f");
+let borderColor:string 	= "#e4ce7f";
+let fillColor:string 	= "#e4ce7f";
 const options = computed(() => {
   return {
     onEachFeature: onEachFeatureFunction.value
   };
 });
 
+// Styling geojson map
+const defaultStyle = {
+  color: borderColor,
+  weight: 2,
+  opacity: 1,
+  fillOpacity: 0.6,
+  fillColor: fillColor,
+};
+
+const highlightStyle = {
+  color: borderColor,
+  weight: 2,
+  opacity: 1,
+  fillOpacity: .9,
+  fillColor: fillColor,
+};
+
 const styleFunction = computed(() => {
   return () => {
-    return {
-      weight: 2,
-      color: "#ECEFF1",
-      opacity: 1,
-      fillColor: fillColor.value,
-      fillOpacity: 1
-    };
+    return defaultStyle;
   };
 });
 
+// Store the previous layer
+let previousLayer: L.Layer | null = null;
+// Define a reactive constant to store the clicked department's ID
+const selectedDepartmentId = ref<string | null>(null);
+// Function to bind to each feature on geojson map
 const onEachFeatureFunction = computed(() => {
-  return (feature:any, layer:any) => {
+  return (feature:any, layer:L.Layer) => {
+	if (!feature.properties) return;
+	// Tooltip
     layer.bindTooltip(
       `<div>code:${feature.properties.code}</div><div>nom: ${feature.properties.nom}</div>`,
       { permanent: false, sticky: true }
     );
-  };
+	// Popup
+	layer.bindPopup(feature.properties.nom);
+	// Click
+    layer.on({
+      click: (e: L.LeafletMouseEvent) => {
+		const currentDepartmentId = feature.properties.code; // Assuming 'code' is the property for department ID
+
+		if (selectedDepartmentId.value === currentDepartmentId) {
+			// If the same department is clicked again, unset the ID
+			selectedDepartmentId.value = null;
+			(layer as L.Path).setStyle(defaultStyle); // Optional: reset the style if needed
+			previousLayer = null; // Clear the previousLayer reference
+		} else {
+			// Update the selectedDepartmentId with the new ID
+			selectedDepartmentId.value = currentDepartmentId;
+
+			// Highlighting logic
+			if (previousLayer) {
+			(previousLayer as L.Path).setStyle(defaultStyle);
+			}
+			(layer as L.Path).setStyle(highlightStyle);
+			previousLayer = layer;
+
+			// A
+			// Centering and zoom logic
+			// const { coordinates } = feature.geometry;
+			// if (coordinates.length > 0) {
+			//   center.value = [coordinates[0][0][1], coordinates[0][0][0]];
+			//   zoom.value = 9;
+			// }
+
+			// B
+			// Centering and zoom logic
+			// Assuming 'layer' is of type L.GeoJSON (or similar Leaflet layer type)
+			// which supports getBounds().
+			const bounds = (layer as L.GeoJSON).getBounds();
+			const centerPoint = bounds.getCenter();
+			center.value = [centerPoint.lat, centerPoint.lng];
+			zoom.value = 9; // Adjust zoom level as needed
+			}
+
+		console.log(`Department clicked: ${feature.properties.nom} | ${e} `);
+      },
+    });
+  }
 });
 
+// Cluster and marker styles
+function clusterIcon(cluster:any) {
+      return L.divIcon({
+        html: `<div style="background-color: #f28f43; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: white;">
+                  ${cluster.getChildCount()}
+               </div>`,
+        className: 'marker-cluster-custom',
+        iconSize: L.point(40, 40, true),
+      });
+    }
 
+// 	function markerIcon() {
+// 		return L.divIcon({
+// 	// 		iconUrl: 'path/to/your/icon.png',
+//     //   iconSize: [38, 95], // Size of the icon
+//     //   iconAnchor: [22, 94], // Point of the icon which will correspond to marker's location
+//     //   popupAnchor: [-3, -76] // Point from which the popup should open relative to the iconAnchor
+// 	html: `<div style="background-color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #f28f43;">
+//                   PIN
+//                </div>`,
+//         className: 'marker-cluster-custom',
+//         iconSize: L.point(40, 40, true),
+
+//       });
+// }
+
+function markerIcon() {
+return L.icon({
+	iconUrl: 'path/to/your/icon.png',
+	iconSize: [38, 95], // Size of the icon
+	iconAnchor: [22, 94], // Point of the icon which will correspond to marker's location
+	popupAnchor: [-3, -76] // Point from which the popup should open relative to the iconAnchor
+	});
+}
+
+// Before mount load geojson map
 onBeforeMount(async () => {
   // Fetch GeoJSON data from GitHub
   try {
@@ -381,6 +516,7 @@ onBeforeMount(async () => {
 	  console.info('Success loading the GeoJSON data.', data);
       geojson.value = data;
       mapLoaded.value = true;
+	  if( map.value !== null ) map.value.invalidateSize();
     } else {
       console.error('Failed to load the GeoJSON data.');
     }
@@ -389,39 +525,45 @@ onBeforeMount(async () => {
   }
 });
 
+// Function to adjust the map view once the GeoJSON layer is ready
+const onGeoJsonReady = (event: { map: L.Map; target: L.GeoJSON }) => {
+  const map = event.map;
+  map.fitBounds(event.target.getBounds());
+};
+
+// On mount zoom to fit markers
 onMounted(() => {
-  L.Map.addInitHook(function () {
-    // const markerCluster = L.markerClusterGroup({
-    //   removeOutsideVisibleBounds: true,
-    //   chunkedLoading: true,
-    // }).addTo(this);
+	// Center on map
+	if (map.value) {
+    const bounds = markers.value.reduce((bounds, marker) => {
+      return bounds.extend(marker.latLng);
+    }, L.latLngBounds(markers.value[0].latLng, markers.value[0].latLng));
 
-	const markerCluster = new MarkerClusterGroup({
-      removeOutsideVisibleBounds: true,
-      chunkedLoading: true,
-    });
-
-    function randomBetween(min: number, max: number): number {
-      return Math.random() * (max - min) + min;
-    }
-
-    let markers: L.Marker[] = [];
-    for (let i = 0; i < 5000; i++) {
-      const marker = L.marker(
-        L.latLng(randomBetween(53.82477192, 53.92365592), randomBetween(27.5078027, 27.70640622))
-      );
-      marker.bindPopup(`Number ${i}`);
-      markers.push(marker);
-    }
-
-    markerCluster.addLayers(markers);
-  });
+    map.value.fitBounds(bounds);
+  }
 });
+
+// Watcher that reacts to changes in the markers array
+watch(markers, (newMarkers) => {
+  if (map.value && newMarkers.length > 0) {
+    const bounds = newMarkers.reduce((bounds, marker) => bounds.extend(marker.latLng), L.latLngBounds(newMarkers[0].latLng, newMarkers[0].latLng));
+    map.value.fitBounds(bounds);
+  }
+}, { deep: true });
 
 
 </script>
 
 <style scoped>
+/**
+Map
+ */
+
+ .leaflet-container {
+	background-color: var(--color-layout-hex, transparent) !important;
+ }
+
+
 /* CSS for Toggle Switch:  https://www.w3schools.com/howto/howto_css_switch.asp */
 .switch {
 	position: relative;

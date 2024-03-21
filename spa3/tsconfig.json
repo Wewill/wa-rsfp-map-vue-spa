@@ -21,7 +21,7 @@
     "noFallthroughCasesInSwitch": true,
 
 		/* Special */
-		"allowJs": true, // This line allows JavaScript files to be compiled ( map )
+		// "allowJs": true, // This line allows JavaScript files to be compiled ( map )
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"],
   "references": [{ "path": "./tsconfig.node.json" }]
