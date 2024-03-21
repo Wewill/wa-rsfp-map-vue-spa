@@ -3,7 +3,7 @@
 MAP =
 {{  zoom }}
 {{  center }}
-{{  mapIsReady }}
+{{  mapLoaded }}
 
 	Les thematiques =
 	{{  wpThematic  }}
@@ -127,41 +127,28 @@ MAP =
 					</div>
 
 					<div class="row f-w px-4">
-						<div class="col-9 bg-color-bg rounded-start-4">
-							1#
-							<!-- <l-map ref="map" v-model:zoom="zoom" :center="[47.41322, -1.219482]">
-							<l-tile-layer
-								url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-								layer-type="base"
-								name="OpenStreetMap"
-							></l-tile-layer>
-							</l-map> -->
-2#
-							<!-- <l-map :useGlobalLeaflet="false">
-							<l-geo-json :geojson="geojson" />
-							</l-map> -->
+						<div class="col-9 bg-color-bg rounded-start-4 p-0">
 
-							3#
-							<!-- <l-map ref="map" v-if="mapIsReady" v-model:zoom="zoom" :center="center">
-    <l-tile-layer
-      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      layer-type="base"
-      name="OpenStreetMap"
-    ></l-tile-layer>
-    <l-geo-json :geojson="geojson" ></l-geo-json>
-  </l-map> -->
+							<l-map class="rounded-start-4" v-if="mapLoaded" style="height: 100%; width: 100%;"
 
-#4
-  <l-map ref="map" v-if="mapIsReady" :zoom="zoom" :center="center" style="height: 100%; width: 100%;">
-    <!-- Omit the <l-tile-layer> to not display the base map -->
-    <l-geo-json :geojson="geojson" :options="options"
-        :options-style="styleFunction"></l-geo-json>
-		<l-marker :lat-lng="marker" />
+							ref="map"
+    :max-zoom="19"
+    v-model:zoom="zoom"
+    v-model:center="center"
+    :zoomAnimation="true"
+    :markerZoomAnimation="true"
+    :useGlobalLeaflet="true"
+    :options="{ zoomControl: false }"
+    @ready="onLeafletReady"
 
-  </l-map>
+							>
+									<!-- Omit the <l-tile-layer> to not display the base map -->
+									<l-geo-json :geojson="geojson" :options="options" :options-style="styleFunction"></l-geo-json>
+									<l-marker :lat-lng="marker" />
+								</l-map>
+
 						</div>
 						<div class="col-3 bg-action-3 rounded-end-4 p-4 pb-10">
-
 
 							<app-get-posts
 								:search-term="searchTerm"
@@ -302,7 +289,7 @@ MAP =
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onBeforeMount} from 'vue';
+import { ref, computed, onBeforeMount, onMounted, nextTick} from 'vue';
 import AppFilterSwitches from './AppFilterSwitches.vue';
 import AppGetPosts from './AppGetPosts.vue';
 import AppGetThematics from './AppGetThematics.vue';
@@ -310,7 +297,15 @@ import AppGetThematics from './AppGetThematics.vue';
 import "leaflet/dist/leaflet.css";
 import { LMap, LGeoJson, LMarker} from "@vue-leaflet/vue-leaflet";
 import { latLng } from 'leaflet';
+import * as L from 'leaflet';
+import 'leaflet.markercluster/dist/leaflet.markercluster.js';
+import { MarkerClusterGroup } from 'leaflet.markercluster';
 
+// import 'leaflet.markercluster';
+// Styles
+import 'leaflet/dist/leaflet.css';
+import 'leaflet.markercluster/dist/MarkerCluster.css';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 
 // import { wpData } from './path-to-wpData'; // You need to import wpData or declare it globally
 
@@ -337,10 +332,16 @@ const mergedFilters = computed(() => {
 const franceDepartments = 'https://rawgit.com/gregoiredavid/france-geojson/master/departements-version-simplifiee.geojson';
 const zoom = ref<number>(6);
 const center = ref<[number, number]>([47.41322, -1.219482])
-const mapIsReady = ref<Boolean>(false)
+const mapLoaded = ref<Boolean>(false)
+const leafletReady = ref<Boolean>(false);
 const geojson = ref(undefined);
 const marker = ref(latLng(47.41322, -1.219482));
+const map = ref<L.Map | null>(null);
 
+async function onLeafletReady() {
+  await nextTick();
+  leafletReady.value = true;
+}
 
 const fillColor = ref("#e4ce7f");
 const options = computed(() => {
@@ -379,13 +380,42 @@ onBeforeMount(async () => {
       const data = await response.json();
 	  console.info('Success loading the GeoJSON data.', data);
       geojson.value = data;
-      mapIsReady.value = true;
+      mapLoaded.value = true;
     } else {
       console.error('Failed to load the GeoJSON data.');
     }
   } catch (error) {
     console.error('Error fetching the GeoJSON data:', error);
   }
+});
+
+onMounted(() => {
+  L.Map.addInitHook(function () {
+    // const markerCluster = L.markerClusterGroup({
+    //   removeOutsideVisibleBounds: true,
+    //   chunkedLoading: true,
+    // }).addTo(this);
+
+	const markerCluster = new MarkerClusterGroup({
+      removeOutsideVisibleBounds: true,
+      chunkedLoading: true,
+    });
+
+    function randomBetween(min: number, max: number): number {
+      return Math.random() * (max - min) + min;
+    }
+
+    let markers: L.Marker[] = [];
+    for (let i = 0; i < 5000; i++) {
+      const marker = L.marker(
+        L.latLng(randomBetween(53.82477192, 53.92365592), randomBetween(27.5078027, 27.70640622))
+      );
+      marker.bindPopup(`Number ${i}`);
+      markers.push(marker);
+    }
+
+    markerCluster.addLayers(markers);
+  });
 });
 
 
