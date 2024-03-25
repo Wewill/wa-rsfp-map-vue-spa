@@ -63,16 +63,28 @@ Les thematiques =
 									<p class="f-12 font-weight-bold m-0">Production</p>
 
 									<Multiselect
+										class="multiselect-tag-production"
 										v-model="productionFilter"
 										:options="wpProduction"
+										mode="tags"
+										:close-on-select="false"
+										:searchable="true"
+										placeholder="Select"
+										@click.stop.prevent
 									/>
 								</div>
 								<div class="flex-fill px-2" data-aos="fade-left" data-aos-delay="300">
 									<p class="f-12 font-weight-bold m-0">Thematique</p>
 
 									<Multiselect
+										class="multiselect-tag-thematic"
 										v-model="thematicFilter"
 										:options="wpThematic"
+										mode="tags"
+										:close-on-select="false"
+										:searchable="true"
+										placeholder="Select"
+										@click.stop.prevent
 									/>
 
 								</div>
@@ -80,9 +92,39 @@ Les thematiques =
 									<p class="f-12 font-weight-bold m-0">Geography</p>
 
 									<Multiselect
+										class="multiselect-tag-geography"
 										v-model="geographyFilter"
 										:options="wpGeography"
-									/>
+										mode="tags"
+										:close-on-select="false"
+										:searchable="true"
+										placeholder="Select"
+										@click.stop.prevent
+									>
+									<!-- <template v-slot:singlelabel="{ value }">
+										<code style="font-size: 9px">{{
+										value
+										}}</code>
+										<div class="multiselect-single-label">
+										<span class="fw-semibold">
+										{{ value.value }}
+										</span>
+										</div>
+									</template>
+
+									<template v-slot:option="{ option }">
+										<code style="font-size: 9px">{{
+										option
+										}}</code>
+										<span
+										class="fw-semibold"
+										role="option"
+										:value="option.value"
+										:key="option.value">
+											{{ option.value }}
+										</span>
+									</template> -->
+									</Multiselect>
 
 								</div>
 
