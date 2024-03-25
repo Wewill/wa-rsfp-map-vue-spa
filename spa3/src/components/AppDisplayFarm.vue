@@ -2,8 +2,8 @@
 	<!-- BEGIN: Farm item -->
 	<li class="list-item me-2 flex-fill">
 		<div class="card my-0 border-0 bg-transparent">
-			<img v-if="postType.vue_meta.thumbnail_url" :src="postType.vue_meta.thumbnail_url" :alt="postType.vue_meta.media_alt || 'post thumbnail'" class="img-fluid rounded-4 img-transition-scale">
-			<div v-else class="h-300px w-300-px rounded-4 bg-layout">PAS d'IMAGE</div>
+			<img v-if="postType.vue_meta.thumbnail_url" :src="postType.vue_meta.thumbnail_url" :alt="postType.vue_meta.media_alt || 'post thumbnail'" class="img-fluid rounded-4 img-transition-scale h-100-px">
+			<div v-else class="h-100-px w-100-px rounded-4 bg-light">PAS d'IMAGE</div>
 			<div class="card-body py-2 px-0">
 				<p class="card-text fs-xs fw-bold"><a :href="postType.link" class="stretched-link"><span v-html="highlightedPostTitle || postType.title.rendered"></span></a></p>
 			</div>

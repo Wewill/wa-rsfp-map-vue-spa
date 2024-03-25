@@ -6,7 +6,7 @@ export interface WpPost {
 	date: string; // You might want to convert this into a Date object in your application
 	slug: string;
 	title: { rendered: string };
-	content: { rendered: string; protected: boolean };
+	content?: { rendered: string; protected: boolean };
 	excerpt: { rendered: string; protected: boolean };
 	author: number; // This is the author's ID. You might want a separate type for author details
 	//
@@ -22,10 +22,22 @@ export interface WpPost {
 		media_alt:string
 		media_url:string,
 		thumbnail_url:string,
-		errors:[string]
+		errors:[string],
+		relationships?: relationships,
+		geolocation?: geolocation,
 	};
 	link: string;
 	// Add any custom fields or other fields you use here
+}
+
+export interface relationships {
+	farm: number;
+	structure: number;
+	operation: number;
+}
+export interface geolocation {
+	code: [string],
+	latLng: [number | null, number | null]
 }
 
 export type WpPosts = WpPost[];

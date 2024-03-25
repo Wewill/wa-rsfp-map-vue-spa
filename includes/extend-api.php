@@ -53,6 +53,7 @@ function vue_get_post_meta_fields( $post_object, $field_name, $request ) {
 	// $term_names = array();
 	$term_links = array();
 	$errors = array();
+	$term_codes = array();
 
 	$post_id = $post_object['id']; // get the post id.
 	$post_type = get_post_type($post_id);
@@ -86,15 +87,15 @@ function vue_get_post_meta_fields( $post_object, $field_name, $request ) {
 		foreach ( $post_terms as $post_term ) {
 			// Get term
 			$term_data = get_term( $post_term, $taxonomy);
-			// error_log(print_r($term_data, true));
+			error_log(print_r($term_data, true));
 
 			// Check if there was an error retrieving the term
 			if ( is_wp_error( $term_data ) ) {
 				// Handle the error. $term_data will contain the WP_Error object.
-				array_push( $errors, $taxonomy  . ' : Error retrieving term: ' . $term_data->get_error_message());
+				array_push( $errors, $taxonomy  . ' : Error retrieving term : ' . $term_data->get_error_message());
 			} elseif ( empty( $term_data ) || is_null( $term_data ) ) {
 				// The term is empty or doesn't exist
-				array_push( $errors, $taxonomy  . 'The term is empty or doesn’t exist.');
+				array_push( $errors, $taxonomy  . ' : the term is empty or doesn’t exist.');
 			} else {
 				// It's ok we have data, then push them
 				$term_name = $term_data->name; //category_nicename
@@ -106,8 +107,26 @@ function vue_get_post_meta_fields( $post_object, $field_name, $request ) {
 				array_push( $terms, $term_name );
 				// array_push( $term_names, $term_name );
 				array_push( $term_links, $term_link );
+
+				// If we are processing geography taxonomy store the geocode
+				if ( $taxonomy === 'geography') {
+					// Get code
+					$g_special_code = get_term_meta( $term_data->term_id, 'g_special_code', true );
+					array_push( $term_codes, $g_special_code );
+				}
 			}
 		}
+	}
+
+	// Get relationships
+	$d_relationships_farm 		= get_post_meta( $post_id, 'd_relationships_farm', true );
+	$d_relationships_structure 	= get_post_meta( $post_id, 'd_relationships_structure', true );
+	$d_relationships_operation 	= get_post_meta( $post_id, 'd_relationships_operation', true );
+
+	// Get attached farm coordinates
+	if($d_relationships_farm) {
+		$f_geolocation_lat 		= get_post_meta( $d_relationships_farm, 'f_geolocation_lat', true );
+		$f_geolocation_lng 		= get_post_meta( $d_relationships_farm, 'f_geolocation_lng', true );
 	}
 
 	// add categories, custom excerpt, featured image to the api response.
@@ -139,6 +158,15 @@ function vue_get_post_meta_fields( $post_object, $field_name, $request ) {
 			'thumbnail'
 		),
 		'errors' => $errors,
+		'relationships' => array(
+			'farm' 		=> $d_relationships_farm,
+			'structure' => $d_relationships_structure,
+			'operation' => $d_relationships_operation,
+		),
+		'geolocation' => array(
+			'code' 		=> $term_codes,
+			'latLng' 	=> array(($f_geolocation_lat != "")?(float)$f_geolocation_lat:null, ($f_geolocation_lng != "")?(float)$f_geolocation_lng:null),
+		)
 	);
 
 	// return data to the get_callback.

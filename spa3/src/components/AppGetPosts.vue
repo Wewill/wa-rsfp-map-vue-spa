@@ -9,7 +9,7 @@
 		<template v-if="route === 'directory'">
 
 			<!-- Title + number of Posts -->
-			<h6 class="fw-bold">Savoir-faire <span class="text-muted" v-if="filteredResults.length === wpPosts.length">{{ wpPosts.length }}</span><span class="text-muted" v-else>{{ filteredResults.length }}+</span></h6>
+			<h6 class="fw-bold">Savoir-faire <span class="----text-muted --muted fw-medium op-5 --muted fw-medium op-5" v-if="filteredResults.length === wpPosts.length">{{ wpPosts.length }}</span><span class="--text-muted --muted fw-medium op-5" v-else>{{ filteredResults.length }}+</span></h6>
 
 			<!-- Results -->
 			<div class="h-300-px overflow-y-scroll scrollbar-white me-n3 pe-3">
@@ -26,7 +26,7 @@
 						<!-- AppDisplayDirectory is called for each post in the filteredResults -->
 						</app-display-directory>
 
-					<li><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></li>
+					<li class="d-flex align-items-center justify-content-center"><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></li>
 				</ul>
 			</div>
 
@@ -36,9 +36,9 @@
 		<template v-else-if="route === 'farm'">
 
 			<!-- Title + number of Posts -->
-			<h6 class="fw-bold">Ferme <span class="text-muted" v-if="filteredResults.length === wpPosts.length">{{ wpPosts.length }}</span><span class="text-muted" v-else>{{ filteredResults.length }}+</span></h6>
+			<h6 class="fw-bold">Ferme <span class="--text-muted --muted fw-medium op-5" v-if="filteredResults.length === wpPosts.length">{{ wpPosts.length }}</span><span class="--text-muted --muted fw-medium op-5" v-else>{{ filteredResults.length }}+</span></h6>
 
-			<ul class="list-unstyled card-items d-flex align-items-center justify-content-between mb-4">
+			<ul class="list-unstyled card-items d-flex align-items-start justify-content-between mb-4">
 
 					<!-- AppDisplayFarm Component -->
 					<app-display-farm
@@ -51,7 +51,7 @@
 					<!-- AppDisplayFarm is called for each post in the filteredResults -->
 					</app-display-farm>
 
-				<li><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></li>
+					<li class="d-flex align-items-center justify-content-center"><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></li>
 			</ul>
 		</template>
 
@@ -169,7 +169,7 @@ async function getPosts(route = 'posts', namespace = 'wp/v2') {
   try {
     const postsPerPage = 100;
     const restURL = window.wpData.rest_url;
-    const fields = 'id,title,content,link,vue_meta'; //content,author,parent,menu_order
+    const fields = 'id,title,link,vue_meta'; //content,author,parent,menu_order
 
     const response = await axios(`${restURL}/${namespace}/${route}?per_page=${postsPerPage}&page=1&_fields=${fields}`);
 

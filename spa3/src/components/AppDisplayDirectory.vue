@@ -1,12 +1,13 @@
 <template>
 	<!-- BEGIN: Directory item -->
-	<li class="list-item card-item p-0 bg-transparent">
+	<li class="list-item card-item p-0 bg-transparent w-100 mb-2">
 		<div class="card my-0 border-0 bg-transparent">
-			<div class="row g-0 align-items-center">
-			<div class="col-md-3 order-first" v-if="postType.vue_meta.thumbnail_url">
-				<img :src="postType.vue_meta.thumbnail_url" :alt="postType.vue_meta.media_alt || 'post thumbnail'" class="img-fluid rounded-4 img-transition-scale">
+			<div class="d-flex align-items-center">
+			<div class="h-100-px w-100-px">
+				<img v-if="postType.vue_meta.thumbnail_url" :src="postType.vue_meta.thumbnail_url" :alt="postType.vue_meta.media_alt || 'post thumbnail'" class="img-fluid rounded-4 img-transition-scale">
+				<div v-else class="h-100-px w-100-px rounded-4 bg-light">PAS D'IMAGE</div>
 			</div>
-			<div class="col-md-9">
+			<div class="">
 				<div class="card-body py-2 pe-0">
 
 					<template v-for="t_production in postType.vue_meta.terms_data.filter((t) => t.taxonomy == 'production' )" >

@@ -4,7 +4,7 @@
     class="rest-data">
 	<!-- BEGIN: Thematics -->
 	<!-- Title + number of Terms -->
-	<h6 class="fw-bold">Thématique <span class="text-muted" v-if="filteredResults.length === wpTerms.length">{{ wpTerms.length }}</span><span class="text-muted" v-else>{{ filteredResults.length }}+</span></h6>
+	<h6 class="fw-bold">Thématique <span class="--text-muted --muted fw-medium op-5" v-if="filteredResults.length === wpTerms.length">{{ wpTerms.length }}</span><span class="--text-muted --muted fw-medium op-5" v-else>{{ filteredResults.length }}+</span></h6>
 
 	<div class="h-200-px overflow-y-scroll scrollbar-white me-n3 pe-3">
 		<ul class="list-unstyled card-items">

@@ -1,45 +1,49 @@
 <template>
   <div>
+<!-- isDataAvailable:: {{ isDataAvailable }} -->
+<!-- <pre><b>filteredResults::</b> {{  filteredResults }}</pre> -->
+<!-- <pre><b>computedMarkers::</b> {{  computedMarkers }}</pre> -->
+
+<!--
 MAP =
 zoom:: {{  zoom }}
 center:: {{  center }}
 mapLoaded:: {{  mapLoaded }}
 leafletReady:: {{  leafletReady }}
 selectedDepartmentIds: {{ selectedDepartmentIds }}
-showTileLayer: {{  showTileLayer }}
-<button @click="showTileLayer = !showTileLayer">Toggle Tile Layer</button>
+showTileLayer: {{  showTileLayer }} -->
 
 <div class="d-none">
 
-	Les thematiques =
-	{{  wpThematic  }}
+Les thematiques =
+{{  wpThematic  }}
 
-    <!-- Filter Buttons -->
-    <app-filter-switches
-      :app-filters="wpCategories"
-      @onFilterToggle="categoryFilter = $event"
-    />
-	{{  categoryFilter  }}
-	<app-filter-switches
-      :app-filters="wpGeography"
-      @onFilterToggle="geographyFilter = $event"
-    />
-		{{  geographyFilter  }}
-	<app-filter-switches
-      :app-filters="wpProduction"
-      @onFilterToggle="productionFilter = $event"
-    />
-		{{  productionFilter  }}
-	<app-filter-switches
-      :app-filters="wpThematic"
-      @onFilterToggle="thematicFilter = $event"
-    />
-		{{  thematicFilter  }}
+<!-- Filter Buttons -->
+<app-filter-switches
+	:app-filters="wpCategories"
+	@onFilterToggle="categoryFilter = $event"
+/>
+{{  categoryFilter  }}
+<app-filter-switches
+	:app-filters="wpGeography"
+	@onFilterToggle="geographyFilter = $event"
+/>
+	{{  geographyFilter  }}
+<app-filter-switches
+	:app-filters="wpProduction"
+	@onFilterToggle="productionFilter = $event"
+/>
+	{{  productionFilter  }}
+<app-filter-switches
+	:app-filters="wpThematic"
+	@onFilterToggle="thematicFilter = $event"
+/>
+	{{  thematicFilter  }}
 
-		MERGED ===
-		{{  mergedFilters }}
+	MERGED ===
+	{{  mergedFilters }}
 
-	</div>
+</div>
 
 
 
@@ -47,7 +51,7 @@ showTileLayer: {{  showTileLayer }}
 		<section id="map" class="mt-2 mb-2 contrast--light is-formatted">
 			<div class="container-fluid mb-n6">
 					<div class="row f-w px-4 pb-4">
-						<div class="col-9" style="padding-left: calc( calc(var(--modified-bs-gutter-x) / 2) - 1.5rem ) !important;">
+						<div class="col-8" style="padding-left: calc( calc(var(--modified-bs-gutter-x) / 2) - 1.5rem ) !important;">
 
 
 							<div class="d-flex align-items-top justify-content-between">
@@ -56,47 +60,44 @@ showTileLayer: {{  showTileLayer }}
 									<h5 class="text-action-3">Le répertoire</h5>
 								</div>
 								<div class="flex-fill px-2" data-aos="fade-left" data-aos-delay="200">
-									<p class="f-12 font-weight-bold m-0">Trier</p>
+									<p class="f-12 font-weight-bold m-0">Production</p>
 
-									<div>
-										<div class=""><a href="#"><i class="icon icon-up"></i> Trier par prix</a></div>
-										<div class=""><a href="#"><i class="icon icon-down"></i> Trier par surface</a></div>
-									</div>
+									<Multiselect
+										v-model="productionFilter"
+										:options="wpProduction"
+									/>
+								</div>
+								<div class="flex-fill px-2" data-aos="fade-left" data-aos-delay="300">
+									<p class="f-12 font-weight-bold m-0">Thematique</p>
+
+									<Multiselect
+										v-model="thematicFilter"
+										:options="wpThematic"
+									/>
 
 								</div>
 								<div class="flex-fill px-2" data-aos="fade-left" data-aos-delay="300">
-									<p class="f-12 font-weight-bold m-0">Localisation</p>
+									<p class="f-12 font-weight-bold m-0">Geography</p>
 
-									<form>
-										<label class="form-label f-12 font-weight-bold text-uppercase mb-3 color-gray" for="City"><i class="icon icon-pin"></i> Ville</label>
-										<fieldset>
-										<select id="City" aria-label="Default select example" class="form-select">
-											<option selected>
-											Paris
-											</option>
-											<option value="1">
-											Lille
-											</option>
-											<option value="2">
-											Provence
-											</option>
-										</select>
-										</fieldset>
-									</form>
+									<Multiselect
+										v-model="geographyFilter"
+										:options="wpGeography"
+									/>
 
 								</div>
+
 								<div class="flex-fill px-2" data-aos="fade-left" data-aos-delay="300">
-									<p class="f-12 font-weight-bold m-0"><i class="icon icon-filters"></i> Filtres</p>
+									<p class="f-12 font-weight-bold m-0"><i class="icon icon-filters"></i> Filtres+</p>
 									<div class="d-flex align-items-top justify-content-between">
 										<div class="">
 											<form>
 												<label class="form-label f-12 font-weight-bold text-uppercase mb-3 color-gray" for="Type"><i class="icon icon-type"></i> Type</label>
 												<fieldset>
 												<div class="form-check mb-1">
-													<input class="form-check-input" id="type-house" type="checkbox" value=""> <label class="form-check-label" for="type-house">Maison</label>
+													<input class="form-check-input" id="type-house" type="checkbox" value=""> <label class="form-check-label" for="type-house">Lorem</label>
 												</div>
 												<div class="form-check mb-1">
-													<input checked class="form-check-input" id="type-apartement" type="checkbox" value=""> <label class="form-check-label" for="type-apartement">Appartement</label>
+													<input checked class="form-check-input" id="type-apartement" type="checkbox" value=""> <label class="form-check-label" for="type-apartement">Lorem</label>
 												</div>
 												</fieldset>
 											</form>
@@ -121,7 +122,7 @@ showTileLayer: {{  showTileLayer }}
 
 
 						</div>
-						<div class="col-3 px-0 pt-1">
+						<div class="col-4 px-0 pt-1">
 
 							<div class="form-floating mb-3">
 								<!-- Search Box -->
@@ -136,47 +137,79 @@ showTileLayer: {{  showTileLayer }}
 					</div>
 
 					<div class="row f-w px-4">
-						<div class="col-9 bg-color-bg rounded-start-4 p-0 d-flex --h-100 justify-content-center align-items-center">
-							<l-map class="rounded-start-4" v-if="mapLoaded" style="min-height: 800px; height: 100%; min-width: 800px; width: 100%;"
+						<div class="col-8 bg-color-bg rounded-start-4 p-0 d-flex --h-100 justify-content-center align-items-center">
+							<l-map class="rounded-start-4" v-if="mapLoaded && isDataAvailable" style="min-height: 800px; height: 100%; min-width: 800px; width: 100%;"
 								ref="map"
+								:min-zoom="5"
 								:max-zoom="19"
 								v-model:zoom="zoom"
 								v-model:center="center"
 								:zoomAnimation="true"
 								:markerZoomAnimation="true"
 								:useGlobalLeaflet="true"
-								:options="{ zoomControl: false }"
+								:options="{ zoomControl: true }"
 								@ready="onLeafletReady"
 							>
 									<!-- Omit the <l-tile-layer> to not display the base map -->
-										<l-tile-layer :url="url" :attribution="attribution" v-if="showTileLayer"/>
+									<l-tile-layer :url="url" :attribution="attribution" v-if="showTileLayer"/>
+									<!-- Geojson -->
 									<l-geo-json :geojson="geojson" :options="options" :options-style="styleFunction" @ready="onGeoJsonReady"></l-geo-json>
-									<l-marker :lat-lng="marker" :icon="markerIcon" />
-									<l-circle-marker :lat-lng="[41.89026, 12.49238]" :radius="50" />
-
+									<!-- Markers-->
 									<l-marker-cluster-group :icon-create-function="clusterIcon">
-										<l-marker :lat-lng="[47.51322, -1.219482]" />
-										<l-marker :lat-lng="[47.41322, -2.219482]" />
-										<l-marker :lat-lng="[47.41322, -1.319482]" />
-										<l-marker :lat-lng="[47.61322, -1.119482]" />
-										<l-circle-marker :lat-lng="[44.89026, 2.49238]" :radius="10" />
-									</l-marker-cluster-group>
+									<l-marker v-for="(marker, index) in computedMarkers" :key="index" :lat-lng="marker.latLng">
+										<l-popup>
+											<!-- <div class="card">
+												<img :src="marker.popupImage" class="card-img-top" :alt="marker.popupTitle">
+												<div class="card-body">
+													<h5 class="card-title"><a :href="marker.popupLink" v-html="marker.popupTitle"></a></h5>
+													<template v-for="t_production in marker.terms_data.filter((t:any) => t.taxonomy == 'production' )" >
+														<div class="production-list d-inline-block"><a :href="t_production.link" class="production-item" tabindex="-1">{{ t_production.name}}</a></div>
+													</template>
+													<template v-for="t_thematic in marker.terms_data.filter((t:any) => t.taxonomy == 'thematic' )" >
+														<div class="thematic-list d-inline-block"><a :href="t_thematic.link" class="thematic-item" tabindex="-1">{{ t_thematic.name}}</a></div>
+													</template>
+													<template v-for="t_geography in marker.terms_data.filter((t:any) => t.taxonomy == 'geography' )" >
+														<div class="geography-list d-inline-block"><a :href="t_geography.link" class="geography-item" tabindex="-1">{{ t_geography.name}}</a></div>
+													</template>
+													<p class="card-text" v-html="marker.popupContent"></p>
+												</div>
+											</div> -->
+											<div class="card border-0"> <!-- style="width:400px; max-width: 500px;" -->
+												<div class="row g-0">
+													<div class="col-md-4 d-flex justify-content-stretch align-items-center ---- bg-cover bg-position-center-center rounded-start" :style="`background-image: url('${marker.popupImage}');`" :title="marker.popupTitle">
+														<!-- <img :src="marker.popupImage" class="img-fluid rounded-start" :alt="marker.popupTitle"> -->
+													</div>
+													<div class="col-md-8">
+														<div class="card-body">
+															<h5 class="card-title mb-2"><a :href="marker.popupLink" v-html="marker.popupTitle"></a></h5>
+															<template v-for="t_production in marker.terms_data.filter((t:any) => t.taxonomy == 'production' )" >
+																<div class="production-list d-inline-block"><a :href="t_production.link" class="production-item" tabindex="-1">{{ t_production.name}}</a></div>
+															</template>
+															<template v-for="t_thematic in marker.terms_data.filter((t:any) => t.taxonomy == 'thematic' )" >
+																<div class="thematic-list d-inline-block"><a :href="t_thematic.link" class="thematic-item" tabindex="-1">{{ t_thematic.name}}</a></div>
+															</template>
+															<template v-for="t_geography in marker.terms_data.filter((t:any) => t.taxonomy == 'geography' )" >
+																<div class="geography-list d-inline-block"><a :href="t_geography.link" class="geography-item" tabindex="-1">{{ t_geography.name}}</a></div>
+															</template>
+															<p class="card-text mt-2 small" v-html="marker.popupContent"></p>
+														</div>
+													</div>
+												</div>
+											</div>
 
-									<l-marker-cluster-group :icon-create-function="clusterIcon">
-									<l-marker v-for="(marker, index) in markers" :key="index" :lat-lng="marker.latLng">
-										<l-popup>{{ marker.popupContent }}</l-popup>
+										</l-popup>
 										<l-icon
 											:icon-anchor="[10, 10]"
 											class-name="someExtraClass"
 											>
-											<div style="background-color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; color: #f28f43;"></div>
+											<div style="background-color: var(--waff-color-heading, rgb(60, 10, 10)); border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; color: white;"></div>
 										</l-icon>
 									</l-marker>
 									</l-marker-cluster-group>
-
 							</l-map>
 						</div>
-						<div class="col-3 bg-action-3 rounded-end-4 p-4 pb-10">
+						<div class="col-4 bg-action-3 rounded-end-4 p-4 pb-10">
+							<button class="btn btn-sm" @click="showTileLayer = !showTileLayer">Toggle Tile Layer</button>
 
 							<app-get-posts
 								:search-term="searchTerm"
@@ -202,9 +235,9 @@ showTileLayer: {{  showTileLayer }}
 							/> -->
 
 							<app-get-thematics
-									:search-term="searchTerm"
-									:app-filters="thematicFilter"
-    />
+								:search-term="searchTerm"
+								:app-filters="thematicFilter"
+    						/>
 
 						</div>
 				</div>
@@ -318,9 +351,11 @@ showTileLayer: {{  showTileLayer }}
 
 <script setup lang="ts">
 import { ref, computed, onBeforeMount, onMounted, nextTick, watch} from 'vue';
+import axios from 'axios';
 import AppFilterSwitches from './AppFilterSwitches.vue';
 import AppGetPosts from './AppGetPosts.vue';
 import AppGetThematics from './AppGetThematics.vue';
+import { WpPosts, WpPost, WpTerm} from '../types/wpTypes'; // Assuming you have a type definition for posts
 
 // https://dev.to/camptocamp-geo/the-3-best-open-source-web-mapping-libraries-57o7
 // https://vue3openlayers.netlify.app
@@ -330,10 +365,14 @@ import L from 'leaflet'
 globalThis.L = L
 
 //import type L from "leaflet";
-import { LTileLayer, LMap, LGeoJson, LMarker, LCircleMarker, LIcon, LPopup} from "@vue-leaflet/vue-leaflet";
+import { LTileLayer, LMap, LGeoJson, LMarker, LIcon, LPopup} from "@vue-leaflet/vue-leaflet";
 import { LMarkerClusterGroup } from 'vue-leaflet-markercluster'
-import 'leaflet/dist/leaflet.css'
+// import 'leaflet/dist/leaflet.css' imported and modified in styles.css
 import 'vue-leaflet-markercluster/dist/style.css'
+import { FeatureCollection, Geometry } from 'geojson';
+
+import Multiselect from '@vueform/multiselect'
+
 
 // import { wpData } from './path-to-wpData'; // You need to import wpData or declare it globally
 
@@ -352,9 +391,74 @@ const wpProduction = ref(window.wpData.production.map((term: string) => term.toL
 const wpThematic = ref(window.wpData.thematic.map((term: string) => term.toLowerCase()));
 
 // Merge arrays reactively
-const mergedFilters = computed(() => {
+const mergedFilters = computed<string[]>(() => {
   return [...categoryFilter.value, ...geographyFilter.value, ...productionFilter.value, ...thematicFilter.value];
 });
+
+
+/**
+ * Get directory posts
+ */
+
+ // Reactive data
+const apiResponse = ref<string>('');
+const wpPosts = ref<WpPosts>([]); // Use a more specific type if available
+const isDataAvailable = ref<boolean>(false);
+
+// Computed property for filtered results
+const filteredResults = computed<WpPosts>(() => {
+  if (wpPosts.value.length) {
+    const pattern = new RegExp(searchTerm.value, 'i');
+    const filteredPosts = wpPosts.value.filter((post) =>
+      post.title.rendered.match(pattern) ||
+      post.vue_meta.custom_excerpt.match(pattern)
+    );
+
+    if (mergedFilters && mergedFilters.value.length) {
+      return filteredPosts.filter((post) =>
+        post.vue_meta.terms.some((term) =>
+          mergedFilters.value.includes(term.toLowerCase())
+        )
+      );
+    } else {
+      return filteredPosts;
+    }
+  }
+  return [];
+});
+
+// Mounted lifecycle hook
+onMounted(() => {
+  fetchData();
+});
+
+// Methods
+async function fetchData() {
+  apiResponse.value = 'Loading ⏳';
+  await getPosts('directory');
+}
+
+// Make it global
+async function getPosts(route = 'posts', namespace = 'wp/v2') {
+	console.log('getPosts::', route)
+  try {
+    const postsPerPage = 100;
+    const restURL = window.wpData.rest_url;
+    const fields = 'id,title,link,vue_meta'; //content,author,parent,menu_order
+
+    const response = await axios(`${restURL}/${namespace}/${route}?per_page=${postsPerPage}&page=1&_fields=${fields}`);
+
+    wpPosts.value = response.data;
+    isDataAvailable.value = true;
+
+    // Handle pagination...
+    // Refer to the original method for additional pagination logic
+  } catch (error) {
+    apiResponse.value = `The request could not be processed! <br> <strong>${error}</strong>`;
+  }
+}
+
+
 
 // Map
 const url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -365,36 +469,72 @@ const zoom = ref<number>(6);
 const center = ref<[number, number]>([47.665496, 2.428034])
 const mapLoaded = ref<Boolean>(false);
 const leafletReady = ref<Boolean>(false);
-const geojson = ref(undefined);
-const marker = ref<L.LatLngExpression>([47.41322, -1.219482]);
+const geojson = ref<FeatureCollection<Geometry> | undefined>(undefined);
 const map = ref<L.Map | null>(null);
 
 // Define your marker type
 interface Marker {
   latLng: L.LatLngExpression;
-  popupContent: string;
+  popupTitle: string;
+  popupContent?: string;
+  popupLink?: string;
+  popupImage?: string;
+  terms_data?: [WpTerm];
 }
 
 const markers = ref<Marker[]>([
-	{ latLng: [47.413220, -4.219482], popupContent: 'Marker 1' },
-	{ latLng: [48.413220, -7.219482], popupContent: 'Marker 2' },
-	{ latLng: [46.413220, 8.219482], popupContent: 'Marker 3' },
-	{ latLng: [47.413220, 2.219482], popupContent: 'Marker 4' },
-	{ latLng: [45.413220, 4.219482], popupContent: 'Marker 5' },
-	{ latLng: [50.413220, 0.219482], popupContent: 'Marker 6' },
-	{ latLng: [47.113220, 10.219482], popupContent: 'Marker 7' },
-	{ latLng: [47.113220, 10.119482], popupContent: 'Marker 8' },
-	{ latLng: [47.013220, 10.119482], popupContent: 'Marker 9' },
+	{ latLng: [47.413220, -4.219482], popupTitle: 'Marker 1', popupContent: 'Marker 1', popupLink: '#' },
+	{ latLng: [48.413220, -7.219482], popupTitle: 'Marker 1', popupContent: 'Marker 2', popupLink: '#'},
+	{ latLng: [46.413220, 8.219482], popupTitle: 'Marker 1', popupContent: 'Marker 3', popupLink: '#' },
+	{ latLng: [47.413220, 2.219482], popupTitle: 'Marker 1', popupContent: 'Marker 4', popupLink: '#' },
+	{ latLng: [45.413220, 4.219482], popupTitle: 'Marker 1', popupContent: 'Marker 5', popupLink: '#' },
+	{ latLng: [50.413220, 0.219482], popupTitle: 'Marker 1', popupContent: 'Marker 6', popupLink: '#' },
+	{ latLng: [47.113220, 10.219482], popupTitle: 'Marker 1', popupContent: 'Marker 7', popupLink: '#' },
+	{ latLng: [47.113220, 10.119482], popupTitle: 'Marker 1', popupContent: 'Marker 8', popupLink: '#' },
+	{ latLng: [47.013220, 10.119482], popupTitle: 'Marker 1', popupContent: 'Marker 9', popupLink: '#' },
 	// Add more markers here
 ]);
 
+function findDepartmentCenter(departmentCode: string | undefined): [number, number] | null {
+	if ( geojson.value === undefined || !departmentCode ) return null;
+	else {
+		const department = geojson.value.features.find(feature => feature.properties && 'code' in feature.properties && feature.properties.code === departmentCode);
+		if (!department) return null;
+
+		const departmentLayer = L.geoJSON(department);
+		const bounds = (departmentLayer as L.GeoJSON).getBounds();
+		const centerPoint = bounds.getCenter();
+		return [centerPoint.lat, centerPoint.lng];
+	}
+}
+
+const computedMarkers = computed<Marker[] | any>(() => {
+	return filteredResults.value.map((p:WpPost) =>
+	{
+		return {
+			latLng: ( p.vue_meta.geolocation?.latLng.every(el => el !== null) )?p.vue_meta.geolocation?.latLng:findDepartmentCenter(p.vue_meta.geolocation?.code[0]),
+			popupTitle: (p.title.rendered)?p.title.rendered:'',
+//			popupContent: (p.excerpt.rendered)?p.excerpt.rendered:'',
+			popupContent: 'Lorem ipsum',
+			popupLink: p.link,
+			popupImage: p.vue_meta.media_url,
+			terms_data: p.vue_meta.terms_data
+		}
+	});
+});
+
+
+// Ready funcs
 async function onLeafletReady() {
   await nextTick();
   leafletReady.value = true;
 }
 
-let borderColor:string 	= "#e4ce7f";
-let fillColor:string 	= "#e4ce7f";
+//Styling funcs
+let borderColor:string 		= "rgb(215, 190, 150)";
+let fillColor:string 		= "rgb(255, 255, 255)";
+let fillColorHover:string 	= "rgb(243, 235, 223)";
+
 const options = computed(() => {
   return {
     onEachFeature: onEachFeatureFunction.value
@@ -404,18 +544,18 @@ const options = computed(() => {
 // Styling geojson map
 const defaultStyle = {
   color: borderColor,
-  weight: 2,
+  weight: 1,
   opacity: 1,
-  fillOpacity: 0.6,
+  fillOpacity: .9,
   fillColor: fillColor,
 };
 
 const highlightStyle = {
   color: borderColor,
-  weight: 2,
+  weight: 1,
   opacity: 1,
-  fillOpacity: .9,
-  fillColor: fillColor,
+  fillOpacity: 1,
+  fillColor: fillColorHover,
 };
 
 const styleFunction = computed(() => {
@@ -432,11 +572,11 @@ const onEachFeatureFunction = computed(() => {
 	if (!feature.properties) return;
 	// Tooltip
     layer.bindTooltip(
-      `<div>code:${feature.properties.code}</div><div>nom: ${feature.properties.nom}</div>`,
-      { permanent: false, sticky: true }
+      `<span class="properties-name">${feature.properties.nom}</span>`,
+      { permanent: false, sticky: true, className: 'leaflet-custom-tooltip' }
     );
 	// Popup
-	layer.bindPopup(feature.properties.nom);
+	//layer.bindPopup(feature.properties.nom, { className: 'leaflet-custom-popup' });
 	// Click
     layer.on({
       click: (e: L.LeafletMouseEvent) => {
@@ -470,11 +610,11 @@ const onEachFeatureFunction = computed(() => {
 // Cluster and marker styles
 function clusterIcon(cluster:any) {
       return L.divIcon({
-        html: `<div style="background-color: #f28f43; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: white;">
-                  ${cluster.getChildCount()}
+        html: `<div style="background-color: var(--waff-action-1, rgb(255, 100, 75)); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: white;">
+                  <strong>${cluster.getChildCount()}</strong>
                </div>`,
         className: 'marker-cluster-custom',
-        iconSize: L.point(40, 40, true),
+        iconSize: L.point(40 * (cluster.getChildCount()/40), 40  * (cluster.getChildCount()/40), true),
       });
     }
 
@@ -493,14 +633,14 @@ function clusterIcon(cluster:any) {
 //       });
 // }
 
-function markerIcon() {
-return L.icon({
-	iconUrl: 'path/to/your/icon.png',
-	iconSize: [38, 95], // Size of the icon
-	iconAnchor: [22, 94], // Point of the icon which will correspond to marker's location
-	popupAnchor: [-3, -76] // Point from which the popup should open relative to the iconAnchor
-	});
-}
+// function markerIcon() {
+// return L.icon({
+// 	iconUrl: 'path/to/your/icon.png',
+// 	iconSize: [38, 95], // Size of the icon
+// 	iconAnchor: [22, 94], // Point of the icon which will correspond to marker's location
+// 	popupAnchor: [-3, -76] // Point from which the popup should open relative to the iconAnchor
+// 	});
+// }
 
 // Before mount load geojson map
 onBeforeMount(async () => {
@@ -550,15 +690,10 @@ watch(markers, (newMarkers) => {
 
 </script>
 
-<style scoped>
+<style>
 /**
 Map
  */
-
- .leaflet-container {
-	background-color: var(--color-layout-hex, transparent) !important;
- }
-
 
 /* CSS for Toggle Switch:  https://www.w3schools.com/howto/howto_css_switch.asp */
 .switch {
