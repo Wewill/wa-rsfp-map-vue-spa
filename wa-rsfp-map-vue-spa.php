@@ -15,13 +15,6 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-// Do not load if not frontend
-if ( is_admin() ) return;
-else
-/* But load init template if admin  */
-require plugin_dir_path( __FILE__ ) . '/includes/init-template.php';
-
-
 /**
  * Currently plugin version.
  * Start at version 1.0.0 and use SemVer - https://semver.org
@@ -29,20 +22,24 @@ require plugin_dir_path( __FILE__ ) . '/includes/init-template.php';
  */
 define( 'WA_MAP_VUE_SPA_VERSION', '1.1.0' );
 
-/* Init */
+if ( is_admin() ) {
+	/* Admin init */
+	// Init custom template
+	require plugin_dir_path( __FILE__ ) . '/includes/init-template.php';
+} else {
+	/* Front init */
+	// includes for the callbacks.
+	require plugin_dir_path( __FILE__ ) . '/includes/enqueue-scripts.php';
+	require plugin_dir_path( __FILE__ ) . '/includes/extend-api.php';
 
-// includes for the callbacks.
-require plugin_dir_path( __FILE__ ) . '/includes/enqueue-scripts.php';
-require plugin_dir_path( __FILE__ ) . '/includes/extend-api.php';
 
+	/* hooks and filters */
+	// enqueue-scripts.php.
+	add_action( 'wp_enqueue_scripts', 'wa_mapvuespa_enqueue_spa_scripts' );
 
-/* hooks and filters */
-
-// enqueue-scripts.php.
-add_action( 'wp_enqueue_scripts', 'wa_mapvuespa_enqueue_spa_scripts' );
-
-// extend-api.php.
-add_action( 'rest_api_init', 'wa_mapvuespa_extend_api_response' );
+	// extend-api.php.
+	add_action( 'rest_api_init', 'wa_mapvuespa_extend_api_response' );
+}
 
 // Todo languages
 // ...
