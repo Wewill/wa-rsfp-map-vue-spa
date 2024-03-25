@@ -13,7 +13,7 @@
 function wa_mapvuespa_enqueue_spa_scripts() {
 	global $post;
 
-	// if ( is_page_template( 'templates/vue-search-app-template.php' ) ) { // CHild template way
+	// if ( is_page_template( 'templates/vue-search-app-template.php' ) ) { // Child template way
 	// Return default template if we don't have a custom one defined
 	if ( '../templates/vue-search-app-template.php' == get_post_meta(  $post->ID, '_wp_page_template', true ) ) { // Plugin way
 

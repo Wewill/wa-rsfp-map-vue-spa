@@ -22,10 +22,15 @@ if ( ! defined( 'WPINC' ) ) {
  */
 define( 'WA_MAP_VUE_SPA_VERSION', '1.1.0' );
 
+// Init custom template
+require plugin_dir_path( __FILE__ ) . '/includes/init-template.php';
+
+// Todo languages
+// ...
+
 if ( is_admin() ) {
 	/* Admin init */
-	// Init custom template
-	require plugin_dir_path( __FILE__ ) . '/includes/init-template.php';
+
 } else {
 	/* Front init */
 	// includes for the callbacks.
@@ -40,6 +45,3 @@ if ( is_admin() ) {
 	// extend-api.php.
 	add_action( 'rest_api_init', 'wa_mapvuespa_extend_api_response' );
 }
-
-// Todo languages
-// ...
