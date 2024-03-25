@@ -17,6 +17,10 @@ if ( ! defined( 'WPINC' ) ) {
 
 // Do not load if not frontend
 if ( is_admin() ) return;
+else
+/* But load init template if admin  */
+require plugin_dir_path( __FILE__ ) . '/includes/init-template.php';
+
 
 /**
  * Currently plugin version.
@@ -31,9 +35,6 @@ define( 'WA_MAP_VUE_SPA_VERSION', '1.1.0' );
 require plugin_dir_path( __FILE__ ) . '/includes/enqueue-scripts.php';
 require plugin_dir_path( __FILE__ ) . '/includes/extend-api.php';
 
-/* Init template */
-
-require plugin_dir_path( __FILE__ ) . '/includes/init-template.php';
 
 /* hooks and filters */
 
