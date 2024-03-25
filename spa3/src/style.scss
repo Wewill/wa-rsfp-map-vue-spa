@@ -289,7 +289,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
 /* general typography */
 .leaflet-container {
-	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+	// font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	font-size: 0.75rem;
 	line-height: 1.5;
@@ -718,4 +718,53 @@ Custom leaflet styles
 .leaflet-tooltip-left::before,
 .leaflet-tooltip-right::before {
   border: none; /* Example: Removing the tip arrow */
+}
+
+
+/**
+Project : Multiselect custom styles
+*/
+
+
+.multiselect {
+	border: 0 !important;
+	border-radius: var(--bs-border-radius);
+	background-color: var(--waff-color-layout);
+
+	.multiselect-wrapper {
+		font-size: 1.35rem;
+		font-weight: 600;
+
+		border: 0 !important;
+		border-radius: 10px;
+		//font-family:var(--go-label--font-family,var(--go-navigation--font-family));
+		font-size: 1.1rem;
+		color: var(--waff-color-heading);
+		background-color: var(--waff-color-layout);
+		font-weight: 700;
+
+		transition: border-color 0.3s;
+
+		border-radius: var(--bs-border-radius);
+	}
+
+	input, input:focus, .multiselect-tags-search {
+		background-color: transparent !important;
+		border: 0 !important;
+		box-shadow: none !important;
+
+	}
+
+	&.multiselect-tag-production .multiselect-tag {
+		background-color: var(--waff-color-accent-1);
+	}
+	&.multiselect-tag-production .multiselect-tag {
+		background-color: var(--waff-color-accent-2);
+	}
+	&.multiselect-tag-geography .multiselect-tag {
+		background-color: var(--waff-color-heading);
+	}
+
+
+
 }
