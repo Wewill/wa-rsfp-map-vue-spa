@@ -349,10 +349,8 @@ Les thematiques =
 
 		</section>
 
+<!--
 
-
-
-    <!-- AppGetPosts Component -->
 	Posts=
     <app-get-posts
       :search-term="searchTerm"
@@ -386,7 +384,7 @@ Les thematiques =
       :search-term="searchTerm"
       :app-filters="mergedFilters"
       :route="'structure'"
-    />
+    /> -->
 
   </div>
 </template>
@@ -419,7 +417,7 @@ import Multiselect from '@vueform/multiselect'
 // import { wpData } from './path-to-wpData'; // You need to import wpData or declare it globally
 
 // Assuming wpData is available here, either imported or declared globally
-const cptSelected = ref('posts'); // default post type
+// const cptSelected = ref('posts'); // default post type
 const searchTerm = ref('');
 
 const categoryFilter = ref([]);
