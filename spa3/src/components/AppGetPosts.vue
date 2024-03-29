@@ -12,22 +12,25 @@
 			<h6 class="fw-bold">Savoir-faire <span class="----text-muted --muted fw-medium op-5 --muted fw-medium op-5" v-if="filteredResults.length === wpPosts.length">{{ wpPosts.length }}</span><span class="--text-muted --muted fw-medium op-5" v-else>{{ filteredResults.length }}+</span></h6>
 
 			<!-- Results -->
-			<div class="h-300-px overflow-y-scroll scrollbar-white me-n3 pe-3">
-				<ul class="list-unstyled card-items d-flex flex-column align-items-center mb-2">
+			<div class="wrapper position-relative">
+				<div class="h-300-px overflow-y-scroll scrollbar-white me-n3 pe-3">
+					<ul class="list-unstyled card-items d-flex flex-column align-items-center mb-2">
 
-						<!-- AppDisplayDirectory Component -->
-						<app-display-directory
-						v-if="route === 'directory'"
-						v-for="postType in filteredResults"
-						:key="postType.id"
-						:search-term="searchTerm"
-						:post-type="postType"
-						role="article" >
-						<!-- AppDisplayDirectory is called for each post in the filteredResults -->
-						</app-display-directory>
+							<!-- AppDisplayDirectory Component -->
+							<app-display-directory
+							v-if="route === 'directory'"
+							v-for="postType in filteredResults"
+							:key="postType.id"
+							:search-term="searchTerm"
+							:post-type="postType"
+							role="article" >
+							<!-- AppDisplayDirectory is called for each post in the filteredResults -->
+							</app-display-directory>
 
-					<li class="d-flex align-items-center justify-content-center"><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></li>
-				</ul>
+						<li class="d-flex align-items-center justify-content-center"><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></li>
+					</ul>
+				</div>
+				<div class="position-absolute w-100 h-20-px w-100 bottom-0 left-0 bg-v-gradient-action-3"></div>
 			</div>
 
 		</template>

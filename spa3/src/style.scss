@@ -726,6 +726,11 @@ Project : Multiselect custom styles
 */
 
 
+:root {
+	--ms-placeholder-color: var(--waff-color-heading);
+}
+
+
 .multiselect {
 	border: 0 !important;
 	border-radius: var(--bs-border-radius);
@@ -755,6 +760,19 @@ Project : Multiselect custom styles
 
 	}
 
+	.multiselect-placeholder {
+		font-size: 0.8rem !important;
+	}
+
+	input::placeholder, input:-ms-input-placeholder {
+		color: var(--waff-color-heading);
+	}
+
+	input.multiselect-tags-search {
+		font-size: 1.1rem;
+		color: var(--waff-color-heading);
+	}
+
 	&.multiselect-tag-production .multiselect-tag {
 		background-color: var(--waff-color-accent-1);
 	}
@@ -764,7 +782,5 @@ Project : Multiselect custom styles
 	&.multiselect-tag-geography .multiselect-tag {
 		background-color: var(--waff-color-heading);
 	}
-
-
 
 }

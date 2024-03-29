@@ -4,14 +4,15 @@
 <!-- <pre><b>filteredResults::</b> {{  filteredResults }}</pre> -->
 <!-- <pre><b>computedMarkers::</b> {{  computedMarkers }}</pre> -->
 
-<!--
+
 MAP =
 zoom:: {{  zoom }}
 center:: {{  center }}
 mapLoaded:: {{  mapLoaded }}
 leafletReady:: {{  leafletReady }}
 selectedDepartmentIds: {{ selectedDepartmentIds }}
-showTileLayer: {{  showTileLayer }} -->
+showTileLayer: {{  showTileLayer }}
+geographyFilter: {{  geographyFilter }}
 
 <div class="d-none">
 
@@ -180,6 +181,7 @@ Les thematiques =
 
 					<div class="row f-w px-4">
 						<div class="col-8 bg-color-bg rounded-start-4 p-0 d-flex --h-100 justify-content-center align-items-center">
+
 							<l-map class="rounded-start-4" v-if="mapLoaded && isDataAvailable" style="min-height: 800px; height: 100%; min-width: 800px; width: 100%;"
 								ref="map"
 								:min-zoom="5"
@@ -192,6 +194,10 @@ Les thematiques =
 								:options="{ zoomControl: true }"
 								@ready="onLeafletReady"
 							>
+									<!-- Control map -->
+									<l-control position="topright" >
+										<button class="btn btn-sm btn-outline-action-2" @click="showTileLayer = !showTileLayer"><i class="bi bi-map-fill"></i></button>
+									</l-control>
 									<!-- Omit the <l-tile-layer> to not display the base map -->
 									<l-tile-layer :url="url" :attribution="attribution" v-if="showTileLayer"/>
 									<!-- Geojson -->
@@ -251,7 +257,6 @@ Les thematiques =
 							</l-map>
 						</div>
 						<div class="col-4 bg-action-3 rounded-end-4 p-4 pb-10">
-							<button class="btn btn-sm" @click="showTileLayer = !showTileLayer">Toggle Tile Layer</button>
 
 							<app-get-posts
 								:search-term="searchTerm"
@@ -286,7 +291,7 @@ Les thematiques =
 			</div>
 
 			<!-- Begin: CTA -->
-			<div class="d-flex align-items-center justify-content-center py-4 px-5 bg-body rounded-4 shadow mx-20 mb-6 z-2 position-relative">
+			<div class="d-flex align-items-center justify-content-center py-4 px-5 bg-body rounded-4 shadow mx-20 mb-6 --z-2 position-relative" style="z-index:1000;">
 				<div class="d-flex align-items-center" data-aos="flip-up" data-aos-delay="200">
 					<div class="flex-shrink-0 me-3">
 						<i class="bi bi-bootstrap h2 text-action-1"></i>
@@ -405,7 +410,7 @@ import L from 'leaflet'
 globalThis.L = L
 
 //import type L from "leaflet";
-import { LTileLayer, LMap, LGeoJson, LMarker, LIcon, LPopup} from "@vue-leaflet/vue-leaflet";
+import { LTileLayer, LMap, LGeoJson, LMarker, LIcon, LPopup, LControl} from "@vue-leaflet/vue-leaflet";
 import { LMarkerClusterGroup } from 'vue-leaflet-markercluster'
 // import 'leaflet/dist/leaflet.css' imported and modified in styles.css
 import 'vue-leaflet-markercluster/dist/style.css'
@@ -570,6 +575,10 @@ async function onLeafletReady() {
   leafletReady.value = true;
 }
 
+// function toggleTileLayer() {
+// 	showTileLayer.value = !showTileLayer.value;
+// }
+
 //Styling funcs
 let borderColor:string 		= "rgb(215, 190, 150)";
 let fillColor:string 		= "rgb(255, 255, 255)";
@@ -711,12 +720,12 @@ const onGeoJsonReady = (event: { map: L.Map; target: L.GeoJSON }) => {
 onMounted(() => {
 	// Center on map
 	if (map.value) {
-    const bounds = markers.value.reduce((bounds, marker) => {
-      return bounds.extend(marker.latLng);
-    }, L.latLngBounds(markers.value[0].latLng, markers.value[0].latLng));
+		const bounds = markers.value.reduce((bounds, marker) => {
+		return bounds.extend(marker.latLng);
+		}, L.latLngBounds(markers.value[0].latLng, markers.value[0].latLng));
 
-    map.value.fitBounds(bounds);
-  }
+		map.value.fitBounds(bounds);
+	}
 });
 
 // Watcher that reacts to changes in the markers array
