@@ -27,8 +27,11 @@
 							<!-- AppDisplayDirectory is called for each post in the filteredResults -->
 							</app-display-directory>
 
-						<li class="d-flex align-items-center justify-content-center"><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></li>
+						<!-- <li class="d-flex align-items-center justify-content-center"><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></li> -->
 					</ul>
+				<!-- Plus button -->
+				<div class="d-flex flex-center"><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></div>
+
 				</div>
 				<div class="position-absolute w-100 h-20-px w-100 bottom-0 left-0 bg-v-gradient-action-3"></div>
 			</div>
@@ -41,7 +44,7 @@
 			<!-- Title + number of Posts -->
 			<h6 class="fw-bold">Ferme <span class="--text-muted --muted fw-medium op-5" v-if="filteredResults.length === wpPosts.length">{{ wpPosts.length }}</span><span class="--text-muted --muted fw-medium op-5" v-else>{{ filteredResults.length }}+</span></h6>
 
-			<ul class="list-unstyled card-items d-flex align-items-start justify-content-between mb-4">
+			<ul class="farm-slide list-unstyled card-items d-flex align-items-start justify-content-between --mb-4">
 
 					<!-- AppDisplayFarm Component -->
 					<app-display-farm
@@ -54,8 +57,11 @@
 					<!-- AppDisplayFarm is called for each post in the filteredResults -->
 					</app-display-farm>
 
-					<li class="d-flex align-items-center justify-content-center"><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></li>
+					<!-- <li class="d-flex align-items-center justify-content-center"><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></li> -->
 			</ul>
+			<!-- Plus button -->
+			<div class="d-flex flex-center"><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></div>
+
 		</template>
 
 		<!-- Posts -->
