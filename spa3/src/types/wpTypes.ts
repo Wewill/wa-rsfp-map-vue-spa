@@ -57,11 +57,16 @@ export interface WpTerm {
 	link: string,
 	vue_meta: {
 		content: string,
+		t_general_image: string,
+		g_special_code: number,
 		media_alt:string
 		media_url:string,
 		thumbnail_url:string,
 		errors:[string]
 	};
+	code?: number,
+	label?:string,
+	value?:string,
 }
 
 export type WpTerms = WpTerm[];

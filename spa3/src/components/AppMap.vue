@@ -4,7 +4,7 @@
 <!-- <pre><b>filteredResults::</b> {{  filteredResults }}</pre> -->
 <!-- <pre><b>computedMarkers::</b> {{  computedMarkers }}</pre> -->
 
-
+<code>
 MAP =
 zoom:: {{  zoom }}
 center:: {{  center }}
@@ -13,11 +13,13 @@ leafletReady:: {{  leafletReady }}
 selectedDepartmentIds: {{ selectedDepartmentIds }}
 showTileLayer: {{  showTileLayer }}
 geographyFilter: {{  geographyFilter }}
+</code>
 
 <div class="d-none">
 
 Les thematiques =
 {{  wpThematic  }}
+{{  wpGeography  }}
 
 <!-- Filter Buttons -->
 <app-filter-switches
@@ -90,9 +92,8 @@ Les thematiques =
 
 								</div>
 								<div class="flex-fill px-2" data-aos="fade-left" data-aos-delay="300">
-									<p class="f-12 font-weight-bold m-0">Geography</p>
-
-									<Multiselect
+									<!-- <p class="f-12 font-weight-bold m-0">Geography</p> -->
+									<!-- <Multiselect
 										class="multiselect-tag-geography"
 										v-model="geographyFilter"
 										:options="wpGeography"
@@ -101,31 +102,15 @@ Les thematiques =
 										:searchable="true"
 										placeholder="Select"
 										@click.stop.prevent
-									>
-									<!-- <template v-slot:singlelabel="{ value }">
-										<code style="font-size: 9px">{{
-										value
-										}}</code>
-										<div class="multiselect-single-label">
-										<span class="fw-semibold">
-										{{ value.value }}
-										</span>
-										</div>
-									</template>
+									/> -->
 
-									<template v-slot:option="{ option }">
-										<code style="font-size: 9px">{{
-										option
-										}}</code>
-										<span
-										class="fw-semibold"
-										role="option"
-										:value="option.value"
-										:key="option.value">
-											{{ option.value }}
-										</span>
-									</template> -->
-									</Multiselect>
+									<app-get-geographies
+										:display-title="true"
+										:search-term="searchTerm"
+										:app-filters="geographyFilter"
+										@onFilterChange="geographyFilter = $event"
+									/>
+
 
 								</div>
 
@@ -201,7 +186,7 @@ Les thematiques =
 									<!-- Omit the <l-tile-layer> to not display the base map -->
 									<l-tile-layer :url="url" :attribution="attribution" v-if="showTileLayer"/>
 									<!-- Geojson -->
-									<l-geo-json :geojson="geojson" :options="options" :options-style="styleFunction" @ready="onGeoJsonReady"></l-geo-json>
+									<l-geo-json :geojson="geojson" :options="options" :options-style="styleFunction"  @ready="onGeoJsonReady"></l-geo-json>
 									<!-- Markers-->
 									<l-marker-cluster-group :icon-create-function="clusterIcon">
 									<l-marker v-for="(marker, index) in computedMarkers" :key="index" :lat-lng="marker.latLng">
@@ -285,6 +270,13 @@ Les thematiques =
 								:search-term="searchTerm"
 								:app-filters="thematicFilter"
     						/>
+
+							<!-- <app-get-geographies
+								:display-title="true"
+								:search-term="searchTerm"
+								:app-filters="geographyFilter"
+								@onFilterChange="geographyFilter = $event"
+    						/> -->
 
 						</div>
 				</div>
@@ -400,6 +392,7 @@ import axios from 'axios';
 import AppFilterSwitches from './AppFilterSwitches.vue';
 import AppGetPosts from './AppGetPosts.vue';
 import AppGetThematics from './AppGetThematics.vue';
+import AppGetGeographies from './AppGetGeographies.vue';
 import { WpPosts, WpPost, WpTerm} from '../types/wpTypes'; // Assuming you have a type definition for posts
 
 // https://dev.to/camptocamp-geo/the-3-best-open-source-web-mapping-libraries-57o7
@@ -426,9 +419,11 @@ import Multiselect from '@vueform/multiselect'
 const searchTerm = ref('');
 
 const categoryFilter = ref([]);
-const geographyFilter = ref([]);
+const geographyFilter = ref<string[]>([]);
 const productionFilter = ref([]);
 const thematicFilter = ref([]);
+
+console.info(window.wpData);
 
 const wpCategories = ref(window.wpData.post_categories.map((term: string) => term.toLowerCase())); // Default
 const wpGeography = ref(window.wpData.geography.map((term: string) => term.toLowerCase()));
@@ -615,10 +610,16 @@ const styleFunction = computed(() => {
 
 // Define a reactive constant to store the clicked department's ID
 const selectedDepartmentIds = ref<string[]>([]);
+const mapLayers = new Map(); // To map department codes to layers
+
 // Function to bind to each feature on geojson map
 const onEachFeatureFunction = computed(() => {
   return (feature:any, layer:L.Layer) => {
 	if (!feature.properties) return;
+	// Load layers to layersMap to reuse in a watcher
+	// Assuming 'code' is a unique identifier for each feature
+	mapLayers.set(feature.properties.code, layer);
+
 	// Tooltip
     layer.bindTooltip(
       `<span class="properties-name">${feature.properties.nom}</span>`,
@@ -650,10 +651,31 @@ const onEachFeatureFunction = computed(() => {
 			zoom.value = 8; // Adjust zoom level as needed
 		}
 
+		geographyFilter.value = selectedDepartmentIds.value;
+
+		// Console
 		console.log(`Department clicked: ${feature.properties.nom} | ${e} `);
       },
     });
   }
+});
+
+// watch geographyFilter
+watch(geographyFilter, (newFilter) => {
+	// Set styles for features in the new filter
+	newFilter.forEach(code => {
+        const layer = mapLayers.get(code);
+        if (layer) {
+            (layer as L.Path).setStyle(highlightStyle);  // Apply highlight style
+        }
+    });
+
+    // Optionally reset styles for features not in the new filter
+    mapLayers.forEach((layer, code) => {
+        if (!newFilter.includes(code)) {
+            (layer as L.Path).setStyle(defaultStyle);  // Reset to default style
+        }
+    });
 });
 
 // Cluster and marker styles
@@ -710,10 +732,11 @@ onBeforeMount(async () => {
   }
 });
 
-// Function to adjust the map view once the GeoJSON layer is ready
+// Function to adjust the map view once the GeoJSON layer is
 const onGeoJsonReady = (event: { map: L.Map; target: L.GeoJSON }) => {
-  const map = event.map;
-  map.fitBounds(event.target.getBounds());
+	const m = event.map;
+	if ( event.target !== undefined )
+		m.fitBounds(event.target.getBounds());
 };
 
 // On mount zoom to fit markers
@@ -724,7 +747,8 @@ onMounted(() => {
 		return bounds.extend(marker.latLng);
 		}, L.latLngBounds(markers.value[0].latLng, markers.value[0].latLng));
 
-		map.value.fitBounds(bounds);
+		if ( bounds !== undefined )
+			map.value.fitBounds(bounds);
 	}
 });
 

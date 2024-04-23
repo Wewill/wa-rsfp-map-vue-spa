@@ -185,15 +185,18 @@ function vue_get_taxonomy_meta_fields( $post_object, $field_name, $request ) {
 
 
 	//Content : t_general_content
-	$t_general_content = get_term_meta( $term_id, 't_general_content', true );
+	$t_general_content 	= get_term_meta( $term_id, 't_general_content', true );
 	//Image : t_general_image
-	$t_general_image = get_term_meta( $term_id, 't_general_image', true );
+	$t_general_image 	= get_term_meta( $term_id, 't_general_image', true );
+	//Code : g_special_code
+	$g_special_code 	= get_term_meta( $term_id, 'g_special_code', true );
 
 	// add categories, custom excerpt, featured image to the api response.
 	// Render
 	$additional_taxonomy_data = array(
-		'content' => $t_general_content,
-		't_general_image' => $t_general_image,
+		'content' 			=> $t_general_content,
+		't_general_image' 	=> $t_general_image,
+		'g_special_code' 	=> $g_special_code,
 		'media_alt' => get_post_meta(
 			$t_general_image,
 			'_wp_attachment_image_alt',
