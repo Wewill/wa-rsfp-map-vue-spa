@@ -98,7 +98,7 @@ function vue_get_post_meta_fields( $post_object, $field_name, $request ) {
 				array_push( $errors, $taxonomy  . ' : the term is empty or doesn’t exist.');
 			} else {
 				// It's ok we have data, then push them
-				$term_name = $term_data->name; //category_nicename
+				$term_name = $taxonomy === 'geography'?get_term_meta( $term_data->term_id, 'g_special_code', true ):$term_data->name; //category_nicename
 				$term_url = get_term_link( $term_data->slug, $term_data->taxonomy );
 				$term_link = "<a href=\"$term_url\">$term_name</a>";
 

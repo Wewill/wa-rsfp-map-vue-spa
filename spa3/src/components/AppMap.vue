@@ -47,6 +47,8 @@ Les thematiques =
 	{{  mergedFilters }}
 
 </div>
+	<!-- MERGED ===
+	{{  mergedFilters }} -->
 
 
 
@@ -189,7 +191,7 @@ Les thematiques =
 									<l-geo-json :geojson="geojson" :options="options" :options-style="styleFunction"  @ready="onGeoJsonReady"></l-geo-json>
 									<!-- Markers-->
 									<l-marker-cluster-group :icon-create-function="clusterIcon">
-									<l-marker v-for="(marker, index) in computedMarkers" :key="index" :lat-lng="marker.latLng">
+									<l-marker v-for="(marker, index) in computedMarkers.filter( (m:Marker) => m.latLng !== null )" :key="index" :lat-lng="marker.latLng">
 										<l-popup>
 											<!-- <div class="card">
 												<img :src="marker.popupImage" class="card-img-top" :alt="marker.popupTitle">

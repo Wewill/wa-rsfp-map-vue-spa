@@ -114,8 +114,8 @@ async function getTerms(route = 'category', namespace = 'wp/v2') {
     const response = await axios(`${restURL}/${namespace}/${route}?per_page=${termsPerPage}&page=1&_fields=${fields}`);
 
     //wpTerms.value = response.data;
-		console.log("response.data::", response.data, response.data.map((d: WpTerm) => { return {label: d.name.toLowerCase(), value: d.vue_meta.g_special_code}}));
-    wpTerms.value = response.data.map((d: WpTerm) => { return {name: d.name.toLowerCase(), label: d.name.toLowerCase(), value: d.vue_meta.g_special_code.toString(), code: d.vue_meta.g_special_code}});
+		console.log("response.data::", response.data);
+    wpTerms.value = response.data.map((d: WpTerm) => { return {name: d.name, label: d.name, value: d.vue_meta.g_special_code.toString(), code: d.vue_meta.g_special_code}});
     isDataAvailable.value = true;
 
     // Handle pagination...

@@ -14,7 +14,7 @@
         </a>
       </h5>
       <p class="card-text">
-           		<span v-html="highlightedPostExcerpt || postType.vue_meta.custom_excerpt"/>
+				<span v-html="highlightedPostExcerpt || postType.vue_meta.custom_excerpt"/>
       </p>
     </div><!-- .card-body -->
 
