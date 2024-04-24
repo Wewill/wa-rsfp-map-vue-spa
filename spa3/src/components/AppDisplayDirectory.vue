@@ -5,7 +5,7 @@
 			<div class="d-flex align-items-center">
 			<!-- <div class="h-100-px w-100-px"> -->
 				<img v-if="postType.vue_meta.thumbnail_url" :src="postType.vue_meta.thumbnail_url" :alt="postType.vue_meta.media_alt || 'post thumbnail'" class="img-fluid fit-image rounded-4 img-transition-scale h-100-px w-100-px">
-				<div v-else class="h-100-px w-100-px rounded-4 bg-color-layout d-flex flex-center"><i class="bi bi-image text-action-3"></i></div>
+				<div v-else class="h-100-px w-100-px"><div class="h-100-px w-100-px rounded-4 bg-color-layout d-flex flex-center"><i class="bi bi-image text-action-3"></i></div></div>
 			<!-- </div> -->
 			<div class="">
 				<div class="card-body py-2 pe-0">
