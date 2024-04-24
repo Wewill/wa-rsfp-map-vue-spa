@@ -13,6 +13,10 @@ leafletReady:: {{  leafletReady }}
 selectedDepartmentIds: {{ selectedDepartmentIds }}
 showTileLayer: {{  showTileLayer }}
 geographyFilter: {{  geographyFilter }}
+opentostageFilter: {{  opentostageFilter }}
+opentovisitFilter: {{  opentovisitFilter }}
+mergedFilters:: {{  mergedFilters }}
+filteredResults.length:: {{  filteredResults.length }}
 </code>
 
 <div class="d-none">
@@ -43,14 +47,9 @@ Les thematiques =
 />
 	{{  thematicFilter  }}
 
-	MERGED ===
-	{{  mergedFilters }}
-
 </div>
 	<!-- MERGED ===
 	{{  mergedFilters }} -->
-
-
 
 		<!-- #Map integration -->
 		<section id="map" class="mt-2 mb-2 contrast--light is-formatted">
@@ -117,9 +116,18 @@ Les thematiques =
 								</div>
 
 								<div class="flex-fill px-2" data-aos="fade-left" data-aos-delay="300">
-									<p class="f-12 font-weight-bold m-0"><i class="icon icon-filters"></i> Filtres+</p>
+									<app-get-labels
+										:display-title="true"
+										:search-term="searchTerm"
+										:app-filters="labelFilter"
+										@onFilterChange="labelFilter = $event"
+									/>
+								</div>
+
+								<div class="flex-fill px-2" data-aos="fade-left" data-aos-delay="300">
+									<p class="f-12 font-weight-bold m-0"><i class="icon icon-filters"></i> Filtres</p>
 									<div class="d-flex align-items-top justify-content-between">
-										<div class="">
+										<!-- <div class="">
 											<form>
 												<label class="form-label f-12 font-weight-bold text-uppercase mb-3 color-gray" for="Type"><i class="icon icon-type"></i> Type</label>
 												<fieldset>
@@ -131,16 +139,18 @@ Les thematiques =
 												</div>
 												</fieldset>
 											</form>
-										</div>
+										</div> -->
 										<div class="">
 											<form>
-												<label class="form-label f-12 font-weight-bold text-uppercase mb-3 color-gray" for="Options"><i class="icon icon-filter"></i> Options</label>
+												<!-- <label class="form-label f-12 font-weight-bold text-uppercase mb-3 color-gray" for="Options"><i class="icon icon-filter"></i> Options</label> -->
 												<fieldset>
 													<div class="form-check mb-1">
-														<input class="form-check-input" id="flexCheckDefault" type="checkbox" value=""> <label class="form-check-label" for="flexCheckDefault">Ouvert aux stages</label>
+														<input class="form-check-input" type="checkbox" id="opentostageFilter" name="opentostageFilter" v-model="opentostageFilter">
+														<label class="form-check-label" for="opentostageFilter">Ouvert aux stages</label>
 													</div>
 													<div class="form-check mb-1">
-														<input class="form-check-input" id="flexCheckDefault" type="checkbox" value=""> <label class="form-check-label" for="flexCheckDefault">Ouvert aux visites</label>
+														<input class="form-check-input" type="checkbox" id="opentovisitFilter" name="opentovisitFilter" v-model="opentovisitFilter">
+														<label class="form-check-label" for="opentovisitFilter">Ouvert aux visites</label>
 													</div>
 												</fieldset>
 											</form>
@@ -248,6 +258,8 @@ Les thematiques =
 							<app-get-posts
 								:search-term="searchTerm"
 								:app-filters="mergedFilters"
+								:opentostage-filter="opentostageFilter"
+								:opentovisit-filter="opentovisitFilter"
 								:route="'directory'"
 							/>
 
@@ -395,6 +407,7 @@ import AppFilterSwitches from './AppFilterSwitches.vue';
 import AppGetPosts from './AppGetPosts.vue';
 import AppGetThematics from './AppGetThematics.vue';
 import AppGetGeographies from './AppGetGeographies.vue';
+import AppGetLabels from './AppGetLabels.vue'
 import { WpPosts, WpPost, WpTerm} from '../types/wpTypes'; // Assuming you have a type definition for posts
 
 // https://dev.to/camptocamp-geo/the-3-best-open-source-web-mapping-libraries-57o7
@@ -424,6 +437,9 @@ const categoryFilter = ref([]);
 const geographyFilter = ref<string[]>([]);
 const productionFilter = ref([]);
 const thematicFilter = ref([]);
+const labelFilter = ref([]);
+const opentostageFilter = ref(false);
+const opentovisitFilter = ref(false);
 
 console.info(window.wpData);
 
@@ -431,10 +447,11 @@ const wpCategories = ref(window.wpData.post_categories.map((term: string) => ter
 const wpGeography = ref(window.wpData.geography.map((term: string) => term.toLowerCase()));
 const wpProduction = ref(window.wpData.production.map((term: string) => term.toLowerCase()));
 const wpThematic = ref(window.wpData.thematic.map((term: string) => term.toLowerCase()));
+// const wpLabel = ref(window.wpData.label);
 
 // Merge arrays reactively
 const mergedFilters = computed<string[]>(() => {
-  return [...categoryFilter.value, ...geographyFilter.value, ...productionFilter.value, ...thematicFilter.value];
+  return [...categoryFilter.value, ...geographyFilter.value, ...productionFilter.value, ...thematicFilter.value, ...labelFilter.value];
 });
 
 
@@ -452,8 +469,18 @@ const filteredResults = computed<WpPosts>(() => {
   if (wpPosts.value.length) {
     const pattern = new RegExp(searchTerm.value, 'i');
     const filteredPosts = wpPosts.value.filter((post) =>
-      post.title.rendered.match(pattern) ||
-      post.vue_meta.custom_excerpt.match(pattern)
+      (
+		post.title.rendered.match(pattern) ||
+		post.vue_meta.additionnal_content.match(pattern) ||
+		post.vue_meta.custom_excerpt.match(pattern)
+	  )
+	  &&
+	  (
+        (!opentostageFilter.value && !opentovisitFilter.value) ||
+        (opentostageFilter.value && post.vue_meta.opentostage) ||
+        (opentovisitFilter.value && post.vue_meta.opentovisit) ||
+        (opentostageFilter.value && opentovisitFilter.value && post.vue_meta.opentostage && post.vue_meta.opentovisit)
+	  )
     );
 
     if (mergedFilters && mergedFilters.value.length) {

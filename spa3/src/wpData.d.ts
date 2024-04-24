@@ -10,6 +10,7 @@ declare global {
 		geography: string[];
 		production: string[];
 		thematic: string[];
+		label: string[];
 		// Add other properties of wpData as needed
 	  };
 	}

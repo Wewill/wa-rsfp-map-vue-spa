@@ -123,6 +123,17 @@ function vue_get_post_meta_fields( $post_object, $field_name, $request ) {
 	$d_relationships_structure 	= get_post_meta( $post_id, 'd_relationships_structure', true );
 	$d_relationships_operation 	= get_post_meta( $post_id, 'd_relationships_operation', true );
 
+	// Get post metas
+	$d_stage_opentostage 		= get_post_meta( $post_id, 'd_stage_opentostage', true );
+	$d_stage_opentovisit 		= get_post_meta( $post_id, 'd_stage_opentovisit', true );
+	$d_identity_label 			= get_post_meta( $post_id, 'd_identity_label', true );
+	array_push( $terms, $d_identity_label );
+
+	// Get content
+	$d_general_subtitle 		= get_post_meta( $post_id, 'd_general_subtitle', true );
+	$d_general_introduction 	= get_post_meta( $post_id, 'd_general_introduction', true );
+	$d_identity_location 		= get_post_meta( $post_id, 'd_identity_location', true );
+
 	// Get attached farm coordinates
 	if($d_relationships_farm) {
 		$f_geolocation_lat 		= get_post_meta( $d_relationships_farm, 'f_geolocation_lat', true );
@@ -132,41 +143,48 @@ function vue_get_post_meta_fields( $post_object, $field_name, $request ) {
 	// add categories, custom excerpt, featured image to the api response.
 	// Render
 	$additional_post_data = array(
-		'custom_excerpt' => wp_trim_words(
-			$post_object['excerpt']['rendered'],
+		'additionnal_content' => $d_general_subtitle . ' > ' . $d_general_introduction . ' > ' . $d_identity_location,
+		'custom_excerpt' 	=> wp_trim_words(
+			$post_object['excerpt']['rendered'] != ''?$post_object['excerpt']['rendered']:$d_general_introduction,
 			25,
 			' &hellip;'
 		),
-		'taxonomies'=> $taxonomies,
-		'post_terms' => $post_terms,
-		'post_type' => $post_type,
-		'post_object' => $post_object,
-		'terms_data' => $terms_data,
-		'terms' => $terms,
-		'term_links' => $term_links,
-		'media_alt' => get_post_meta(
+		'taxonomies'		=> $taxonomies,
+		'post_terms' 		=> $post_terms,
+		'post_type' 		=> $post_type,
+		'post_object' 		=> $post_object,
+		//
+		'terms_data' 		=> $terms_data,
+		'terms' 			=> $terms,
+		'term_links' 		=> $term_links,
+		'media_alt' 		=> get_post_meta(
 			get_post_thumbnail_id( $post_id ),
 			'_wp_attachment_image_alt',
 			true
 		),
-		'media_url' => get_the_post_thumbnail_url(
+		'media_url' 		=> get_the_post_thumbnail_url(
 			$post_id,
 			'full'
 		),
-		'thumbnail_url' => get_the_post_thumbnail_url(
+		'thumbnail_url' 	=> get_the_post_thumbnail_url(
 			$post_id,
 			'thumbnail'
 		),
-		'errors' => $errors,
-		'relationships' => array(
+		//
+		'relationships' 	=> array(
 			'farm' 		=> $d_relationships_farm,
 			'structure' => $d_relationships_structure,
 			'operation' => $d_relationships_operation,
 		),
-		'geolocation' => array(
+		'geolocation' 		=> array(
 			'code' 		=> $term_codes,
 			'latLng' 	=> array(($f_geolocation_lat != "")?(float)$f_geolocation_lat:null, ($f_geolocation_lng != "")?(float)$f_geolocation_lng:null),
-		)
+		),
+		'opentostage' 		=> !empty($d_stage_opentostage)?true:false,
+		'opentovisit' 		=> !empty($d_stage_opentovisit)?true:false,
+		'label' 			=> $d_identity_label,
+		//
+		'errors' 			=> $errors,
 	);
 
 	// return data to the get_callback.

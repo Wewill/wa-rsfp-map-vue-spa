@@ -9,7 +9,10 @@
 		<template v-if="route === 'directory'">
 
 			<!-- Title + number of Posts -->
-			<h6 class="fw-bold">Savoir-faire <span class="----text-muted --muted fw-medium op-5 --muted fw-medium op-5" v-if="filteredResults.length === wpPosts.length">{{ wpPosts.length }}</span><span class="--text-muted --muted fw-medium op-5" v-else>{{ filteredResults.length }}+</span></h6>
+			<div class="d-flex justify-content-between align-items-center">
+				<h6 class="fw-bold">Savoir-faire <span class="----text-muted --muted fw-medium op-5 --muted fw-medium op-5" v-if="filteredResults.length === wpPosts.length">{{ wpPosts.length }}</span><span class="--text-muted --muted fw-medium op-5" v-else>{{ filteredResults.length }}+</span></h6>
+				<div class=""><button type="button" class="btn --btn-sm --p-0 --btn-light py-0 px-1"><i class="bi bi-plus h3 text-light"></i></button></div>
+			</div>
 
 			<!-- Results -->
 			<div class="wrapper position-relative">
@@ -30,7 +33,7 @@
 						<!-- <li class="d-flex align-items-center justify-content-center"><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></li> -->
 					</ul>
 				<!-- Plus button -->
-				<div class="d-flex flex-center"><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></div>
+				<!-- <div class="d-flex flex-center"><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></div> -->
 
 				</div>
 				<div class="position-absolute w-100 h-20-px w-100 bottom-0 left-0 bg-v-gradient-action-3"></div>
@@ -42,7 +45,10 @@
 		<template v-else-if="route === 'farm'">
 
 			<!-- Title + number of Posts -->
-			<h6 class="fw-bold">Ferme <span class="--text-muted --muted fw-medium op-5" v-if="filteredResults.length === wpPosts.length">{{ wpPosts.length }}</span><span class="--text-muted --muted fw-medium op-5" v-else>{{ filteredResults.length }}+</span></h6>
+			<div class="d-flex justify-content-between align-items-center">
+				<h6 class="fw-bold">Ferme <span class="--text-muted --muted fw-medium op-5" v-if="filteredResults.length === wpPosts.length">{{ wpPosts.length }}</span><span class="--text-muted --muted fw-medium op-5" v-else>{{ filteredResults.length }}+</span></h6>
+				<div class=""><button type="button" class="btn --btn-sm --p-0 --btn-light py-0 px-1"><i class="bi bi-plus h3 text-light"></i></button></div>
+			</div>
 
 			<ul class="farm-slide list-unstyled card-items d-flex align-items-start justify-content-between --mb-4">
 
@@ -60,7 +66,7 @@
 					<!-- <li class="d-flex align-items-center justify-content-center"><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></li> -->
 			</ul>
 			<!-- Plus button -->
-			<div class="d-flex flex-center"><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></div>
+			<!-- <div class="d-flex flex-center"><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></div> -->
 
 		</template>
 
@@ -116,11 +122,15 @@ import { WpPosts } from '../types/wpTypes'; // Assuming you have a type definiti
 const props = withDefaults(defineProps<{
   searchTerm?: string;
   appFilters?: string[];
+  opentostageFilter?: boolean;
+  opentovisitFilter?: boolean;
   route?: string;
   fetchNow?: number;
 }>(), {
   searchTerm: '',
   appFilters: () => [], // Use a factory function for default array to avoid shared state
+  opentostageFilter: false,
+  opentovisitFilter: false,
   route: 'posts',
   fetchNow: 1,
 });
@@ -137,10 +147,25 @@ const isDataAvailable = ref<boolean>(false);
 const filteredResults = computed(() => {
   if (wpPosts.value.length) {
     const pattern = new RegExp(props.searchTerm, 'i');
-    const filteredPosts = wpPosts.value.filter((post) =>
-      post.title.rendered.match(pattern) ||
-      post.vue_meta.custom_excerpt.match(pattern)
+    // const filteredPosts = wpPosts.value.filter((post) =>
+    //   post.title.rendered.match(pattern) ||
+    //   post.vue_meta.custom_excerpt.match(pattern)
+    // );
+	const filteredPosts = wpPosts.value.filter((post) =>
+      (
+		post.title.rendered.match(pattern) ||
+		post.vue_meta.additionnal_content.match(pattern) ||
+		post.vue_meta.custom_excerpt.match(pattern)
+	  )
+	  &&
+	  (
+        (!props.opentostageFilter && !props.opentovisitFilter) ||
+        (props.opentostageFilter && post.vue_meta.opentostage) ||
+        (props.opentovisitFilter && post.vue_meta.opentovisit) ||
+        (props.opentostageFilter && props.opentovisitFilter && post.vue_meta.opentostage && post.vue_meta.opentovisit)
+	  )
     );
+
 
     if (props.appFilters && props.appFilters.length) {
       return filteredPosts.filter((post) =>

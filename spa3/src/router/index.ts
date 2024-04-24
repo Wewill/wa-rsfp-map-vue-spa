@@ -21,6 +21,7 @@ if (typeof window.wpData === 'undefined') {
 		geography: ['geography 1', 'geography 2', 'geography 3'],
 		production: ['production 1', 'production 2', 'production 3'],
 		thematic: ['thematic 1', 'thematic 2', 'thematic 3'],
+		label: ['label 1', 'label 2', 'label 3'],
 	  // Add more properties as needed to mimic your actual `wpData` structure
 	};
   }

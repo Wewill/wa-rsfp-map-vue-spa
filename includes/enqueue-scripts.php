@@ -13,6 +13,37 @@
 function wa_mapvuespa_enqueue_spa_scripts() {
 	global $post;
 
+	$_options_identity_label = [
+		'agriculture_biologique'    => __( 'Agriculteur Biologique', 'wa-rsfp' ),
+		'demeter' 		            => __( 'Demeter', 'wa-rsfp' ),
+		'bio_coherence' 		    => __( 'Bio Cohérence', 'wa-rsfp' ),
+		'nature_progres' 		    => __( 'Nature & Progrès', 'wa-rsfp' ),
+		'label_rouge' 		        => __( 'Label Rouge', 'wa-rsfp' ),
+		'aop' 		                => __( 'AOP', 'wa-rsfp' ),
+		'igp' 		                => __( 'IGP', 'wa-rsfp' ),
+		'stg' 		                => __( 'STG', 'wa-rsfp' ),
+	];
+
+	$options_identity_label = array();
+
+	foreach ($_options_identity_label as $key => $label) {
+        // Each entry is an associative array representing an object
+        $options_identity_label[] = ['value' => $key, 'label' => $label];
+    }
+
+	// Get metabox io label options
+	// $d_identity_label   		= rwmb_get_field_settings( 'd_identity_label' );
+	// $options_identity_label 	= $d_identity_label['options'];
+	// error_log('MetaBox ???.');
+
+
+	// if (function_exists('rwmb_get_field_settings')) {
+    //     $field_settings = rwmb_get_field_settings('d_identity_label');
+    //     error_log(print_r($field_settings, true));  // Check the server error log to see the output
+    // } else {
+    //     error_log('MetaBox is not available.');
+    // }
+
 	// if ( is_page_template( 'templates/vue-search-app-template.php' ) ) { // Child template way
 	// Return default template if we don't have a custom one defined
 	if ( '../templates/vue-search-app-template.php' == get_post_meta(  $post->ID, '_wp_page_template', true ) ) { // Plugin way
@@ -59,6 +90,8 @@ function wa_mapvuespa_enqueue_spa_scripts() {
 					'hide_empty' => true,
 					'fields' => 'names',
 				) ),
+				// Metas
+				'label' => $options_identity_label,
 				)
 		);
 

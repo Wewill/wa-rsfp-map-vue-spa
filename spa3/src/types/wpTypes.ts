@@ -11,6 +11,7 @@ export interface WpPost {
 	author: number; // This is the author's ID. You might want a separate type for author details
 	//
 	vue_meta: {
+		additionnal_content: string,
 		custom_excerpt: string,
 		taxonomies: [string],
 		post_terms: [number],
@@ -22,9 +23,13 @@ export interface WpPost {
 		media_alt:string
 		media_url:string,
 		thumbnail_url:string,
-		errors:[string],
 		relationships?: relationships,
 		geolocation?: geolocation,
+		opentostage?:boolean,
+		opentovisit?:boolean,
+		label:[string],
+		//
+		errors:[string],
 	};
 	link: string;
 	// Add any custom fields or other fields you use here
