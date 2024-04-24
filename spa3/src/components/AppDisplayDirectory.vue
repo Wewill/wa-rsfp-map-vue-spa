@@ -3,10 +3,10 @@
 	<li class="list-item card-item p-0 bg-transparent w-100 mb-2">
 		<div class="card my-0 border-0 bg-transparent">
 			<div class="d-flex align-items-center">
-			<div class="h-100-px w-100-px">
-				<img v-if="postType.vue_meta.thumbnail_url" :src="postType.vue_meta.thumbnail_url" :alt="postType.vue_meta.media_alt || 'post thumbnail'" class="img-fluid rounded-4 img-transition-scale h-100-px w-100-px">
+			<!-- <div class="h-100-px w-100-px"> -->
+				<img v-if="postType.vue_meta.thumbnail_url" :src="postType.vue_meta.thumbnail_url" :alt="postType.vue_meta.media_alt || 'post thumbnail'" class="img-fluid fit-image rounded-4 img-transition-scale h-100-px w-100-px">
 				<div v-else class="h-100-px w-100-px rounded-4 bg-color-layout d-flex flex-center"><i class="bi bi-image text-action-3"></i></div>
-			</div>
+			<!-- </div> -->
 			<div class="">
 				<div class="card-body py-2 pe-0">
 
@@ -25,9 +25,6 @@
 					</a></h5>
 				<p class="card-text fs-xs"><span v-html="highlightedPostExcerpt || postType.vue_meta.custom_excerpt"></span></p>
 				<!-- <p class="card-text mt-n2"><small class="text-body-secondary">Last updated 3 mins ago</small></p> -->
-				{{  postType.vue_meta.opentostage }}
-			{{  postType.vue_meta.opentovisit }}
-
 			</div>
 			</div>
 			</div>
