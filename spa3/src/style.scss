@@ -782,5 +782,8 @@ Project : Multiselect custom styles
 	&.multiselect-tag-geography .multiselect-tag {
 		background-color: var(--waff-color-heading);
 	}
+	&.multiselect-tag-label .multiselect-tag {
+		background-color: var(--waff-action-1);
+	}
 
 }

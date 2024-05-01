@@ -48,319 +48,295 @@ Les thematiques =
 	{{  thematicFilter  }}
 
 </div>
-	<!-- MERGED ===
-	{{  mergedFilters }} -->
 
-		<!-- #Map integration -->
-		<section id="map" class="mt-2 mb-2 contrast--light is-formatted">
-			<div class="container-fluid mb-n6">
-					<div class="row f-w px-4 pb-4">
-						<div class="col-8" style="padding-left: calc( calc(var(--modified-bs-gutter-x) / 2) - 1.5rem ) !important;">
+	<!-- BEGIN: #Map integration -->
+	<section id="map" class="mt-2 mb-2 contrast--light is-formatted">
+		<div class="container-fluid mb-n6">
+				<div class="row f-w px-4 pb-4">
+					<div class="col-12 zi-max" style="--padding-left: calc( calc(var(--modified-bs-gutter-x) / 2) - 1.5rem ) !important;z-index: 410;">
 
-
-							<div class="d-flex align-items-top justify-content-between">
-								<div class="flex-fill px-2" data-aos="fade-left" data-aos-delay="200">
-									<span class="bullet bullet-action-3 ml-0"></span>
-									<h5 class="text-action-3">Le répertoire</h5>
-								</div>
-								<div class="flex-fill px-2" data-aos="fade-left" data-aos-delay="200">
-									<p class="f-12 font-weight-bold m-0">Production</p>
-
-									<Multiselect
-										class="multiselect-tag-production"
-										v-model="productionFilter"
-										:options="wpProduction"
-										mode="tags"
-										:close-on-select="false"
-										:searchable="true"
-										placeholder="Select"
-										@click.stop.prevent
-									/>
-								</div>
-								<div class="flex-fill px-2" data-aos="fade-left" data-aos-delay="300">
-									<p class="f-12 font-weight-bold m-0">Thematique</p>
-
-									<Multiselect
-										class="multiselect-tag-thematic"
-										v-model="thematicFilter"
-										:options="wpThematic"
-										mode="tags"
-										:close-on-select="false"
-										:searchable="true"
-										placeholder="Select"
-										@click.stop.prevent
-									/>
-
-								</div>
-								<div class="flex-fill px-2" data-aos="fade-left" data-aos-delay="300">
-									<!-- <p class="f-12 font-weight-bold m-0">Geography</p> -->
-									<!-- <Multiselect
-										class="multiselect-tag-geography"
-										v-model="geographyFilter"
-										:options="wpGeography"
-										mode="tags"
-										:close-on-select="false"
-										:searchable="true"
-										placeholder="Select"
-										@click.stop.prevent
-									/> -->
-
-									<app-get-geographies
-										:display-title="true"
-										:search-term="searchTerm"
-										:app-filters="geographyFilter"
-										@onFilterChange="geographyFilter = $event"
-									/>
+						<div class="flex-fill px-2" data-aos="fade-left" data-aos-delay="200">
+							<span class="bullet bullet-action-3 ml-0"></span>
+							<h5 class="text-action-3">Le répertoire</h5>
+						</div>
 
 
-								</div>
+						<div class="d-flex align-items-center justify-content-between">
+							<!-- <div class="flex-fill px-2" data-aos="fade-left" data-aos-delay="200">
+								<span class="bullet bullet-action-3 ml-0"></span>
+								<h5 class="text-action-3">Le répertoire</h5>
+							</div> -->
+							<div class="flex-fill px-2 w-20" data-aos="fade-left" data-aos-delay="200">
+								<p class="f-12 font-weight-bold m-0">Production <span class="--text-muted --muted fw-medium op-5">{{ wpProduction.length }}</span></p>
+								<Multiselect
+									class="multiselect-tag-production"
+									v-model="productionFilter"
+									:options="wpProduction"
+									mode="tags"
+									:close-on-select="false"
+									:searchable="true"
+									placeholder="Select"
+									@click.stop.prevent
+								/>
+							</div>
+							<div class="flex-fill px-2 w-20" data-aos="fade-left" data-aos-delay="300">
+								<p class="f-12 font-weight-bold m-0">Thematique <span class="--text-muted --muted fw-medium op-5">{{ wpThematic.length }}</span></p>
+								<Multiselect
+									class="multiselect-tag-thematic"
+									v-model="thematicFilter"
+									:options="wpThematic"
+									mode="tags"
+									:close-on-select="false"
+									:searchable="true"
+									placeholder="Select"
+									@click.stop.prevent
+								/>
+							</div>
+							<div class="flex-fill px-2 w-20" data-aos="fade-left" data-aos-delay="300">
+								<app-get-geographies
+									:display-title="true"
+									:app-filters="geographyFilter"
+									@onFilterChange="geographyFilter = $event"
+								/>
+							</div>
 
-								<div class="flex-fill px-2" data-aos="fade-left" data-aos-delay="300">
-									<app-get-labels
-										:display-title="true"
-										:search-term="searchTerm"
-										:app-filters="labelFilter"
-										@onFilterChange="labelFilter = $event"
-									/>
-								</div>
+							<div class="flex-fill px-2 w-20" data-aos="fade-left" data-aos-delay="300">
+								<app-get-labels
+									:display-title="true"
+									:app-filters="labelFilter"
+									@onFilterChange="labelFilter = $event"
+								/>
+							</div>
 
-								<div class="flex-fill px-2" data-aos="fade-left" data-aos-delay="300">
-									<p class="f-12 font-weight-bold m-0"><i class="icon icon-filters"></i> Filtres</p>
-									<div class="d-flex align-items-top justify-content-between">
-										<!-- <div class="">
-											<form>
-												<label class="form-label f-12 font-weight-bold text-uppercase mb-3 color-gray" for="Type"><i class="icon icon-type"></i> Type</label>
-												<fieldset>
-												<div class="form-check mb-1">
-													<input class="form-check-input" id="type-house" type="checkbox" value=""> <label class="form-check-label" for="type-house">Lorem</label>
-												</div>
-												<div class="form-check mb-1">
-													<input checked class="form-check-input" id="type-apartement" type="checkbox" value=""> <label class="form-check-label" for="type-apartement">Lorem</label>
-												</div>
-												</fieldset>
-											</form>
-										</div> -->
-										<div class="">
-											<form>
-												<!-- <label class="form-label f-12 font-weight-bold text-uppercase mb-3 color-gray" for="Options"><i class="icon icon-filter"></i> Options</label> -->
-												<fieldset>
-													<div class="form-check mb-1">
-														<input class="form-check-input" type="checkbox" id="opentostageFilter" name="opentostageFilter" v-model="opentostageFilter">
-														<label class="form-check-label" for="opentostageFilter">Ouvert aux stages</label>
-													</div>
-													<div class="form-check mb-1">
-														<input class="form-check-input" type="checkbox" id="opentovisitFilter" name="opentovisitFilter" v-model="opentovisitFilter">
-														<label class="form-check-label" for="opentovisitFilter">Ouvert aux visites</label>
-													</div>
-												</fieldset>
-											</form>
+							<div class="flex-fill px-2 w-20" data-aos="fade-left" data-aos-delay="300">
+								<p class="f-12 font-weight-bold m-0"><i class="icon icon-filters"></i> Ouvert aux...</p>
+								<form>
+									<!-- <label class="form-label f-12 font-weight-bold text-uppercase mb-3 color-gray" for="Options"><i class="icon icon-filter"></i> Ouvert aux...</label> -->
+									<fieldset class="d-flex">
+										<div class="form-check mb-1">
+											<input class="form-check-input" type="checkbox" id="opentostageFilter" name="opentostageFilter" v-model="opentostageFilter">
+											<label class="form-check-label" for="opentostageFilter">Stages</label>
 										</div>
-									</div>
-								</div>
+										<div class="form-check mb-1 ms-3">
+											<input class="form-check-input" type="checkbox" id="opentovisitFilter" name="opentovisitFilter" v-model="opentovisitFilter">
+											<label class="form-check-label" for="opentovisitFilter">Visites</label>
+										</div>
+									</fieldset>
+								</form>
 							</div>
-
-
-
 						</div>
-						<div class="col-4 px-0 pt-1">
 
-							<div class="form-floating mb-3">
-								<!-- Search Box -->
-								<input  v-model="searchTerm" type="text" class="form-control --form-control-lg border-action-3 focus-action-3 px-4" id="floatingInput" placeholder="Rechercher..." aria-label="Search">
-								<label for="floatingInput" class="ms-3 fs-18">Rechercher...</label>
-								<div class="input__search-toggle position-absolute top-50 end-0 translate-middle-y pe-4">
-									<svg role="img" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="m18.0553691 9.08577774c0-4.92630404-4.02005-8.94635404-8.94635408-8.94635404-4.92630404 0-8.96959132 4.02005-8.96959132 8.94635404 0 4.92630406 4.02005 8.94635406 8.94635404 8.94635406 2.13783006 0 4.08976186-.7435931 5.64665986-1.9984064l3.8109144 3.8109145 1.3245252-1.3245252-3.8341518-3.7876771c1.2548133-1.5336607 2.0216437-3.5088298 2.0216437-5.64665986zm-8.96959136 7.11060866c-3.90386358 0-7.08737138-3.1835078-7.08737138-7.08737138s3.1835078-7.08737138 7.08737138-7.08737138c3.90386356 0 7.08737136 3.1835078 7.08737136 7.08737138s-3.1602705 7.08737138-7.08737136 7.08737138z"></path></svg>
-								</div>
-							</div>
-
-						</div>
 					</div>
+				</div>
 
-					<div class="row f-w px-4">
-						<div class="col-8 bg-color-bg rounded-start-4 p-0 d-flex --h-100 justify-content-center align-items-center">
-
-							<l-map class="rounded-start-4" v-if="mapLoaded && isDataAvailable" style="min-height: 800px; height: 100%; min-width: 800px; width: 100%;"
-								ref="map"
-								:min-zoom="5"
-								:max-zoom="19"
-								v-model:zoom="zoom"
-								v-model:center="center"
-								:zoomAnimation="true"
-								:markerZoomAnimation="true"
-								:useGlobalLeaflet="true"
-								:options="{ zoomControl: true }"
-								@ready="onLeafletReady"
-							>
-									<!-- Control map -->
-									<l-control position="topright" >
-										<button class="btn btn-sm btn-outline-action-2" @click="showTileLayer = !showTileLayer"><i class="bi bi-map-fill"></i></button>
-									</l-control>
-									<!-- Omit the <l-tile-layer> to not display the base map -->
-									<l-tile-layer :url="url" :attribution="attribution" v-if="showTileLayer"/>
-									<!-- Geojson -->
-									<l-geo-json :geojson="geojson" :options="options" :options-style="styleFunction"  @ready="onGeoJsonReady"></l-geo-json>
-									<!-- Markers-->
-									<l-marker-cluster-group :icon-create-function="clusterIcon">
-									<l-marker v-for="(marker, index) in computedMarkers.filter( (m:Marker) => m.latLng !== null )" :key="index" :lat-lng="marker.latLng">
-										<l-popup>
-											<!-- <div class="card">
-												<img :src="marker.popupImage" class="card-img-top" :alt="marker.popupTitle">
-												<div class="card-body">
-													<h5 class="card-title"><a :href="marker.popupLink" v-html="marker.popupTitle"></a></h5>
-													<template v-for="t_production in marker.terms_data.filter((t:any) => t.taxonomy == 'production' )" >
-														<div class="production-list d-inline-block"><a :href="t_production.link" class="production-item" tabindex="-1">{{ t_production.name}}</a></div>
-													</template>
-													<template v-for="t_thematic in marker.terms_data.filter((t:any) => t.taxonomy == 'thematic' )" >
-														<div class="thematic-list d-inline-block"><a :href="t_thematic.link" class="thematic-item" tabindex="-1">{{ t_thematic.name}}</a></div>
-													</template>
-													<template v-for="t_geography in marker.terms_data.filter((t:any) => t.taxonomy == 'geography' )" >
-														<div class="geography-list d-inline-block"><a :href="t_geography.link" class="geography-item" tabindex="-1">{{ t_geography.name}}</a></div>
-													</template>
-													<p class="card-text" v-html="marker.popupContent"></p>
+				<div class="row f-w px-4 min-vh-90">
+					<div class="col-6 bg-color-bg rounded-start-4 p-0 d-flex --h-100 justify-content-center align-items-center">
+						<l-map class="rounded-start-4" v-if="mapLoaded && isDataAvailable" style="min-height: 800px; height: 100%; min-width: 400px; width: 100%;"
+							ref="map"
+							:min-zoom="5"
+							:max-zoom="19"
+							v-model:zoom="zoom"
+							v-model:center="center"
+							:zoomAnimation="true"
+							:markerZoomAnimation="true"
+							:useGlobalLeaflet="true"
+							:options="{
+								zoomControl: true,
+								dragging: true,
+								touchZoom: false,
+								scrollWheelZoom: false,
+								doubleClickZoom: false,
+								boxZoom: false,
+								keyboard: false
+							}"
+							@ready="onLeafletReady"
+						>
+								<!-- Control map -->
+								<l-control position="topright" >
+									<button class="btn btn-sm btn-outline-action-2" @click="showTileLayer = !showTileLayer"><i class="bi bi-map-fill"></i></button>
+								</l-control>
+								<!-- Omit the <l-tile-layer> to not display the base map -->
+								<l-tile-layer :url="url" :attribution="attribution" v-if="showTileLayer"/>
+								<!-- Geojson -->
+								<l-geo-json :geojson="geojson" :options="options" :options-style="styleFunction"  @ready="onGeoJsonReady"></l-geo-json>
+								<!-- Markers-->
+								<l-marker-cluster-group :icon-create-function="clusterIcon">
+								<l-marker v-for="(marker, index) in computedMarkers.filter( (m:Marker) => m.latLng !== null )" :key="index" :lat-lng="marker.latLng">
+									<l-popup>
+										<!-- <div class="card">
+											<img :src="marker.popupImage" class="card-img-top" :alt="marker.popupTitle">
+											<div class="card-body">
+												<h5 class="card-title"><a :href="marker.popupLink" v-html="marker.popupTitle"></a></h5>
+												<template v-for="t_production in marker.terms_data.filter((t:any) => t.taxonomy == 'production' )" >
+													<div class="production-list d-inline-block"><a :href="t_production.link" class="production-item" tabindex="-1">{{ t_production.name}}</a></div>
+												</template>
+												<template v-for="t_thematic in marker.terms_data.filter((t:any) => t.taxonomy == 'thematic' )" >
+													<div class="thematic-list d-inline-block"><a :href="t_thematic.link" class="thematic-item" tabindex="-1">{{ t_thematic.name}}</a></div>
+												</template>
+												<template v-for="t_geography in marker.terms_data.filter((t:any) => t.taxonomy == 'geography' )" >
+													<div class="geography-list d-inline-block"><a :href="t_geography.link" class="geography-item" tabindex="-1">{{ t_geography.name}}</a></div>
+												</template>
+												<p class="card-text" v-html="marker.popupContent"></p>
+											</div>
+										</div> -->
+										<div class="card border-0"> <!-- style="width:400px; max-width: 500px;" -->
+											<div class="row g-0">
+												<div class="col-md-4 d-flex justify-content-stretch align-items-center ---- bg-cover bg-position-center-center rounded-start" :style="`background-image: url('${marker.popupImage}');`" :title="marker.popupTitle">
+													<!-- <img :src="marker.popupImage" class="img-fluid rounded-start" :alt="marker.popupTitle"> -->
 												</div>
-											</div> -->
-											<div class="card border-0"> <!-- style="width:400px; max-width: 500px;" -->
-												<div class="row g-0">
-													<div class="col-md-4 d-flex justify-content-stretch align-items-center ---- bg-cover bg-position-center-center rounded-start" :style="`background-image: url('${marker.popupImage}');`" :title="marker.popupTitle">
-														<!-- <img :src="marker.popupImage" class="img-fluid rounded-start" :alt="marker.popupTitle"> -->
-													</div>
-													<div class="col-md-8">
-														<div class="card-body">
-															<h5 class="card-title mb-2"><a :href="marker.popupLink" v-html="marker.popupTitle"></a></h5>
-															<template v-for="t_production in marker.terms_data.filter((t:any) => t.taxonomy == 'production' )" >
-																<div class="production-list d-inline-block"><a :href="t_production.link" class="production-item" tabindex="-1">{{ t_production.name}}</a></div>
-															</template>
-															<template v-for="t_thematic in marker.terms_data.filter((t:any) => t.taxonomy == 'thematic' )" >
-																<div class="thematic-list d-inline-block"><a :href="t_thematic.link" class="thematic-item" tabindex="-1">{{ t_thematic.name}}</a></div>
-															</template>
-															<template v-for="t_geography in marker.terms_data.filter((t:any) => t.taxonomy == 'geography' )" >
-																<div class="geography-list d-inline-block"><a :href="t_geography.link" class="geography-item" tabindex="-1">{{ t_geography.name}}</a></div>
-															</template>
-															<p class="card-text mt-2 small" v-html="marker.popupContent"></p>
-														</div>
+												<div class="col-md-8">
+													<div class="card-body">
+														<h5 class="card-title mb-2"><a :href="marker.popupLink" v-html="marker.popupTitle"></a></h5>
+														<template v-for="t_production in marker.terms_data.filter((t:any) => t.taxonomy == 'production' )" >
+															<div class="production-list d-inline-block"><a :href="t_production.link" class="production-item" tabindex="-1">{{ t_production.name}}</a></div>
+														</template>
+														<template v-for="t_thematic in marker.terms_data.filter((t:any) => t.taxonomy == 'thematic' )" >
+															<div class="thematic-list d-inline-block"><a :href="t_thematic.link" class="thematic-item" tabindex="-1">{{ t_thematic.name}}</a></div>
+														</template>
+														<template v-for="t_geography in marker.terms_data.filter((t:any) => t.taxonomy == 'geography' )" >
+															<div class="geography-list d-inline-block"><a :href="t_geography.link" class="geography-item" tabindex="-1">{{ t_geography.name}}</a></div>
+														</template>
+														<p class="card-text mt-2 small" v-html="marker.popupContent"></p>
 													</div>
 												</div>
 											</div>
+										</div>
 
-										</l-popup>
-										<l-icon
-											:icon-anchor="[10, 10]"
-											class-name="someExtraClass"
-											>
-											<div style="background-color: var(--waff-color-heading, rgb(60, 10, 10)); border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; color: white;"></div>
-										</l-icon>
-									</l-marker>
-									</l-marker-cluster-group>
-							</l-map>
+									</l-popup>
+									<l-icon
+										:icon-anchor="[10, 10]"
+										class-name="someExtraClass"
+										>
+										<div style="background-color: var(--waff-color-heading, rgb(60, 10, 10)); border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; color: white;"></div>
+									</l-icon>
+								</l-marker>
+								</l-marker-cluster-group>
+						</l-map>
+					</div>
+					<div class="col-6 bg-action-3 rounded-end-4 p-4 --pb-10 mb-0">
+
+						<div class="form-floating mb-3">
+							<!-- Search Box -->
+							<input  v-model="searchTerm" type="text" class="form-control --form-control-lg border-action-3 focus-action-3 px-4" id="floatingInput" placeholder="Rechercher..." aria-label="Search">
+							<label for="floatingInput" class="ms-3 fs-18">Rechercher...</label>
+							<div class="input__search-toggle position-absolute top-50 end-0 translate-middle-y pe-4">
+								<svg role="img" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="m18.0553691 9.08577774c0-4.92630404-4.02005-8.94635404-8.94635408-8.94635404-4.92630404 0-8.96959132 4.02005-8.96959132 8.94635404 0 4.92630406 4.02005 8.94635406 8.94635404 8.94635406 2.13783006 0 4.08976186-.7435931 5.64665986-1.9984064l3.8109144 3.8109145 1.3245252-1.3245252-3.8341518-3.7876771c1.2548133-1.5336607 2.0216437-3.5088298 2.0216437-5.64665986zm-8.96959136 7.11060866c-3.90386358 0-7.08737138-3.1835078-7.08737138-7.08737138s3.1835078-7.08737138 7.08737138-7.08737138c3.90386356 0 7.08737136 3.1835078 7.08737136 7.08737138s-3.1602705 7.08737138-7.08737136 7.08737138z"></path></svg>
+							</div>
 						</div>
-						<div class="col-4 bg-action-3 rounded-end-4 p-4 pb-10">
 
-							<app-get-posts
-								:search-term="searchTerm"
-								:app-filters="mergedFilters"
-								:opentostage-filter="opentostageFilter"
-								:opentovisit-filter="opentovisitFilter"
-								:route="'directory'"
-							/>
+						<app-get-posts
+							:search-term="searchTerm"
+							:app-filters="mergedFilters"
+							:opentostage-filter="opentostageFilter"
+							:opentovisit-filter="opentovisitFilter"
+							:route="'directory'"
+						/>
 
-							<app-get-posts
-								:search-term="searchTerm"
-								:route="'farm'"
-							/>
+						<div class="row">
+							<div class="col-6">
+								<app-get-posts
+									:search-term="searchTerm"
+									:route="'farm'"
+								/>
+							</div>
 
-							<!-- <app-get-posts
-								:search-term="searchTerm"
-								:app-filters="thematicFilter"
-								:route="'operation'"
-							/>
-
-							<app-get-posts
-								:search-term="searchTerm"
-								:app-filters="geographyFilter"
-								:route="'structure'"
-							/> -->
-
-							<app-get-thematics
-								:search-term="searchTerm"
-								:app-filters="thematicFilter"
-    						/>
-
-							<!-- <app-get-geographies
-								:display-title="true"
-								:search-term="searchTerm"
-								:app-filters="geographyFilter"
-								@onFilterChange="geographyFilter = $event"
-    						/> -->
-
+							<div class="col-6">
+								<app-get-thematics
+									:search-term="searchTerm"
+									:app-filters="thematicFilter"
+								/>
+							</div>
 						</div>
+
+					</div>
+			</div>
+		</div>
+
+		<!-- Begin: CTA -->
+		<!-- <div class="d-flex align-items-center justify-content-center py-4 px-5 bg-body rounded-4 shadow mx-20 mb-6 --z-2 position-relative" style="z-index:1000;">
+			<div class="d-flex align-items-center" data-aos="flip-up" data-aos-delay="200">
+				<div class="flex-shrink-0 me-3">
+					<i class="bi bi-bootstrap h2 text-action-1"></i>
+					<h5 class="text-action-1">100+</h5>
+				</div>
+				<div>
+				<h6 class="fw-bold text-action-1">Lorem ipsum</h6>
+				<p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
 				</div>
 			</div>
 
-			<!-- Begin: CTA -->
-			<div class="d-flex align-items-center justify-content-center py-4 px-5 bg-body rounded-4 shadow mx-20 mb-6 --z-2 position-relative" style="z-index:1000;">
-				<div class="d-flex align-items-center" data-aos="flip-up" data-aos-delay="200">
-					<div class="flex-shrink-0 me-3">
-						<i class="bi bi-bootstrap h2 text-action-1"></i>
-						<h5 class="text-action-1">100+</h5>
-					</div>
-					<div>
-					<h6 class="fw-bold text-action-1">Lorem ipsum</h6>
-					<p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-					</div>
-				</div>
-
-				<div class="d-flex align-items-center justify-content-center px-5">
-					<span class="bullet bullet-action-3 ml-0"></span>
-				</div>
-
-				<div class="d-flex align-items-center" data-aos="flip-up" data-aos-delay="400">
-					<div class="flex-shrink-0 me-3">
-						<i class="bi bi-bootstrap h2"></i>
-						<h5>100+</h5>
-					</div>
-					<div>
-					<h6 class="fw-bold">Lorem ipsum</h6>
-					<p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-					</div>
-				</div>
-
-				<div class="d-flex align-items-center justify-content-center px-5">
-					<span class="bullet bullet-action-3 ml-0"></span>
-				</div>
-
-				<div class="d-flex align-items-center" data-aos="flip-up" data-aos-delay="600">
-					<div class="flex-shrink-0 me-3">
-						<i class="bi bi-bootstrap h2"></i>
-						<h5>100+</h5>
-					</div>
-					<div>
-					<h6 class="fw-bold">Lorem ipsum</h6>
-					<p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-					</div>
-				</div>
-
-
-				<div class="d-flex align-items-center justify-content-center px-5">
-					<span class="bullet bullet-action-3 ml-0"></span>
-				</div>
-
-				<div class="d-flex align-items-center" data-aos="flip-up" data-aos-delay="800">
-					<div class="flex-shrink-0 me-3">
-						<i class="bi bi-bootstrap h2"></i>
-						<h5>100+</h5>
-					</div>
-					<div>
-					<h6 class="fw-bold">Lorem ipsum</h6>
-					<p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-					</div>
-				</div>
-
+			<div class="d-flex align-items-center justify-content-center px-5">
+				<span class="bullet bullet-action-3 ml-0"></span>
 			</div>
-			<!-- End: CTA -->
 
-		</section>
+			<div class="d-flex align-items-center" data-aos="flip-up" data-aos-delay="400">
+				<div class="flex-shrink-0 me-3">
+					<i class="bi bi-bootstrap h2"></i>
+					<h5>100+</h5>
+				</div>
+				<div>
+				<h6 class="fw-bold">Lorem ipsum</h6>
+				<p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+				</div>
+			</div>
+
+			<div class="d-flex align-items-center justify-content-center px-5">
+				<span class="bullet bullet-action-3 ml-0"></span>
+			</div>
+
+			<div class="d-flex align-items-center" data-aos="flip-up" data-aos-delay="600">
+				<div class="flex-shrink-0 me-3">
+					<i class="bi bi-bootstrap h2"></i>
+					<h5>100+</h5>
+				</div>
+				<div>
+				<h6 class="fw-bold">Lorem ipsum</h6>
+				<p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+				</div>
+			</div>
+
+
+			<div class="d-flex align-items-center justify-content-center px-5">
+				<span class="bullet bullet-action-3 ml-0"></span>
+			</div>
+
+			<div class="d-flex align-items-center" data-aos="flip-up" data-aos-delay="800">
+				<div class="flex-shrink-0 me-3">
+					<i class="bi bi-bootstrap h2"></i>
+					<h5>100+</h5>
+				</div>
+				<div>
+				<h6 class="fw-bold">Lorem ipsum</h6>
+				<p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+				</div>
+			</div>
+
+		</div> -->
+		<!-- End: CTA -->
+
+	</section>
+	<!-- END : #Map integration -->
 
 <!--
+
+	<app-get-geographies
+		:display-title="true"
+		:search-term="searchTerm"
+		:app-filters="geographyFilter"
+		@onFilterChange="geographyFilter = $event"
+	/>
+
+	<app-get-posts
+		:search-term="searchTerm"
+		:app-filters="thematicFilter"
+		:route="'operation'"
+	/>
+
+	<app-get-posts
+		:search-term="searchTerm"
+		:app-filters="geographyFilter"
+		:route="'structure'"
+	/>
 
 	Posts=
     <app-get-posts
@@ -444,9 +420,9 @@ const opentovisitFilter = ref(false);
 console.info(window.wpData);
 
 const wpCategories = ref(window.wpData.post_categories.map((term: string) => term.toLowerCase())); // Default
-const wpGeography = ref(window.wpData.geography.map((term: string) => term.toLowerCase()));
-const wpProduction = ref(window.wpData.production.map((term: string) => term.toLowerCase()));
-const wpThematic = ref(window.wpData.thematic.map((term: string) => term.toLowerCase()));
+const wpGeography = ref(window.wpData.geography.map((term: string) => {return {value:term.toLowerCase(), label: term}}));
+const wpProduction = ref(window.wpData.production.map((term: string) => {return {value:term.toLowerCase(), label: term}}));
+const wpThematic = ref(window.wpData.thematic.map((term: string) => {return {value:term.toLowerCase(), label: term}}));
 // const wpLabel = ref(window.wpData.label);
 
 // Merge arrays reactively
@@ -674,10 +650,10 @@ const onEachFeatureFunction = computed(() => {
 			// Centering and zoom logic
 			// Assuming 'layer' is of type L.GeoJSON (or similar Leaflet layer type)
 			// which supports getBounds().
-			const bounds = (layer as L.GeoJSON).getBounds();
-			const centerPoint = bounds.getCenter();
-			center.value = [centerPoint.lat, centerPoint.lng];
-			zoom.value = 8; // Adjust zoom level as needed
+			// const bounds = (layer as L.GeoJSON).getBounds();
+			// const centerPoint = bounds.getCenter();
+			// center.value = [centerPoint.lat, centerPoint.lng];
+			// zoom.value = 7; // Adjust zoom level as needed
 		}
 
 		geographyFilter.value = selectedDepartmentIds.value;

@@ -146,9 +146,9 @@ function vue_get_post_meta_fields( $post_object, $field_name, $request ) {
 		'additionnal_content' => $d_general_subtitle . ' > ' . $d_general_introduction . ' > ' . $d_identity_location,
 		'custom_excerpt' 	=> wp_trim_words(
 			$post_object['excerpt']['rendered'] != ''?$post_object['excerpt']['rendered']:$d_general_introduction,
-			25,
+			15,
 			' &hellip;'
-		),
+		), // From 25 to 15 words
 		'taxonomies'		=> $taxonomies,
 		'post_terms' 		=> $post_terms,
 		'post_type' 		=> $post_type,
