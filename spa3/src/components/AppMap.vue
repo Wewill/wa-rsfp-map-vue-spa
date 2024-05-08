@@ -4,7 +4,7 @@
 <!-- <pre><b>filteredResults::</b> {{  filteredResults }}</pre> -->
 <!-- <pre><b>computedMarkers::</b> {{  computedMarkers }}</pre> -->
 
-<code>
+<code class="d-none">
 MAP =
 zoom:: {{  zoom }}
 center:: {{  center }}
@@ -19,13 +19,12 @@ mergedFilters:: {{  mergedFilters }}
 filteredResults.length:: {{  filteredResults.length }}
 </code>
 
-<div class="d-none">
+<!-- <div class="d-none">
 
 Les thematiques =
 {{  wpThematic  }}
 {{  wpGeography  }}
 
-<!-- Filter Buttons -->
 <app-filter-switches
 	:app-filters="wpCategories"
 	@onFilterToggle="categoryFilter = $event"
@@ -47,13 +46,13 @@ Les thematiques =
 />
 	{{  thematicFilter  }}
 
-</div>
+</div> -->
 
 	<!-- BEGIN: #Map integration -->
 	<section id="map" class="mt-2 mb-2 contrast--light is-formatted">
 		<div class="container-fluid mb-n6">
 				<div class="row f-w px-4 pb-4">
-					<div class="col-12 zi-max" style="--padding-left: calc( calc(var(--modified-bs-gutter-x) / 2) - 1.5rem ) !important;z-index: 410;">
+					<div class="col-12 --zi-max" style="--padding-left: calc( calc(var(--modified-bs-gutter-x) / 2) - 1.5rem ) !important;z-index: 410;">
 
 						<div class="flex-fill px-2" data-aos="fade-left" data-aos-delay="200">
 							<span class="bullet bullet-action-3 ml-0"></span>
@@ -379,7 +378,6 @@ Les thematiques =
 <script setup lang="ts">
 import { ref, computed, onBeforeMount, onMounted, nextTick, watch} from 'vue';
 import axios from 'axios';
-import AppFilterSwitches from './AppFilterSwitches.vue';
 import AppGetPosts from './AppGetPosts.vue';
 import AppGetThematics from './AppGetThematics.vue';
 import AppGetGeographies from './AppGetGeographies.vue';
@@ -419,8 +417,8 @@ const opentovisitFilter = ref(false);
 
 console.info(window.wpData);
 
-const wpCategories = ref(window.wpData.post_categories.map((term: string) => term.toLowerCase())); // Default
-const wpGeography = ref(window.wpData.geography.map((term: string) => {return {value:term.toLowerCase(), label: term}}));
+// const wpCategories = ref(window.wpData.post_categories.map((term: string) => term.toLowerCase())); // Default
+// const wpGeography = ref(window.wpData.geography.map((term: string) => {return {value:term.toLowerCase(), label: term}}));
 const wpProduction = ref(window.wpData.production.map((term: string) => {return {value:term.toLowerCase(), label: term}}));
 const wpThematic = ref(window.wpData.thematic.map((term: string) => {return {value:term.toLowerCase(), label: term}}));
 // const wpLabel = ref(window.wpData.label);

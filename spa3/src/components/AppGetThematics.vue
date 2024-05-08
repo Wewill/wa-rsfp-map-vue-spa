@@ -6,7 +6,7 @@
 	<!-- Title + number of Terms -->
 	<h6 class="fw-bold">Thématique <span class="--text-muted --muted fw-medium op-5" v-if="filteredResults.length === wpTerms.length">{{ wpTerms.length }}</span><span class="--text-muted --muted fw-medium op-5" v-else>{{ filteredResults.length }}+</span></h6>
 
-	<div class="h-200-px overflow-y-scroll scrollbar-white me-n3 pe-3">
+	<div class="h-300-px overflow-y-scroll scrollbar-white me-n3 pe-3">
 		<ul class="list-unstyled card-items">
 			<!-- AppDisplayThematic Component -->
 			<app-display-thematic

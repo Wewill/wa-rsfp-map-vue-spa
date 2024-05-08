@@ -13,7 +13,7 @@
 					<template v-for="t_production in postType.vue_meta.terms_data.filter((t) => t.taxonomy == 'production' )" >
 						<div class="production-list d-inline-block"><a :href="t_production.link" class="production-item" tabindex="-1">{{ t_production.name}}</a></div>
 					</template>
-					<template v-for="t_thematic in postType.vue_meta.terms_data.filter((t) => t.taxonomy == 'thematic' )" >
+					<template v-for="t_thematic in postType.vue_meta.terms_data.filter((t) => t.taxonomy == 'thematic' && t.parent !== 0 )" >
 						<div class="thematic-list d-inline-block"><a :href="t_thematic.link" class="thematic-item" tabindex="-1">{{ t_thematic.name}}</a></div>
 					</template>
 					<template v-for="t_geography in postType.vue_meta.terms_data.filter((t) => t.taxonomy == 'geography' )" >
