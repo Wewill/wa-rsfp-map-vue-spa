@@ -1,9 +1,11 @@
 <template>
 	<!-- BEGIN: Farm item -->
-	<li class="farm-slide-item list-item me-2 flex-fill --w-25">
+	<li class="--farm-slide-item list-item me-2 col --flex-fill --w-25 w-80-px">
 		<div class="card my-0 border-0 bg-transparent">
-			<img v-if="postType.vue_meta.thumbnail_url" :src="postType.vue_meta.thumbnail_url" :alt="postType.vue_meta.media_alt || 'post thumbnail'" class="img-fluid fit-image rounded-4 --img-transition-scale h-80-px w-80-px">
-			<div v-else class="h-80-px w-80-px rounded-4 bg-color-layout d-flex flex-center"><i class="bi bi-image text-action-3"></i></div>
+			<div class="h-80-px w-80-px">
+				<img v-if="postType.vue_meta.thumbnail_url" :src="postType.vue_meta.thumbnail_url" :alt="postType.vue_meta.media_alt || 'post thumbnail'" class="img-fluid fit-image rounded-4 --img-transition-scale h-80-px w-80-px">
+				<div v-else class="h-80-px w-80-px"><div class="h-80-px w-80-px rounded-4 bg-color-layout d-flex flex-center"><i class="bi bi-image text-action-3"></i></div></div>
+			</div>
 			<div class="card-body py-2 px-0">
 				<p class="card-text fs-xs fw-bold"><span v-html="highlightedPostTitle || postType.title.rendered"></span></p>
 			</div>

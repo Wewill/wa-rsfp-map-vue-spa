@@ -50,7 +50,7 @@
 				<div class=""><button type="button" class="btn --btn-sm --p-0 --btn-light py-0 px-1"><i class="bi bi-plus h3 text-light"></i></button></div>
 			</div>
 
-			<ul class="farm-slide list-unstyled card-items d-flex align-items-start justify-content-between --mb-4">
+			<ul class="--farm-slide list-unstyled card-items --d-flex --flex-grid row g-2 g-lg-1 align-items-start justify-content-between --mb-4">
 
 					<!-- AppDisplayFarm Component -->
 					<app-display-farm

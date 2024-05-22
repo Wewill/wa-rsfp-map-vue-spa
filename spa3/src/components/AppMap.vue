@@ -593,7 +593,7 @@ const defaultStyle = {
   color: borderColor,
   weight: 1,
   opacity: 1,
-  fillOpacity: .9,
+  fillOpacity: .5,
   fillColor: fillColor,
 };
 
@@ -601,7 +601,7 @@ const highlightStyle = {
   color: borderColor,
   weight: 1,
   opacity: 1,
-  fillOpacity: 1,
+  fillOpacity: .8,
   fillColor: fillColorHover,
 };
 

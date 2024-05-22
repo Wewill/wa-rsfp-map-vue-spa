@@ -89,7 +89,7 @@ async function getTerms(route = 'category', namespace = 'wp/v2') {
   try {
     const termsPerPage = 100;
     const restURL = window.wpData.rest_url;
-    const fields = 'id,slug,name,description,link,count,vue_meta';
+    const fields = 'id,slug,name,description,link,count,parent,vue_meta';
 
     const response = await axios(`${restURL}/${namespace}/${route}?per_page=${termsPerPage}&page=1&_fields=${fields}`);
 
