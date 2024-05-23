@@ -50,7 +50,8 @@
 				<div class=""><button type="button" class="btn --btn-sm --p-0 --btn-light py-0 px-1"><i class="bi bi-plus h3 text-light"></i></button></div>
 			</div>
 
-			<ul class="--farm-slide list-unstyled card-items --d-flex --flex-grid row g-2 g-lg-1 align-items-start justify-content-between --mb-4">
+			<div class="h-300-px overflow-y-scroll scrollbar-white me-n3 pe-3">
+				<ul class="--farm-slide list-unstyled card-items --d-flex --flex-grid row g-2 g-lg-1 align-items-start justify-content-between --mb-4">
 
 					<!-- AppDisplayFarm Component -->
 					<app-display-farm
@@ -64,7 +65,8 @@
 					</app-display-farm>
 
 					<!-- <li class="d-flex align-items-center justify-content-center"><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></li> -->
-			</ul>
+				</ul>
+			</div>
 			<!-- Plus button -->
 			<!-- <div class="d-flex flex-center"><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></div> -->
 
