@@ -22,6 +22,7 @@
 <script setup lang="ts">
 import { ref,  computed, watch, toRefs} from 'vue';
 import Multiselect from '@vueform/multiselect'
+import _ from "lodash";
 
 // Define props with TypeScript
 const props = withDefaults(defineProps<{
@@ -65,9 +66,9 @@ watch(appFilters, (filter) => {
 // Computed property for filtered results
 const filteredResults = computed(() => {
   if (wpLabels.value.length) {
-    const pattern = new RegExp(props.searchTerm, 'i');
+    const pattern = new RegExp(_.lowerCase(_.deburr(props.searchTerm)), 'i');
     const filteredTerms = wpLabels.value.filter((t: any) =>
-      t.label.match(pattern) //||
+			_.lowerCase(_.deburr(t.label)).match(pattern) //||
       // t.description.match(pattern) ||
       // t.code.match(pattern)
     );

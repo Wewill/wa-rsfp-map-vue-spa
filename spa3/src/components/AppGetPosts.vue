@@ -11,12 +11,12 @@
 			<!-- Title + number of Posts -->
 			<div class="d-flex justify-content-between align-items-center">
 				<h6 class="fw-bold">Savoir-faire <span class="----text-muted --muted fw-medium op-5 --muted fw-medium op-5" v-if="filteredResults.length === wpPosts.length">{{ wpPosts.length }}</span><span class="--text-muted --muted fw-medium op-5" v-else>{{ filteredResults.length }}+</span></h6>
-				<div class=""><button type="button" class="btn --btn-sm --p-0 --btn-light py-0 px-1"><i class="bi bi-plus h3 text-light"></i></button></div>
+				<div class=""><button type="button" class="btn --btn-sm --p-0 --btn-light py-0 px-1 mb-0"><i class="bi bi-plus h3 text-light"></i></button></div>
 			</div>
 
 			<!-- Results -->
 			<div class="wrapper position-relative">
-				<div class="h-300-px overflow-y-scroll scrollbar-white me-n3 pe-3">
+				<div class="h-550-px overflow-y-scroll scrollbar-white me-n3 pe-3">
 					<ul class="list-unstyled card-items d-flex flex-column align-items-center mb-2">
 
 							<!-- AppDisplayDirectory Component -->
@@ -47,7 +47,7 @@
 			<!-- Title + number of Posts -->
 			<div class="d-flex justify-content-between align-items-center">
 				<h6 class="fw-bold">Ferme <span class="--text-muted --muted fw-medium op-5" v-if="filteredResults.length === wpPosts.length">{{ wpPosts.length }}</span><span class="--text-muted --muted fw-medium op-5" v-else>{{ filteredResults.length }}+</span></h6>
-				<div class=""><button type="button" class="btn --btn-sm --p-0 --btn-light py-0 px-1"><i class="bi bi-plus h3 text-light"></i></button></div>
+				<div class=""><button type="button" class="btn --btn-sm --p-0 --btn-light py-0 px-1 mb-0"><i class="bi bi-plus h3 text-light"></i></button></div>
 			</div>
 
 			<div class="h-300-px overflow-y-scroll scrollbar-white me-n3 pe-3">
@@ -119,6 +119,7 @@ import AppDisplayPost from './AppDisplayPost.vue';
 import AppDisplayDirectory from './AppDisplayDirectory.vue';
 import AppDisplayFarm from './AppDisplayFarm.vue';
 import { WpPosts } from '../types/wpTypes'; // Assuming you have a type definition for posts
+import _ from "lodash";
 
 // Define props with TypeScript
 const props = withDefaults(defineProps<{
@@ -148,16 +149,16 @@ const isDataAvailable = ref<boolean>(false);
 // Computed property for filtered results
 const filteredResults = computed(() => {
   if (wpPosts.value.length) {
-    const pattern = new RegExp(props.searchTerm, 'i');
+    const pattern = new RegExp(_.lowerCase(_.deburr(props.searchTerm)), 'i');
     // const filteredPosts = wpPosts.value.filter((post) =>
     //   post.title.rendered.match(pattern) ||
     //   post.vue_meta.custom_excerpt.match(pattern)
     // );
 	const filteredPosts = wpPosts.value.filter((post) =>
       (
-		post.title.rendered.match(pattern) ||
-		post.vue_meta.additionnal_content.match(pattern) ||
-		post.vue_meta.custom_excerpt.match(pattern)
+		_.lowerCase(_.deburr(post.title.rendered)).match(pattern) ||
+		_.lowerCase(_.deburr(post.vue_meta.additionnal_content)).match(pattern) ||
+		_.lowerCase(_.deburr(post.vue_meta.custom_excerpt)).match(pattern)
 	  )
 	  &&
 	  (

@@ -35,6 +35,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { WpPost } from '../types/wpTypes'; // Assuming you have a type definition for posts
+import _ from "lodash";
 
 // Defining props with TypeScript types
 // Note: Vue 3 `<script setup>` uses `defineProps` to declare props.
@@ -60,8 +61,8 @@ const highlightedPostExcerpt = computed(() => {
 
 // Method to add span tags with the hl-search CSS class to the search term
 function highlightData(data: string, searchTerm: string): string {
-  const pattern = new RegExp(searchTerm, 'i');
-  const highlightedData = data.replace(
+  const pattern = new RegExp(_.lowerCase(_.deburr(searchTerm)), 'i');
+  const highlightedData = _.lowerCase(_.deburr(data)).replace(
     pattern,
     `<span class="hl-search">${searchTerm}</span>`
   );

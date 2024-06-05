@@ -6,19 +6,24 @@
 	<!-- Title + number of Terms -->
 	<h6 class="fw-bold">Thématique <span class="--text-muted --muted fw-medium op-5" v-if="filteredResults.length === wpTerms.length">{{ wpTerms.length }}</span><span class="--text-muted --muted fw-medium op-5" v-else>{{ filteredResults.length }}+</span></h6>
 
-	<div class="h-300-px overflow-y-scroll scrollbar-white me-n3 pe-3">
-		<ul class="list-unstyled card-items">
-			<!-- AppDisplayThematic Component -->
-			<app-display-thematic
-			v-for="item in filteredResults"
-			:key="item.id"
-			:search-term="searchTerm"
-			:item="item"
-			role="article" >
-			<!-- AppDisplayThematic is called for each post in the filteredResults -->
-			</app-display-thematic>
-		</ul>
+	<!-- Results -->
+	<div class="wrapper position-relative">
+			<div class="h-550-px overflow-y-scroll scrollbar-white me-n3 pe-3">
+				<ul class="list-unstyled card-items">
+					<!-- AppDisplayThematic Component -->
+					<app-display-thematic
+					v-for="item in filteredResults"
+					:key="item.id"
+					:search-term="searchTerm"
+					:item="item"
+					role="article" >
+					<!-- AppDisplayThematic is called for each post in the filteredResults -->
+					</app-display-thematic>
+				</ul>
+			</div>
+			<div class="position-absolute w-100 h-20-px w-100 bottom-0 left-0 bg-v-gradient-action-3"></div>
 	</div>
+
 	<!-- END: Thematics -->
 </div><!-- .rest-data -->
   <div v-else>
@@ -33,6 +38,7 @@ import { ref, onMounted, computed} from 'vue';
 import axios from 'axios';
 import { WpTerms } from '../types/wpTypes'; // Assuming you have a type definition for posts
 import AppDisplayThematic from './AppDisplayThematic.vue';
+import _ from "lodash";
 
 // Define props with TypeScript
 const props = withDefaults(defineProps<{
@@ -55,11 +61,11 @@ const isDataAvailable = ref<boolean>(false);
 // Computed property for filtered results
 const filteredResults = computed(() => {
   if (wpTerms.value.length) {
-    const pattern = new RegExp(props.searchTerm, 'i');
+    const pattern = new RegExp(_.lowerCase(_.deburr(props.searchTerm)), 'i');
     const filteredTerms = wpTerms.value.filter((t) =>
-      t.name.match(pattern) ||
-      t.description.match(pattern) ||
-      t.vue_meta.content.match(pattern)
+			_.lowerCase(_.deburr(t.name)).match(pattern) ||
+			_.lowerCase(_.deburr(t.description)).match(pattern) ||
+			_.lowerCase(_.deburr(t.vue_meta.content)).match(pattern)
     );
 
     if (props.appFilters && props.appFilters.length) {

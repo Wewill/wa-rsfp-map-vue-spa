@@ -30,6 +30,7 @@ import { ref, onMounted, computed, watch, toRefs} from 'vue';
 import axios from 'axios';
 import { WpTerm, WpTerms } from '../types/wpTypes'; // Assuming you have a type definition for posts
 import Multiselect from '@vueform/multiselect'
+import _ from "lodash";
 
 // Define props with TypeScript
 const props = withDefaults(defineProps<{
@@ -75,11 +76,11 @@ watch(appFilters, (filter) => {
 // Computed property for filtered results
 const filteredResults = computed(() => {
   if (wpTerms.value.length) {
-    const pattern = new RegExp(props.searchTerm, 'i');
+    const pattern = new RegExp(_.lowerCase(_.deburr(props.searchTerm)), 'i');
     const filteredTerms = wpTerms.value.filter((t) =>
-      t.name.match(pattern) //||
-      // t.description.match(pattern) ||
-      // t.code.match(pattern)
+			_.lowerCase(_.deburr(t.name)).match(pattern) //||
+      // _.lowerCase(_.deburr(t.description)).match(pattern) ||
+      // _.lowerCase(_.deburr(t.code)).match(pattern)
     );
 
     // if (props.appFilters && props.appFilters.length) {

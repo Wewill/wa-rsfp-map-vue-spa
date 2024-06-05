@@ -128,9 +128,9 @@ Les thematiques =
 					</div>
 				</div>
 
-				<div class="row f-w px-4 min-vh-90">
+				<div class="row f-w px-4 min-vh-80">
 					<div class="col-6 bg-color-bg rounded-start-4 p-0 d-flex --h-100 justify-content-center align-items-center">
-						<l-map class="rounded-start-4" v-if="mapLoaded && isDataAvailable" style="min-height: 800px; height: 100%; min-width: 400px; width: 100%;"
+						<l-map class="rounded-start-4" v-if="mapLoaded && isDataAvailable" style="min-height: 750px; height: 100%; min-width: 400px; width: 100%;"
 							ref="map"
 							:min-zoom="5"
 							:max-zoom="19"
@@ -214,7 +214,7 @@ Les thematiques =
 					</div>
 					<div class="col-6 bg-action-3 rounded-end-4 p-4 --pb-10 mb-0">
 
-						<div class="form-floating mb-3">
+						<div class="form-floating mb-1">
 							<!-- Search Box -->
 							<input  v-model="searchTerm" type="text" class="form-control --form-control-lg border-action-3 focus-action-3 px-4" id="floatingInput" placeholder="Rechercher..." aria-label="Search">
 							<label for="floatingInput" class="ms-3 fs-18">Rechercher...</label>
@@ -223,21 +223,24 @@ Les thematiques =
 							</div>
 						</div>
 
-						<app-get-posts
-							:search-term="searchTerm"
-							:app-filters="mergedFilters"
-							:opentostage-filter="opentostageFilter"
-							:opentovisit-filter="opentovisitFilter"
-							:route="'directory'"
-						/>
-
 						<div class="row">
+
 							<div class="col-6">
+								<app-get-posts
+									:search-term="searchTerm"
+									:app-filters="mergedFilters"
+									:opentostage-filter="opentostageFilter"
+									:opentovisit-filter="opentovisitFilter"
+									:route="'directory'"
+								/>
+							</div>
+
+							<!-- <div class="col-6">
 								<app-get-posts
 									:search-term="searchTerm"
 									:route="'farm'"
 								/>
-							</div>
+							</div> -->
 
 							<div class="col-6">
 								<app-get-thematics
@@ -245,6 +248,7 @@ Les thematiques =
 									:app-filters="thematicFilter"
 								/>
 							</div>
+
 						</div>
 
 					</div>
@@ -383,6 +387,7 @@ import AppGetThematics from './AppGetThematics.vue';
 import AppGetGeographies from './AppGetGeographies.vue';
 import AppGetLabels from './AppGetLabels.vue'
 import { WpPosts, WpPost, WpTerm} from '../types/wpTypes'; // Assuming you have a type definition for posts
+import _ from "lodash";
 
 // https://dev.to/camptocamp-geo/the-3-best-open-source-web-mapping-libraries-57o7
 // https://vue3openlayers.netlify.app
@@ -441,12 +446,12 @@ const isDataAvailable = ref<boolean>(false);
 // Computed property for filtered results
 const filteredResults = computed<WpPosts>(() => {
   if (wpPosts.value.length) {
-    const pattern = new RegExp(searchTerm.value, 'i');
+    const pattern = new RegExp(_.lowerCase(_.deburr(searchTerm.value)), 'i');
     const filteredPosts = wpPosts.value.filter((post) =>
       (
-		post.title.rendered.match(pattern) ||
-		post.vue_meta.additionnal_content.match(pattern) ||
-		post.vue_meta.custom_excerpt.match(pattern)
+		_.lowerCase(_.deburr(post.title.rendered)).match(pattern) ||
+		_.lowerCase(_.deburr(post.vue_meta.additionnal_content)).match(pattern) ||
+		_.lowerCase(_.deburr(post.vue_meta.custom_excerpt)).match(pattern)
 	  )
 	  &&
 	  (
