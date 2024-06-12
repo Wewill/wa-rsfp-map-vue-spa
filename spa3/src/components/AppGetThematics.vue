@@ -1,42 +1,42 @@
 <template>
-	  <div
-    v-if="isDataAvailable"
-    class="rest-data">
-	<!-- BEGIN: Thematics -->
-	<!-- Title + number of Terms -->
-	<h6 class="fw-bold">Thématique <span class="--text-muted --muted fw-medium op-5" v-if="filteredResults.length === wpTerms.length">{{ wpTerms.length }}</span><span class="--text-muted --muted fw-medium op-5" v-else>{{ filteredResults.length }}+</span></h6>
+  <div v-if="isDataAvailable" class="rest-data">
+    <!-- BEGIN: Thematics -->
+    <h6 class="fw-bold">
+      Thématique
+      <span class="--text-muted --muted fw-medium op-5" v-if="filteredResults.length === wpTerms.length">
+        {{ wpTerms.length }}
+      </span>
+      <span class="--text-muted --muted fw-medium op-5" v-else>
+        {{ filteredResults.length }}+
+      </span>
+    </h6>
 
-	<!-- Results -->
-	<div class="wrapper position-relative">
-			<div class="h-550-px overflow-y-scroll scrollbar-white me-n3 pe-3">
-				<ul class="list-unstyled card-items">
-					<!-- AppDisplayThematic Component -->
-					<app-display-thematic
-					v-for="item in filteredResults"
-					:key="item.id"
-					:search-term="searchTerm"
-					:item="item"
-					role="article" >
-					<!-- AppDisplayThematic is called for each post in the filteredResults -->
-					</app-display-thematic>
-				</ul>
-			</div>
-			<div class="position-absolute w-100 h-20-px w-100 bottom-0 left-0 bg-v-gradient-action-3"></div>
-	</div>
-
-	<!-- END: Thematics -->
-</div><!-- .rest-data -->
+    <div class="wrapper position-relative">
+      <div class="h-550-px overflow-y-scroll scrollbar-white me-n3 pe-3">
+        <ul class="list-unstyled card-items">
+          <app-display-thematic
+            v-for="item in filteredResults"
+            :key="item.id"
+            :search-term="searchTerm"
+            :item="item"
+            role="article"
+						:collapse-states="{}"
+          />
+        </ul>
+      </div>
+      <div class="position-absolute w-100 h-20-px w-100 bottom-0 left-0 bg-v-gradient-action-3"></div>
+    </div>
+    <!-- END: Thematics -->
+  </div>
   <div v-else>
-    <p
-      class="text-center"
-      v-html="apiResponse" />
+    <p class="text-center" v-html="apiResponse" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed} from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
-import { WpTerms } from '../types/wpTypes'; // Assuming you have a type definition for posts
+import { WpTerms, WpTerm} from '../types/wpTypes'; // Assuming you have a type definition for posts
 import AppDisplayThematic from './AppDisplayThematic.vue';
 import _ from "lodash";
 
@@ -44,13 +44,9 @@ import _ from "lodash";
 const props = withDefaults(defineProps<{
   searchTerm?: string;
   appFilters?: string[];
-//   route?: string;
-//   fetchNow?: number;
 }>(), {
   searchTerm: '',
-  appFilters: () => [], // Use a factory function for default array to avoid shared state
-//   route: 'posts',
-//   fetchNow: 1,
+  appFilters: () => [],
 });
 
 // Reactive data
@@ -62,15 +58,15 @@ const isDataAvailable = ref<boolean>(false);
 const filteredResults = computed(() => {
   if (wpTerms.value.length) {
     const pattern = new RegExp(_.lowerCase(_.deburr(props.searchTerm)), 'i');
-    const filteredTerms = wpTerms.value.filter((t) =>
-			_.lowerCase(_.deburr(t.name)).match(pattern) ||
-			_.lowerCase(_.deburr(t.description)).match(pattern) ||
-			_.lowerCase(_.deburr(t.vue_meta.content)).match(pattern)
+    const filteredTerms = wpTerms.value.filter(t =>
+      _.lowerCase(_.deburr(t.name)).match(pattern) ||
+      _.lowerCase(_.deburr(t.description)).match(pattern) ||
+      _.lowerCase(_.deburr(t.vue_meta.content)).match(pattern)
     );
 
     if (props.appFilters && props.appFilters.length) {
-      return filteredTerms.filter((t) =>
-          props.appFilters.includes(t.slug.toLowerCase())
+      return filteredTerms.filter(t =>
+        props.appFilters.includes(t.slug.toLowerCase())
       );
     } else {
       return filteredTerms;
@@ -91,7 +87,7 @@ async function fetchData() {
 }
 
 async function getTerms(route = 'category', namespace = 'wp/v2') {
-	console.log('getTerms::', route)
+  console.log('getTerms::', route);
   try {
     const termsPerPage = 100;
     const restURL = window.wpData.rest_url;
@@ -99,7 +95,7 @@ async function getTerms(route = 'category', namespace = 'wp/v2') {
 
     const response = await axios(`${restURL}/${namespace}/${route}?per_page=${termsPerPage}&page=1&_fields=${fields}`);
 
-    wpTerms.value = response.data;
+    wpTerms.value = buildHierarchy(response.data);
     isDataAvailable.value = true;
 
     // Handle pagination...
@@ -107,6 +103,31 @@ async function getTerms(route = 'category', namespace = 'wp/v2') {
   } catch (error) {
     apiResponse.value = `The request could not be processed! <br> <strong>${error}</strong>`;
   }
+}
+
+// Build term hierarchy to handle accordion
+function buildHierarchy(terms: WpTerm[]): WpTerm[] {
+  const map: { [key: number]: WpTerm } = {};
+  const roots: WpTerm[] = [];
+
+  terms.forEach(term => {
+    if (term.id !== undefined) {
+      term.children = [];
+      map[term.id] = term;
+    }
+  });
+
+  terms.forEach(term => {
+    if (term.id !== undefined) {
+      if (term.parent === 0) {
+        roots.push(term);
+      } else if (term.parent && map[term.parent]) {
+        map[term.parent].children!.push(term);
+      }
+    }
+  });
+
+  return roots;
 }
 </script>
 
