@@ -16,11 +16,11 @@
 		  >
 			<div class="d-flex justify-content-between align-items-center text-white text-shadow-1 p-4 z-2">
 			  <p class="text-white m-0 fw-bold ps-3" v-html="highlightedPostTitle || item.name"></p>
-			  <span class="badge text-bg-secondary fw-bold py-2">c:{{ item.count }} id:{{  item.id  }} p:{{  item.parent  }}</span>
+			  <span class="badge text-bg-secondary fw-bold py-2">{{ item.count }}<!-- id:{{  item.id  }} p:{{  item.parent  }}--></span>
 			</div>
 		  </a>
 		  <button
-			class="accordion-button collapsed position-absolute top-50 start-0 translate-middle-y"
+			class="accordion-button collapsed position-absolute top-50 start-0 translate-middle-y w-40-px"
 			type="button"
 			data-bs-toggle="collapse"
 			:data-bs-target="`#collapse_${item.id}`"
@@ -32,7 +32,7 @@
 		  </button>
 		</div>
 		<!-- Display overlay -->
-		<div class="overlay card-overlay bg-image op-2 z-0" :class="item.parent !== 0?'bg-action-3':'bg-action-2'"></div>
+		<div class="overlay card-overlay bg-image op-6 z-0" :class="item.parent !== 0?'bg-action-3':'bg-action-2'"></div>
 	  </div>
 	  <!-- Accordion content : list children -->
 	  <div
