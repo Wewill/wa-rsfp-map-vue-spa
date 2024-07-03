@@ -3,7 +3,7 @@
     v-if="isDataAvailable"
     class="rest-data">
 	<!-- BEGIN: Geographies -->
-	<p v-if="displayTitle" class="f-12 font-weight-bold m-0">Geographie <span class="--text-muted --muted fw-medium op-5" v-if="filteredResults.length === wpTerms.length">{{ wpTerms.length }}</span><span class="--text-muted --muted fw-medium op-5" v-else>{{ filteredResults.length }}+</span></p>
+	<p v-if="displayTitle" class="f-12 font-weight-bold m-0">Géographie <span class="--text-muted --muted fw-medium op-5" v-if="filteredResults.length === wpTerms.length">{{ wpTerms.length }}</span><span class="--text-muted --muted fw-medium op-5" v-else>{{ filteredResults.length }}+</span></p>
 
 	<Multiselect
 		class="multiselect-tag-geography"
@@ -12,7 +12,7 @@
 		mode="tags"
 		:close-on-select="false"
 		:searchable="true"
-		placeholder="Select"
+		placeholder="Filtrer"
 		@click.stop.prevent
 	/>
 

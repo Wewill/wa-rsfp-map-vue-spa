@@ -11,7 +11,7 @@
 		mode="tags"
 		:close-on-select="false"
 		:searchable="true"
-		placeholder="Select"
+		placeholder="Filtrer"
 		@click.stop.prevent
 	/>
 
