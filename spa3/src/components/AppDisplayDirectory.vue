@@ -62,11 +62,17 @@ const highlightedPostExcerpt = computed(() => {
 
 // Method to add span tags with the hl-search CSS class to the search term
 function highlightData(data: string, searchTerm: string): string {
-  const pattern = new RegExp(_.lowerCase(_.deburr(searchTerm)), 'i');
-  const highlightedData = _.lowerCase(_.deburr(data)).replace(
-    pattern,
-    `<span class="hl-search">${searchTerm}</span>`
-  );
+//   const pattern = new RegExp(_.lowerCase(_.deburr(searchTerm)), 'i');
+//   const highlightedData = _.lowerCase(_.deburr(data)).replace(
+//     pattern,
+//     `<span class="hl-search">${searchTerm}</span>`
+//   );
+  // Preserve original text
+  const pattern = new RegExp(_.escapeRegExp(_.deburr(searchTerm)), 'gi');
+  // Use replace with a function to preserve the original case
+  const highlightedData = data.replace(pattern, (match) => {
+    return `<span class="hl-search">${match}</span>`;
+  });
   return highlightedData;
 }
 </script>
