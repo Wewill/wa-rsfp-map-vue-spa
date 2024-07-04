@@ -60,7 +60,7 @@ Les thematiques =
 						</div>
 
 
-						<div class="d-flex align-items-center justify-content-between">
+						<div class="d-none d-sm-flex align-items-center justify-content-between">
 							<!-- <div class="flex-fill px-2" data-aos="fade-left" data-aos-delay="200">
 								<span class="bullet bullet-action-3 ml-0"></span>
 								<h5 class="text-action-3">Le répertoire</h5>
@@ -129,7 +129,7 @@ Les thematiques =
 				</div>
 
 				<div class="row f-w px-4 min-vh-80">
-					<div class="col-6 bg-color-bg rounded-start-4 p-0 d-flex --h-100 justify-content-center align-items-center">
+					<div class="col-sm-6 bg-color-bg rounded-start-4 p-0 d-flex --h-100 justify-content-center align-items-center">
 						<l-map class="rounded-start-4" v-if="mapLoaded && isDataAvailable" style="min-height: 750px; height: 100%; min-width: 400px; width: 100%;"
 							ref="map"
 							:min-zoom="5"
@@ -212,7 +212,7 @@ Les thematiques =
 								</l-marker-cluster-group>
 						</l-map>
 					</div>
-					<div class="col-6 bg-action-3 rounded-end-4 p-4 --pb-10 mb-0">
+					<div class="col-sm-6 bg-action-3 rounded-end-4 p-4 --pb-10 mb-0">
 
 						<div class="form-floating mb-1">
 							<!-- Search Box -->
@@ -225,7 +225,7 @@ Les thematiques =
 
 						<div class="row">
 
-							<div class="col-6">
+							<div class="col-sm-6">
 								<app-get-posts
 									:search-term="searchTerm"
 									:app-filters="mergedFilters"
@@ -242,7 +242,7 @@ Les thematiques =
 								/>
 							</div> -->
 
-							<div class="col-6">
+							<div class="col-sm-6">
 								<app-get-thematics
 									:search-term="searchTerm"
 									:app-filters="thematicFilter"
@@ -420,7 +420,7 @@ const labelFilter = ref([]);
 const opentostageFilter = ref(false);
 const opentovisitFilter = ref(false);
 
-console.info(window.wpData);
+// console.info(window.wpData);
 
 // const wpCategories = ref(window.wpData.post_categories.map((term: string) => term.toLowerCase())); // Default
 // const wpGeography = ref(window.wpData.geography.map((term: string) => {return {value:term.toLowerCase(), label: term}}));

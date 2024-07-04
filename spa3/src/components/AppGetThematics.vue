@@ -18,6 +18,7 @@
             v-for="item in filteredResults"
             :key="item.id"
             :search-term="searchTerm"
+						:appFilters="appFilters"
             :item="item"
             role="article"
 						:collapse-states="{}"
@@ -57,22 +58,44 @@ const isDataAvailable = ref<boolean>(false);
 // Computed property for filtered results
 const filteredResults = computed(() => {
   if (wpTerms.value.length) {
-    const pattern = new RegExp(_.lowerCase(_.deburr(props.searchTerm)), 'i');
+    //const pattern = new RegExp(_.lowerCase(_.deburr(props.searchTerm)), 'i');
+    const pattern = new RegExp(_.escapeRegExp(_.deburr(props.searchTerm)), 'gi');
+
+		// Verifier
+		console.log( _.lowerCase(_.deburr( wpTerms.value.find(t => t.id === 22)?.children?.map(c => c.name).join() )) );
+		console.log( _.lowerCase(_.deburr( wpTerms.value.find(t => t.id === 22)?.children?.map(c => props.appFilters.includes(c.name.toLowerCase())).join() )) );
+
     const filteredTerms = wpTerms.value.filter(t =>
       _.lowerCase(_.deburr(t.name)).match(pattern) ||
       _.lowerCase(_.deburr(t.description)).match(pattern) ||
-      _.lowerCase(_.deburr(t.vue_meta.content)).match(pattern)
+      _.lowerCase(_.deburr(t.vue_meta.content)).match(pattern) ||
+			_.lowerCase(_.deburr( t.children?.map(c => c.name).join() )).match(pattern)
     );
 
     if (props.appFilters && props.appFilters.length) {
       return filteredTerms.filter(t =>
-        props.appFilters.includes(t.slug.toLowerCase())
+        props.appFilters.includes(t.name.toLowerCase()) ||
+				// (t.children && !props.appFilters.includes(t.name.toLowerCase())) ? t.children?.map(c => props.appFilters.includes(c.name.toLowerCase())).reduce((a, v) => a || v, false) : false
+				t.children?.map(c => props.appFilters.includes(c.name.toLowerCase())).reduce((a, v) => a || v, false)
       );
     } else {
       return filteredTerms;
     }
   }
   return [];
+	// if (wpTerms.value.length) {
+  //   const pattern = new RegExp(_.lowerCase(_.deburr(props.searchTerm)), 'i');
+  //   let filteredTerms = wpTerms.value.map(term => filterTerms(term, pattern)).reduce((acc, val) => acc.concat(val), []);
+
+  //   if (props.appFilters && props.appFilters.length) {
+  //     filteredTerms = filteredTerms.filter(t =>
+  //       props.appFilters.includes(t.slug.toLowerCase())
+  //     );
+  //   }
+
+  //   return filteredTerms;
+  // }
+  // return [];
 });
 
 // Mounted lifecycle hook

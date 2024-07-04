@@ -43,9 +43,9 @@
 	  >
 		<div class="accordion-body">
 		  <!-- Check if the item has children and display them in an accordion -->
-		  <ul v-if="item.children && item.children.length" class="list-unstyled ms-4">
+		  <ul v-if="filteredItemChildren && filteredItemChildren.length" class="list-unstyled ms-4">
 			<app-display-thematic
-			  v-for="child in item.children"
+			  v-for="child in filteredItemChildren"
 			  :key="child.id"
 			  :item="child"
 			  :search-term="searchTerm"
@@ -65,11 +65,49 @@
   import _ from "lodash";
 
   // Defining props with TypeScript types
-  const props = defineProps<{
+  const props = withDefaults(defineProps<{
 	item: WpTerm;
 	searchTerm: string;
+	appFilters: string[];
 	collapseStates: { [key:string]:boolean }; // Define collapseStates prop
-  }>();
+}>(), {
+  searchTerm: '',
+  appFilters: () => [],
+});
+
+  // Computed property for filtered results
+const filteredItemChildren = computed(() => {
+  if (props.item.children) {
+
+	// Verifier
+	console.log( _.lowerCase(_.deburr( props.item.children.find(t => t.id === 22)?.children?.map(c => props.appFilters.includes(c.name.toLowerCase())).join() )) );
+
+    if (props.appFilters && props.appFilters.length && !props.appFilters.includes(props.item.name.toLowerCase()) ) {
+      return props.item.children.filter(t =>
+        props.appFilters.includes(t.name.toLowerCase()) ||
+				// (t.children && !props.appFilters.includes(t.name.toLowerCase())) ? t.children?.map(c => props.appFilters.includes(c.name.toLowerCase())).reduce((a, v) => a || v, false) : false
+				t.children?.map(c => props.appFilters.includes(c.name.toLowerCase())).reduce((a, v) => a || v, false)
+      );
+    } else {
+      return props.item.children;
+    }
+  }
+  return [];
+	// if (wpTerms.value.length) {
+  //   const pattern = new RegExp(_.lowerCase(_.deburr(props.searchTerm)), 'i');
+  //   let filteredTerms = wpTerms.value.map(term => filterTerms(term, pattern)).reduce((acc, val) => acc.concat(val), []);
+
+  //   if (props.appFilters && props.appFilters.length) {
+  //     filteredTerms = filteredTerms.filter(t =>
+  //       props.appFilters.includes(t.slug.toLowerCase())
+  //     );
+  //   }
+
+  //   return filteredTerms;
+  // }
+  // return [];
+});
+
 
   // Computed properties to highlight search terms
   const highlightedPostTitle = computed(() => {
