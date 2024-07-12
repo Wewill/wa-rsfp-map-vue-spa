@@ -563,7 +563,7 @@ const computedMarkers = computed<Marker[] | any>(() => {
 			latLng: ( p.vue_meta.geolocation?.latLng.every(el => el !== null) )?p.vue_meta.geolocation?.latLng:findDepartmentCenter(p.vue_meta.geolocation?.code[0]),
 			popupTitle: (p.title.rendered)?p.title.rendered:'',
 //			popupContent: (p.excerpt.rendered)?p.excerpt.rendered:'',
-			popupContent: 'Lorem ipsum',
+			popupContent: '', // Lorem ipsum
 			popupLink: p.link,
 			popupImage: p.vue_meta.media_url,
 			terms_data: p.vue_meta.terms_data
