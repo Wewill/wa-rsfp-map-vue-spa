@@ -559,11 +559,12 @@ function findDepartmentCenter(departmentCode: string | undefined): [number, numb
 const computedMarkers = computed<Marker[] | any>(() => {
 	return filteredResults.value.map((p:WpPost) =>
 	{
+		console.log(p);
 		return {
 			latLng: ( p.vue_meta.geolocation?.latLng.every(el => el !== null) )?p.vue_meta.geolocation?.latLng:findDepartmentCenter(p.vue_meta.geolocation?.code[0]),
 			popupTitle: (p.title.rendered)?p.title.rendered:'',
 //			popupContent: (p.excerpt.rendered)?p.excerpt.rendered:'',
-			popupContent: '', // Lorem ipsum
+			popupContent: (p.vue_meta.farm_title)?p.vue_meta.farm_title:'', // Lorem ipsum
 			popupLink: p.link,
 			popupImage: p.vue_meta.media_url,
 			terms_data: p.vue_meta.terms_data

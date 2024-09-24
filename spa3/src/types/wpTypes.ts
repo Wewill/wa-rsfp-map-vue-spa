@@ -28,6 +28,7 @@ export interface WpPost {
 		opentostage?:boolean;
 		opentovisit?:boolean;
 		label:[string];
+		farm_title?:string;
 		//
 		errors:[string];
 	};

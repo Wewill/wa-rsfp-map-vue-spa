@@ -23,8 +23,9 @@
 					<h5 class="card-title mt-2"><a :href="postType.link" class="stretched-link">
 						<span v-html="highlightedPostTitle || postType.title.rendered"></span>
 					</a></h5>
-				<p class="card-text fs-xs"><span v-html="highlightedPostExcerpt || postType.vue_meta.custom_excerpt"></span></p>
+				<p class="card-text fs-xs mb-1"><span v-html="highlightedPostExcerpt || postType.vue_meta.custom_excerpt"></span></p>
 				<!-- <p class="card-text mt-n2"><small class="text-body-secondary">Last updated 3 mins ago</small></p> -->
+				<p class="card-text mt-n2" v-if="postType.vue_meta.farm_title != ''"><small class="text-muted">{{ postType.vue_meta.farm_title }}</small></p>
 			</div>
 			</div>
 			</div>

@@ -146,7 +146,7 @@ function vue_get_post_meta_fields( $post_object, $field_name, $request ) {
 		'additionnal_content' => $d_general_subtitle . ' > ' . $d_general_introduction . ' > ' . $d_identity_location,
 		'custom_excerpt' 	=> wp_trim_words(
 			$post_object['excerpt']['rendered'] != ''?$post_object['excerpt']['rendered']:$d_general_introduction,
-			15,
+			9,
 			' &hellip;'
 		), // From 25 to 15 words
 		'taxonomies'		=> $taxonomies,
@@ -183,6 +183,7 @@ function vue_get_post_meta_fields( $post_object, $field_name, $request ) {
 		'opentostage' 		=> !empty($d_stage_opentostage)?true:false,
 		'opentovisit' 		=> !empty($d_stage_opentovisit)?true:false,
 		'label' 			=> $d_identity_label,
+		'farm_title'		=> get_the_title( $d_relationships_farm ),
 		//
 		'errors' 			=> $errors,
 	);
