@@ -15,7 +15,11 @@ module.exports = {
 	parserOptions: {
 		ecmaVersion: "latest",
 	},
-
+	env: {
+		es6: true, // Active l'environnement ES6
+		browser: true, // Si votre projet est pour le navigateur
+		node: true, // Si votre projet est pour Node.js
+	},
 	rules: {
 		"import/no-unresolved": "error",
 	},
