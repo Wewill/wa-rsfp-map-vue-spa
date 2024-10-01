@@ -60,11 +60,16 @@ Les thematiques =
 						</div>
 
 
-						<div class="d-none d-sm-flex align-items-center justify-content-between">
-							<!-- <div class="flex-fill px-2" data-aos="fade-left" data-aos-delay="200">
+
+  <button class="btn btn-sm btn-outline-action-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters"><i class="bi bi-toggles"></i></button>
+
+
+  <div class="collapse" id="collapseFilters">
+	<div class="d-none d-sm-flex align-items-center justify-content-between">
+							<div class="flex-fill px-2" data-aos="fade-left" data-aos-delay="200">
 								<span class="bullet bullet-action-3 ml-0"></span>
-								<h5 class="text-action-3">Le répertoire</h5>
-							</div> -->
+								<h6 class="text-action-3">Filtrer</h6>
+							</div>
 							<div class="flex-fill px-2 w-20" data-aos="fade-left" data-aos-delay="200">
 								<p class="f-12 font-weight-bold m-0">Production <span class="--text-muted --muted fw-medium op-5">{{ wpProduction.length }}</span></p>
 								<Multiselect
@@ -124,6 +129,7 @@ Les thematiques =
 								</form>
 							</div>
 						</div>
+						</div>
 
 					</div>
 				</div>
@@ -162,22 +168,7 @@ Les thematiques =
 								<l-marker-cluster-group :icon-create-function="clusterIcon">
 								<l-marker v-for="(marker, index) in computedMarkers.filter( (m:Marker) => m.latLng !== null )" :key="index" :lat-lng="marker.latLng">
 									<l-popup>
-										<!-- <div class="card">
-											<img :src="marker.popupImage" class="card-img-top" :alt="marker.popupTitle">
-											<div class="card-body">
-												<h5 class="card-title"><a :href="marker.popupLink" v-html="marker.popupTitle"></a></h5>
-												<template v-for="t_production in marker.terms_data.filter((t:any) => t.taxonomy == 'production' )" >
-													<div class="production-list d-inline-block"><a :href="t_production.link" class="production-item" tabindex="-1">{{ t_production.name}}</a></div>
-												</template>
-												<template v-for="t_thematic in marker.terms_data.filter((t:any) => t.taxonomy == 'thematic' )" >
-													<div class="thematic-list d-inline-block"><a :href="t_thematic.link" class="thematic-item" tabindex="-1">{{ t_thematic.name}}</a></div>
-												</template>
-												<template v-for="t_geography in marker.terms_data.filter((t:any) => t.taxonomy == 'geography' )" >
-													<div class="geography-list d-inline-block"><a :href="t_geography.link" class="geography-item" tabindex="-1">{{ t_geography.name}}</a></div>
-												</template>
-												<p class="card-text" v-html="marker.popupContent"></p>
-											</div>
-										</div> -->
+
 										<div class="card border-0"> <!-- style="width:400px; max-width: 500px;" -->
 											<div class="row g-0">
 												<div class="col-md-4 d-flex justify-content-stretch align-items-center ---- bg-cover bg-position-center-center rounded-start" :style="`background-image: url('${marker.popupImage}');`" :title="marker.popupTitle">
@@ -216,11 +207,20 @@ Les thematiques =
 
 						<div class="form-floating mb-1">
 							<!-- Search Box -->
-							<input  v-model="searchTerm" type="text" class="form-control --form-control-lg border-action-3 focus-action-3 px-4" id="floatingInput" placeholder="Rechercher..." aria-label="Search">
+							<input  v-model="searchTerm" type="text" class="d-none form-control --form-control-lg border-action-3 focus-action-3 px-4" id="floatingInput" placeholder="Rechercher..." aria-label="Search">
 							<label for="floatingInput" class="ms-3 fs-18">Rechercher dans le contenu...</label>
 							<div class="input__search-toggle position-absolute top-50 end-0 translate-middle-y pe-4">
 								<svg role="img" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="m18.0553691 9.08577774c0-4.92630404-4.02005-8.94635404-8.94635408-8.94635404-4.92630404 0-8.96959132 4.02005-8.96959132 8.94635404 0 4.92630406 4.02005 8.94635406 8.94635404 8.94635406 2.13783006 0 4.08976186-.7435931 5.64665986-1.9984064l3.8109144 3.8109145 1.3245252-1.3245252-3.8341518-3.7876771c1.2548133-1.5336607 2.0216437-3.5088298 2.0216437-5.64665986zm-8.96959136 7.11060866c-3.90386358 0-7.08737138-3.1835078-7.08737138-7.08737138s3.1835078-7.08737138 7.08737138-7.08737138c3.90386356 0 7.08737136 3.1835078 7.08737136 7.08737138s-3.1602705 7.08737138-7.08737136 7.08737138z"></path></svg>
 							</div>
+
+							<!-- BEGIN: Use the GlobalSearch component -->
+							<GlobalSearch
+								v-model="globalSearch"
+								:options="[...wpGeography, ...wpProduction, ...wpThematic, ...wpLabel]"
+								@search-change="onSearchChange"
+							/>
+							<!-- END: Use the GlobalSearch component -->
+
 						</div>
 
 						<div class="row">
@@ -319,74 +319,17 @@ Les thematiques =
 
 	</section>
 	<!-- END : #Map integration -->
-
-<!--
-
-	<app-get-geographies
-		:display-title="true"
-		:search-term="searchTerm"
-		:app-filters="geographyFilter"
-		@onFilterChange="geographyFilter = $event"
-	/>
-
-	<app-get-posts
-		:search-term="searchTerm"
-		:app-filters="thematicFilter"
-		:route="'operation'"
-	/>
-
-	<app-get-posts
-		:search-term="searchTerm"
-		:app-filters="geographyFilter"
-		:route="'structure'"
-	/>
-
-	Posts=
-    <app-get-posts
-      :search-term="searchTerm"
-      :app-filters="mergedFilters"
-      :route="cptSelected"
-    />
-
-	Directory=
-    <app-get-posts
-      :search-term="searchTerm"
-      :app-filters="mergedFilters"
-      :route="'directory'"
-    />
-
-	Farm=
-	<app-get-posts
-      :search-term="searchTerm"
-      :app-filters="mergedFilters"
-      :route="'farm'"
-    />
-
-	Operation=
-	<app-get-posts
-      :search-term="searchTerm"
-      :app-filters="mergedFilters"
-      :route="'operation'"
-    />
-
-	Structure=
-	<app-get-posts
-      :search-term="searchTerm"
-      :app-filters="mergedFilters"
-      :route="'structure'"
-    /> -->
-
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onBeforeMount, onMounted, nextTick, watch} from 'vue';
-import axios from 'axios';
+// import axios from 'axios';
 import AppGetPosts from './AppGetPosts.vue';
 import AppGetThematics from './AppGetThematics.vue';
 import AppGetGeographies from './AppGetGeographies.vue';
 import AppGetLabels from './AppGetLabels.vue'
-import { WpPosts, WpPost, WpTerm} from '../types/wpTypes'; // Assuming you have a type definition for posts
+import { WpPosts, WpPost, Marker} from '../types/wpTypes'; // WpTerm
 import _ from "lodash";
 
 // https://dev.to/camptocamp-geo/the-3-best-open-source-web-mapping-libraries-57o7
@@ -404,7 +347,7 @@ import 'vue-leaflet-markercluster/dist/style.css'
 import { FeatureCollection, Geometry } from 'geojson';
 
 import Multiselect from '@vueform/multiselect'
-
+import GlobalSearch from './GlobalSearch.vue';
 
 // import { wpData } from './path-to-wpData'; // You need to import wpData or declare it globally
 
@@ -422,16 +365,20 @@ const opentovisitFilter = ref(false);
 
 // console.info(window.wpData);
 
-// const wpCategories = ref(window.wpData.post_categories.map((term: string) => term.toLowerCase())); // Default
-// const wpGeography = ref(window.wpData.geography.map((term: string) => {return {value:term.toLowerCase(), label: term}}));
-const wpProduction = ref(window.wpData.production.map((term: string) => {return {value:term.toLowerCase(), label: term}}));
-const wpThematic = ref(window.wpData.thematic.map((term: string) => {return {value:term.toLowerCase(), label: term}}));
-// const wpLabel = ref(window.wpData.label);
+// const wpCategories 		= ref(window.wpData.post_categories.map((term: string) => {return {value:term.toLowerCase(), label: term, term: 'category'}}));
+const wpGeography 		= ref(window.wpData.geography.map((term: string) => {return {value:term.toLowerCase(), label: term, term: 'geography'}}));
+const wpProduction 		= ref(window.wpData.production.map((term: string) => {return {value:term.toLowerCase(), label: term, term: 'production'}}));
+const wpThematic 		= ref(window.wpData.thematic.map((term: string) => {return {value:term.toLowerCase(), label: term, term: 'thematic'}}));
+
+// Statics in enqueue-scripts.php
+const wpLabel = ref(window.wpData.label);
 
 // Merge arrays reactively
 const mergedFilters = computed<string[]>(() => {
   return [...categoryFilter.value, ...geographyFilter.value, ...productionFilter.value, ...thematicFilter.value, ...labelFilter.value];
 });
+
+const globalSearch = ref([]);
 
 
 /**
@@ -439,9 +386,7 @@ const mergedFilters = computed<string[]>(() => {
  */
 
  // Reactive data
-const apiResponse = ref<string>('');
-const wpPosts = ref<WpPosts>([]); // Use a more specific type if available
-const isDataAvailable = ref<boolean>(false);
+ import { getPosts, wpPosts, isDataAvailable, apiResponse } from '../services/postService';
 
 // Computed property for filtered results
 const filteredResults = computed<WpPosts>(() => {
@@ -483,30 +428,8 @@ onMounted(() => {
 // Methods
 async function fetchData() {
   apiResponse.value = 'Loading ⏳';
-  await getPosts('directory');
+  await getPosts(['directory']);
 }
-
-// Make it global
-async function getPosts(route = 'posts', namespace = 'wp/v2') {
-	console.log('getPosts::', route)
-  try {
-    const postsPerPage = 100;
-    const restURL = window.wpData.rest_url;
-    const fields = 'id,title,link,vue_meta'; //content,author,parent,menu_order
-
-    const response = await axios(`${restURL}/${namespace}/${route}?per_page=${postsPerPage}&page=1&_fields=${fields}`);
-
-    wpPosts.value = response.data;
-    isDataAvailable.value = true;
-
-    // Handle pagination...
-    // Refer to the original method for additional pagination logic
-  } catch (error) {
-    apiResponse.value = `The request could not be processed! <br> <strong>${error}</strong>`;
-  }
-}
-
-
 
 // Map
 const url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -519,16 +442,6 @@ const mapLoaded = ref<Boolean>(false);
 const leafletReady = ref<Boolean>(false);
 const geojson = ref<FeatureCollection<Geometry> | undefined>(undefined);
 const map = ref<L.Map | null>(null);
-
-// Define your marker type
-interface Marker {
-  latLng: L.LatLngExpression;
-  popupTitle: string;
-  popupContent?: string;
-  popupLink?: string;
-  popupImage?: string;
-  terms_data?: [WpTerm];
-}
 
 const markers = ref<Marker[]>([
 	{ latLng: [47.413220, -4.219482], popupTitle: 'Marker 1', popupContent: 'Marker 1', popupLink: '#' },
@@ -572,16 +485,11 @@ const computedMarkers = computed<Marker[] | any>(() => {
 	});
 });
 
-
 // Ready funcs
 async function onLeafletReady() {
   await nextTick();
   leafletReady.value = true;
 }
-
-// function toggleTileLayer() {
-// 	showTileLayer.value = !showTileLayer.value;
-// }
 
 //Styling funcs
 let borderColor:string 		= "rgb(215, 190, 150)";
@@ -698,30 +606,6 @@ function clusterIcon(cluster:any) {
       });
     }
 
-// 	function markerIcon() {
-// 		return L.divIcon({
-// 	// 		iconUrl: 'path/to/your/icon.png',
-//     //   iconSize: [38, 95], // Size of the icon
-//     //   iconAnchor: [22, 94], // Point of the icon which will correspond to marker's location
-//     //   popupAnchor: [-3, -76] // Point from which the popup should open relative to the iconAnchor
-// 	html: `<div style="background-color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #f28f43;">
-//                   PIN
-//                </div>`,
-//         className: 'marker-cluster-custom',
-//         iconSize: L.point(40, 40, true),
-
-//       });
-// }
-
-// function markerIcon() {
-// return L.icon({
-// 	iconUrl: 'path/to/your/icon.png',
-// 	iconSize: [38, 95], // Size of the icon
-// 	iconAnchor: [22, 94], // Point of the icon which will correspond to marker's location
-// 	popupAnchor: [-3, -76] // Point from which the popup should open relative to the iconAnchor
-// 	});
-// }
-
 // Before mount load geojson map
 onBeforeMount(async () => {
   // Fetch GeoJSON data from GitHub
@@ -769,6 +653,14 @@ watch(markers, (newMarkers) => {
   }
 }, { deep: true });
 
+// Multicriteria search
+const onSearchChange = (s: string) => {
+  console.log('Recherche changée :', s)
+  searchTerm.value = s;
+  // Si vous avez besoin de charger dynamiquement les options via une API, faites-le ici
+  // Exemple : charger des résultats via une requête API en fonction de searchTerm
+}
+
 
 </script>
 
@@ -778,7 +670,7 @@ Map
  */
 
 /* CSS for Toggle Switch:  https://www.w3schools.com/howto/howto_css_switch.asp */
-.switch {
+/* .switch {
 	position: relative;
 	display: inline-block;
 
@@ -824,5 +716,5 @@ Map
 	-webkit-transform: translateX(26px);
 	-ms-transform: translateX(26px);
 	transform: translateX(26px);
-}
+} */
 </style>

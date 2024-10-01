@@ -41,10 +41,6 @@ export interface relationships {
 	structure: number;
 	operation: number;
 }
-export interface geolocation {
-	code: [string];
-	latLng: [number | null, number | null]
-}
 
 export type WpPosts = WpPost[];
 
@@ -83,4 +79,25 @@ export interface WpUser {
 	// Fields...
 }
 
+// Multiselect options
+export interface option {
+	value:string;
+	label?:string;
+	term?:string;
+}
 
+// Map
+export interface geolocation {
+	code: [string];
+	latLng: [number | null, number | null]
+}
+
+// Define your marker type
+export interface Marker {
+	latLng: L.LatLngExpression;
+	popupTitle: string;
+	popupContent?: string;
+	popupLink?: string;
+	popupImage?: string;
+	terms_data?: [WpTerm];
+  }

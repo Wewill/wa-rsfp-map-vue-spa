@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 // import AppQuickSearch from '../components/AppQuickSearch.vue';
 import AppMap from '../components/AppMap.vue';
+import AppList from '../components/AppList.vue';
 
 /*global wpData:true*/
 /*eslint no-undef: "error"*/
@@ -41,6 +42,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/map',
     name: 'Map',
     component: AppMap,
+  },
+	{
+    path: '/list',
+    name: 'List',
+    component: AppList,
   },
   // {
   //   path: '/advanced',

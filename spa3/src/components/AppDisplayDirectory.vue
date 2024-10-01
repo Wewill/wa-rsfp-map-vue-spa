@@ -1,6 +1,6 @@
 <template>
 	<!-- BEGIN: Directory item -->
-	<li class="list-item card-item p-0 bg-transparent w-100 mb-2">
+	<li class="list-item card-item p-0 bg-transparent --w-100 mb-2 col">
 		<div class="card my-0 border-0 bg-transparent">
 			<div class="d-flex align-items-center">
 			<!-- <div class="h-100-px w-100-px"> -->

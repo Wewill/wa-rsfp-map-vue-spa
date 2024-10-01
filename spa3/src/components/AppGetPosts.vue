@@ -16,8 +16,8 @@
 
 			<!-- Results -->
 			<div class="wrapper position-relative">
-				<div class="h-550-px overflow-y-scroll scrollbar-white me-n3 pe-3">
-					<ul class="list-unstyled card-items d-flex flex-column align-items-center mb-2">
+				<div class="h-550-px overflow-y-scroll scrollbar-white --me-n3 --ps-3 --pe-0 container-xl">
+					<ul class="list-unstyled card-items --d-flex --flex-column align-items-center mb-2 row row-cols-3">
 
 							<!-- AppDisplayDirectory Component -->
 							<app-display-directory
@@ -36,7 +36,7 @@
 				<!-- <div class="d-flex flex-center"><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></div> -->
 
 				</div>
-				<div class="position-absolute w-100 h-20-px w-100 bottom-0 left-0 bg-v-gradient-action-3"></div>
+				<div class="position-absolute w-100 h-20-px w-100 bottom-0 left-0 --bg-v-gradient-action-3 bg-v-gradient-color-bg"></div>
 			</div>
 
 		</template>
