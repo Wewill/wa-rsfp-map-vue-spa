@@ -14,7 +14,7 @@ function wa_mapvuespa_enqueue_spa_scripts() {
 	global $post;
 
 	$_options_identity_label = [
-		'agriculture_biologique'    => __( 'Agriculteur Biologique', 'wa-rsfp' ),
+		'agriculture_biologique'    => __( 'Agriculture Biologique', 'wa-rsfp' ),
 		'demeter' 		            => __( 'Demeter', 'wa-rsfp' ),
 		'bio_coherence' 		    => __( 'Bio Cohérence', 'wa-rsfp' ),
 		'nature_progres' 		    => __( 'Nature & Progrès', 'wa-rsfp' ),
@@ -28,7 +28,7 @@ function wa_mapvuespa_enqueue_spa_scripts() {
 
 	foreach ($_options_identity_label as $key => $label) {
         // Each entry is an associative array representing an object
-        $options_identity_label[] = ['value' => $key, 'label' => $label];
+        $options_identity_label[] = ['value' => $key, 'label' => $label, 'term' => 'label'];
     }
 
 	// Get metabox io label options
