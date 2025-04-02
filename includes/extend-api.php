@@ -144,15 +144,16 @@ function vue_get_post_meta_fields( $post_object, $field_name, $request ) {
 	// Render
 	$additional_post_data = array(
 		'additionnal_content' => $d_general_subtitle . ' > ' . $d_general_introduction . ' > ' . $d_identity_location,
-		'custom_excerpt' 	=> wp_trim_words(
+				'custom_excerpt' 	=> wp_trim_words(
 			$post_object['excerpt']['rendered'] != ''?$post_object['excerpt']['rendered']:$d_general_introduction,
 			9,
 			' &hellip;'
 		), // From 25 to 15 words
+		'content' 			=> wp_strip_all_tags( strip_shortcodes( get_the_content( null, false, $post_id ) ) ),
 		'taxonomies'		=> $taxonomies,
 		'post_terms' 		=> $post_terms,
 		'post_type' 		=> $post_type,
-		'post_object' 		=> $post_object,
+		// 'post_object' 		=> $post_object,
 		//
 		'terms_data' 		=> $terms_data,
 		'terms' 			=> $terms,
@@ -183,7 +184,7 @@ function vue_get_post_meta_fields( $post_object, $field_name, $request ) {
 		'opentostage' 		=> !empty($d_stage_opentostage)?true:false,
 		'opentovisit' 		=> !empty($d_stage_opentovisit)?true:false,
 		'label' 			=> $d_identity_label,
-		'farm_title'		=> get_the_title( $d_relationships_farm ),
+		'farm_title'		=> html_entity_decode( get_the_title( $d_relationships_farm ) ),
 		//
 		'errors' 			=> $errors,
 	);

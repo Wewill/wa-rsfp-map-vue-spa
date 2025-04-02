@@ -1,25 +1,25 @@
 <template>
-  <div>
-<!-- isDataAvailable:: {{ isDataAvailable }} -->
-<!-- <pre><b>filteredResults::</b> {{  filteredResults }}</pre> -->
-<!-- <pre><b>computedMarkers::</b> {{  computedMarkers }}</pre> -->
+	<div>
+		<!-- isDataAvailable:: {{ isDataAvailable }} -->
+		<!-- <pre><b>filteredResults::</b> {{  filteredResults }}</pre> -->
+		<!-- <pre><b>computedMarkers::</b> {{  computedMarkers }}</pre> -->
 
-<code class="d-none">
+		<code class="d-none">
 MAP =
-zoom:: {{  zoom }}
-center:: {{  center }}
-mapLoaded:: {{  mapLoaded }}
-leafletReady:: {{  leafletReady }}
+zoom:: {{ zoom }}
+center:: {{ center }}
+mapLoaded:: {{ mapLoaded }}
+leafletReady:: {{ leafletReady }}
 selectedDepartmentIds: {{ selectedDepartmentIds }}
-showTileLayer: {{  showTileLayer }}
-geographyFilter: {{  geographyFilter }}
-opentostageFilter: {{  opentostageFilter }}
-opentovisitFilter: {{  opentovisitFilter }}
-mergedFilters:: {{  mergedFilters }}
-filteredResults.length:: {{  filteredResults.length }}
+showTileLayer: {{ showTileLayer }}
+geographyFilter: {{ geographyFilter }}
+opentostageFilter: {{ opentostageFilter }}
+opentovisitFilter: {{ opentovisitFilter }}
+mergedFilters:: {{ mergedFilters }}
+filteredResults.length:: {{ filteredResults.length }}
 </code>
 
-<!-- <div class="d-none">
+		<!-- <div class="d-none">
 
 Les thematiques =
 {{  wpThematic  }}
@@ -48,6 +48,7 @@ Les thematiques =
 
 </div> -->
 
+
 globalSearch:
 {{  globalSearch }}
 globalThematicFilter:
@@ -66,7 +67,8 @@ labelFilter:
 	<section id="map" class="mt-2 mb-2 contrast--light is-formatted">
 		<div class="container-fluid mb-n6">
 				<div class="row f-w px-4 pb-4">
-					<div class="col-12 --zi-max" style="--padding-left: calc( calc(var(--modified-bs-gutter-x) / 2) - 1.5rem ) !important;z-index: 410;">
+					<div class="col-12 --zi-max"
+						style="--padding-left: calc( calc(var(--modified-bs-gutter-x) / 2) - 1.5rem ) !important;z-index: 410;">
 
 						<div class="flex-fill px-2" data-aos="fade-left" data-aos-delay="200">
 							<span class="bullet bullet-action-3 ml-0"></span>
@@ -85,20 +87,20 @@ labelFilter:
 								<h6 class="text-action-3">Filtrer</h6>
 							</div>
 							<div class="flex-fill px-2 w-20" data-aos="fade-left" data-aos-delay="200">
-								<p class="f-12 font-weight-bold m-0">Production <span class="--text-muted --muted fw-medium op-5">{{ wpProduction.length }}</span></p>
-								<Multiselect
-									class="multiselect-tag-production"
-									v-model="productionFilter"
-									:options="wpProduction"
-									mode="tags"
-									:close-on-select="false"
-									:searchable="true"
-									placeholder="Filtrer"
-									@click.stop.prevent
-								/>
+								<p class="f-12 font-weight-bold m-0">Production <span
+										class="--text-muted --muted fw-medium op-5">{{ wpProduction.length }}</span></p>
+								<Multiselect class="multiselect-tag-production" v-model="productionFilter"
+									:options="wpProduction" mode="tags" :close-on-select="false" :searchable="true"
+									placeholder="Filtrer" @click.stop.prevent />
 							</div>
 							<div class="flex-fill px-2 w-20" data-aos="fade-left" data-aos-delay="300">
-								<p class="f-12 font-weight-bold m-0">Thématique <span class="--text-muted --muted fw-medium op-5">{{ wpThematic.length }}</span></p>
+								<p class="f-12 font-weight-bold m-0">Thématique <span
+										class="--text-muted --muted fw-medium op-5">{{ wpThematic.length }}</span></p>
+								<Multiselect class="multiselect-tag-thematic" v-model="thematicFilter"
+									:options="wpThematic" mode="tags" :close-on-select="false" :searchable="true"
+									placeholder="Filtrer" @click.stop.prevent />
+
+<p class="f-12 font-weight-bold m-0">Thématique <span class="--text-muted --muted fw-medium op-5">{{ wpThematic.length }}</span></p>
 								<Multiselect
 									class="multiselect-tag-thematic"
 									v-model="thematicFilter"
@@ -135,19 +137,13 @@ labelFilter:
 
 							</div>
 							<div class="flex-fill px-2 w-20" data-aos="fade-left" data-aos-delay="300">
-								<app-get-geographies
-									:display-title="true"
-									:app-filters="geographyFilter"
-									@onFilterChange="geographyFilter = $event"
-								/>
+								<app-get-geographies :display-title="true" :app-filters="geographyFilter"
+									@onFilterChange="geographyFilter = $event" />
 							</div>
 
 							<div class="flex-fill px-2 w-20" data-aos="fade-left" data-aos-delay="300">
-								<app-get-labels
-									:display-title="true"
-									:app-filters="labelFilter"
-									@onFilterChange="labelFilter = $event"
-								/>
+								<app-get-labels :display-title="true" :app-filters="labelFilter"
+									@onFilterChange="labelFilter = $event" />
 							</div>
 
 							<div class="flex-fill px-2 w-20" data-aos="fade-left" data-aos-delay="300">
@@ -156,11 +152,13 @@ labelFilter:
 									<!-- <label class="form-label f-12 font-weight-bold text-uppercase mb-3 color-gray" for="Options"><i class="icon icon-filter"></i> Ouvert aux...</label> -->
 									<fieldset class="d-flex">
 										<div class="form-check mb-1">
-											<input class="form-check-input" type="checkbox" id="opentostageFilter" name="opentostageFilter" v-model="opentostageFilter">
+											<input class="form-check-input" type="checkbox" id="opentostageFilter"
+												name="opentostageFilter" v-model="opentostageFilter">
 											<label class="form-check-label" for="opentostageFilter">Stages</label>
 										</div>
 										<div class="form-check mb-1 ms-3">
-											<input class="form-check-input" type="checkbox" id="opentovisitFilter" name="opentovisitFilter" v-model="opentovisitFilter">
+											<input class="form-check-input" type="checkbox" id="opentovisitFilter"
+												name="opentovisitFilter" v-model="opentovisitFilter">
 											<label class="form-check-label" for="opentovisitFilter">Visites</label>
 										</div>
 									</fieldset>
@@ -173,17 +171,12 @@ labelFilter:
 				</div>
 
 				<div class="row f-w px-4 min-vh-80">
-					<div class="col-sm-6 bg-color-bg rounded-start-4 p-0 d-flex --h-100 justify-content-center align-items-center">
-						<l-map class="rounded-start-4" v-if="mapLoaded && isDataAvailable" style="min-height: 750px; height: 100%; min-width: 400px; width: 100%;"
-							ref="map"
-							:min-zoom="5"
-							:max-zoom="19"
-							v-model:zoom="zoom"
-							v-model:center="center"
-							:zoomAnimation="true"
-							:markerZoomAnimation="true"
-							:useGlobalLeaflet="true"
-							:options="{
+					<div
+						class="col-sm-6 bg-color-bg rounded-start-4 p-0 d-flex --h-100 justify-content-center align-items-center">
+						<l-map class="rounded-start-4" v-if="mapLoaded && isDataAvailable"
+							style="min-height: 750px; height: 100%; min-width: 400px; width: 100%;" ref="map"
+							:min-zoom="5" :max-zoom="19" v-model:zoom="zoom" v-model:center="center"
+							:zoomAnimation="true" :markerZoomAnimation="true" :useGlobalLeaflet="true" :options="{
 								zoomControl: true,
 								dragging: true,
 								touchZoom: false,
@@ -191,57 +184,73 @@ labelFilter:
 								doubleClickZoom: false,
 								boxZoom: false,
 								keyboard: false
-							}"
-							@ready="onLeafletReady"
-						>
-								<!-- Control map -->
-								<l-control position="topright" >
-									<button class="btn btn-sm btn-outline-action-2" @click="showTileLayer = !showTileLayer"><i class="bi bi-map-fill"></i></button>
-								</l-control>
-								<!-- Omit the <l-tile-layer> to not display the base map -->
-								<l-tile-layer :url="url" :attribution="attribution" v-if="showTileLayer"/>
-								<!-- Geojson -->
-								<l-geo-json :geojson="geojson" :options="options" :options-style="styleFunction"  @ready="onGeoJsonReady"></l-geo-json>
-								<!-- Markers-->
-								<l-marker-cluster-group :icon-create-function="clusterIcon">
-								<l-marker v-for="(marker, index) in computedMarkers.filter( (m:Marker) => m.latLng !== null )" :key="index" :lat-lng="marker.latLng">
+							}" @ready="onLeafletReady">
+							<!-- Control map -->
+							<l-control position="topright">
+								<button class="btn btn-sm btn-outline-action-2"
+									@click="showTileLayer = !showTileLayer"><i class="bi bi-map-fill"></i></button>
+							</l-control>
+							<!-- Omit the <l-tile-layer> to not display the base map -->
+							<l-tile-layer :url="url" :attribution="attribution" v-if="showTileLayer" />
+							<!-- Geojson -->
+							<l-geo-json :geojson="geojson" :options="options" :options-style="styleFunction"
+								@ready="onGeoJsonReady"></l-geo-json>
+							<!-- Markers-->
+							<l-marker-cluster-group :icon-create-function="clusterIcon">
+								<l-marker
+									v-for="(marker, index) in computedMarkers.filter((m: Marker) => m.latLng !== null)"
+									:key="index" :lat-lng="marker.latLng">
 									<l-popup>
+
 
 										<div class="card border-0"> <!-- style="width:400px; max-width: 500px;" -->
 											<div class="row g-0">
-												<div class="col-md-4 d-flex justify-content-stretch align-items-center ---- bg-cover bg-position-center-center rounded-start" :style="`background-image: url('${marker.popupImage}');`" :title="marker.popupTitle">
+												<div class="col-md-4 d-flex justify-content-stretch align-items-center ---- bg-cover bg-position-center-center rounded-start"
+													:style="`background-image: url('${marker.popupImage}');`"
+													:title="marker.popupTitle">
 													<!-- <img :src="marker.popupImage" class="img-fluid rounded-start" :alt="marker.popupTitle"> -->
 												</div>
 												<div class="col-md-8">
 													<div class="card-body">
-														<h5 class="card-title mb-2"><a :href="marker.popupLink" v-html="marker.popupTitle"></a></h5>
-														<template v-for="t_production in marker.terms_data.filter((t:any) => t.taxonomy == 'production' )" >
-															<div class="production-list d-inline-block"><a :href="t_production.link" class="production-item" tabindex="-1">{{ t_production.name}}</a></div>
+														<h5 class="card-title mb-2"><a :href="marker.popupLink"
+																v-html="marker.popupTitle"></a></h5>
+														<template
+															v-for="t_production in marker.terms_data.filter((t: any) => t.taxonomy == 'production')">
+															<div class="production-list d-inline-block"><a
+																	:href="t_production.link" class="production-item"
+																	tabindex="-1">{{ t_production.name }}</a></div>
 														</template>
-														<template v-for="t_thematic in marker.terms_data.filter((t:any) => t.taxonomy == 'thematic' )" >
-															<div class="thematic-list d-inline-block"><a :href="t_thematic.link" class="thematic-item" tabindex="-1">{{ t_thematic.name}}</a></div>
+														<template
+															v-for="t_thematic in marker.terms_data.filter((t: any) => t.taxonomy == 'thematic')">
+															<div class="thematic-list d-inline-block"><a
+																	:href="t_thematic.link" class="thematic-item"
+																	tabindex="-1">{{ t_thematic.name }}</a></div>
 														</template>
-														<template v-for="t_geography in marker.terms_data.filter((t:any) => t.taxonomy == 'geography' )" >
-															<div class="geography-list d-inline-block"><a :href="t_geography.link" class="geography-item" tabindex="-1">{{ t_geography.name}}</a></div>
+														<template
+															v-for="t_geography in marker.terms_data.filter((t: any) => t.taxonomy == 'geography')">
+															<div class="geography-list d-inline-block"><a
+																	:href="t_geography.link" class="geography-item"
+																	tabindex="-1">{{ t_geography.name }}</a></div>
 														</template>
-														<p class="card-text mt-2 small" v-html="marker.popupContent"></p>
+														<p class="card-text mt-2 small" v-html="marker.popupContent">
+														</p>
 													</div>
 												</div>
 											</div>
 										</div>
 
 									</l-popup>
-									<l-icon
-										:icon-anchor="[10, 10]"
-										class-name="someExtraClass"
-										>
-										<div style="background-color: var(--waff-color-heading, rgb(60, 10, 10)); border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; color: white;"></div>
+									<l-icon :icon-anchor="[10, 10]" class-name="someExtraClass">
+										<div
+											style="background-color: var(--waff-color-heading, rgb(60, 10, 10)); border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; color: white;">
+										</div>
 									</l-icon>
 								</l-marker>
-								</l-marker-cluster-group>
+							</l-marker-cluster-group>
 						</l-map>
 					</div>
 					<div class="col-sm-6 bg-action-3 rounded-end-4 p-4 --pb-10 mb-0">
+
 
 						<div class="global-search form-floating mb-1">
 
@@ -258,13 +267,9 @@ labelFilter:
 						<div class="row">
 
 							<div class="col-sm-6">
-								<app-get-posts
-									:search-term="searchTerm"
-									:app-filters="mergedFilters"
-									:opentostage-filter="opentostageFilter"
-									:opentovisit-filter="opentovisitFilter"
-									:route="'directory'"
-								/>
+								<app-get-posts :search-term="searchTerm" :app-filters="mergedFilters"
+									:opentostage-filter="opentostageFilter" :opentovisit-filter="opentovisitFilter"
+									:route="'directory'" />
 							</div>
 
 							<!-- <div class="col-6">
@@ -275,6 +280,7 @@ labelFilter:
 							</div> -->
 
 							<div class="col-sm-6">
+
 								<app-get-thematics
 									:search-term="searchTerm"
 									:app-filters="thematicFilter.map(o => o.value)"
@@ -284,11 +290,11 @@ labelFilter:
 						</div>
 
 					</div>
+				</div>
 			</div>
-		</div>
 
-		<!-- Begin: CTA -->
-		<!-- <div class="d-flex align-items-center justify-content-center py-4 px-5 bg-body rounded-4 shadow mx-20 mb-6 --z-2 position-relative" style="z-index:1000;">
+			<!-- Begin: CTA -->
+			<!-- <div class="d-flex align-items-center justify-content-center py-4 px-5 bg-body rounded-4 shadow mx-20 mb-6 --z-2 position-relative" style="z-index:1000;">
 			<div class="d-flex align-items-center" data-aos="flip-up" data-aos-delay="200">
 				<div class="flex-shrink-0 me-3">
 					<i class="bi bi-bootstrap h2 text-action-1"></i>
@@ -347,7 +353,8 @@ labelFilter:
 			</div>
 
 		</div> -->
-		<!-- End: CTA -->
+			<!-- End: CTA -->
+
 
 	</section>
 	<!-- END : #Map integration -->
@@ -361,6 +368,7 @@ import AppGetPosts from './AppGetPosts.vue';
 import AppGetThematics from './AppGetThematics.vue';
 import AppGetGeographies from './AppGetGeographies.vue';
 import AppGetLabels from './AppGetLabels.vue'
+
 import { WpPosts, WpPost, Marker, option} from '../types/wpTypes'; // WpTerm
 import _ from "lodash";
 
@@ -372,7 +380,7 @@ import L from 'leaflet'
 globalThis.L = L
 
 //import type L from "leaflet";
-import { LTileLayer, LMap, LGeoJson, LMarker, LIcon, LPopup, LControl} from "@vue-leaflet/vue-leaflet";
+import { LTileLayer, LMap, LGeoJson, LMarker, LIcon, LPopup, LControl } from "@vue-leaflet/vue-leaflet";
 import { LMarkerClusterGroup } from 'vue-leaflet-markercluster'
 // import 'leaflet/dist/leaflet.css' imported and modified in styles.css
 import 'vue-leaflet-markercluster/dist/style.css'
@@ -396,6 +404,7 @@ const opentostageFilter = ref(false);
 const opentovisitFilter = ref(false);
 
 // console.info(window.wpData);
+
 
 // const wpCategories 		= ref(window.wpData.post_categories.map((term: string) => {return {value:term.toLowerCase(), label: term, term: 'category'}}));
 const wpGeography 		= ref(window.wpData.geography.map((term: string) => {return {value:term.toLowerCase(), label: term, term: 'geography'}}));
@@ -469,48 +478,52 @@ const globalThematicFilter = computed<option[]>(() => globalSearch.value.filter(
  * Get directory posts
  */
 
+
  // Reactive data
  import { getPosts, wpPosts, isDataAvailable, apiResponse } from '../services/postService';
 
 // Computed property for filtered results
 const filteredResults = computed<WpPosts>(() => {
-  if (wpPosts.value.length) {
-    const pattern = new RegExp(_.lowerCase(_.deburr(searchTerm.value)), 'i');
-    const filteredPosts = wpPosts.value.filter((post) =>
-      (
-		_.lowerCase(_.deburr(post.title.rendered)).match(pattern) ||
-		_.lowerCase(_.deburr(post.vue_meta.additionnal_content)).match(pattern) ||
-		_.lowerCase(_.deburr(post.vue_meta.custom_excerpt)).match(pattern)
-	  )
-	  &&
-	  (
-        (!opentostageFilter.value && !opentovisitFilter.value) ||
-        (opentostageFilter.value && post.vue_meta.opentostage) ||
-        (opentovisitFilter.value && post.vue_meta.opentovisit) ||
-        (opentostageFilter.value && opentovisitFilter.value && post.vue_meta.opentostage && post.vue_meta.opentovisit)
-	  )
-    );
+	if (wpPosts.value.length) {
+		const pattern = new RegExp(_.lowerCase(_.deburr(searchTerm.value)), 'i');
+		const filteredPosts = wpPosts.value.filter((post) =>
+			(
+				_.lowerCase(_.deburr(post.title.rendered)).match(pattern) ||
+				_.lowerCase(_.deburr(post.vue_meta.additionnal_content)).match(pattern) ||
+				_.lowerCase(_.deburr(post.vue_meta.custom_excerpt)).match(pattern) ||
+				_.lowerCase(_.deburr(post.vue_meta.content)).match(pattern)
 
-    if (mergedFilters && mergedFilters.value.length) {
-      return filteredPosts.filter((post) =>
-        post.vue_meta.terms.some((term) =>
-          mergedFilters.value.includes(term.toLowerCase())
-        )
-      );
-    } else {
-      return filteredPosts;
-    }
-  }
-  return [];
+			)
+			&&
+			(
+				(!opentostageFilter.value && !opentovisitFilter.value) ||
+				(opentostageFilter.value && post.vue_meta.opentostage) ||
+				(opentovisitFilter.value && post.vue_meta.opentovisit) ||
+				(opentostageFilter.value && opentovisitFilter.value && post.vue_meta.opentostage && post.vue_meta.opentovisit)
+			)
+		);
+
+		if (mergedFilters && mergedFilters.value.length) {
+			return filteredPosts.filter((post) =>
+				post.vue_meta.terms.some((term) =>
+					mergedFilters.value.includes(term.toLowerCase())
+				)
+			);
+		} else {
+			return filteredPosts;
+		}
+	}
+	return [];
 });
 
 // Mounted lifecycle hook
 onMounted(() => {
-  fetchData();
+	fetchData();
 });
 
 // Methods
 async function fetchData() {
+
   apiResponse.value = 'Loading ⏳';
   await getPosts(['directory']);
 }
@@ -527,9 +540,10 @@ const leafletReady = ref<Boolean>(false);
 const geojson = ref<FeatureCollection<Geometry> | undefined>(undefined);
 const map = ref<L.Map | null>(null);
 
+
 const markers = ref<Marker[]>([
 	{ latLng: [47.413220, -4.219482], popupTitle: 'Marker 1', popupContent: 'Marker 1', popupLink: '#' },
-	{ latLng: [48.413220, -7.219482], popupTitle: 'Marker 1', popupContent: 'Marker 2', popupLink: '#'},
+	{ latLng: [48.413220, -7.219482], popupTitle: 'Marker 1', popupContent: 'Marker 2', popupLink: '#' },
 	{ latLng: [46.413220, 8.219482], popupTitle: 'Marker 1', popupContent: 'Marker 3', popupLink: '#' },
 	{ latLng: [47.413220, 2.219482], popupTitle: 'Marker 1', popupContent: 'Marker 4', popupLink: '#' },
 	{ latLng: [45.413220, 4.219482], popupTitle: 'Marker 1', popupContent: 'Marker 5', popupLink: '#' },
@@ -541,7 +555,7 @@ const markers = ref<Marker[]>([
 ]);
 
 function findDepartmentCenter(departmentCode: string | undefined): [number, number] | null {
-	if ( geojson.value === undefined || !departmentCode ) return null;
+	if (geojson.value === undefined || !departmentCode) return null;
 	else {
 		const department = geojson.value.features.find(feature => feature.properties && 'code' in feature.properties && feature.properties.code === departmentCode);
 		if (!department) return null;
@@ -554,14 +568,13 @@ function findDepartmentCenter(departmentCode: string | undefined): [number, numb
 }
 
 const computedMarkers = computed<Marker[] | any>(() => {
-	return filteredResults.value.map((p:WpPost) =>
-	{
+	return filteredResults.value.map((p: WpPost) => {
 		console.log(p);
 		return {
-			latLng: ( p.vue_meta.geolocation?.latLng.every(el => el !== null) )?p.vue_meta.geolocation?.latLng:findDepartmentCenter(p.vue_meta.geolocation?.code[0]),
-			popupTitle: (p.title.rendered)?p.title.rendered:'',
-//			popupContent: (p.excerpt.rendered)?p.excerpt.rendered:'',
-			popupContent: (p.vue_meta.farm_title)?p.vue_meta.farm_title:'', // Lorem ipsum
+			latLng: (p.vue_meta.geolocation?.latLng.every(el => el !== null)) ? p.vue_meta.geolocation?.latLng : findDepartmentCenter(p.vue_meta.geolocation?.code[0]),
+			popupTitle: (p.title.rendered) ? p.title.rendered : '',
+			//			popupContent: (p.excerpt.rendered)?p.excerpt.rendered:'',
+			popupContent: (p.vue_meta.farm_title) ? p.vue_meta.farm_title : '', // Lorem ipsum
 			popupLink: p.link,
 			popupImage: p.vue_meta.media_url,
 			terms_data: p.vue_meta.terms_data
@@ -571,42 +584,42 @@ const computedMarkers = computed<Marker[] | any>(() => {
 
 // Ready funcs
 async function onLeafletReady() {
-  await nextTick();
-  leafletReady.value = true;
+	await nextTick();
+	leafletReady.value = true;
 }
 
 //Styling funcs
-let borderColor:string 		= "rgb(215, 190, 150)";
-let fillColor:string 		= "rgb(255, 255, 255)";
-let fillColorHover:string 	= "rgb(243, 235, 223)";
+let borderColor: string = "rgb(215, 190, 150)";
+let fillColor: string = "rgb(255, 255, 255)";
+let fillColorHover: string = "rgb(243, 235, 223)";
 
 const options = computed(() => {
-  return {
-    onEachFeature: onEachFeatureFunction.value
-  };
+	return {
+		onEachFeature: onEachFeatureFunction.value
+	};
 });
 
 // Styling geojson map
 const defaultStyle = {
-  color: borderColor,
-  weight: 1,
-  opacity: 1,
-  fillOpacity: .5,
-  fillColor: fillColor,
+	color: borderColor,
+	weight: 1,
+	opacity: 1,
+	fillOpacity: .5,
+	fillColor: fillColor,
 };
 
 const highlightStyle = {
-  color: borderColor,
-  weight: 1,
-  opacity: 1,
-  fillOpacity: .8,
-  fillColor: fillColorHover,
+	color: borderColor,
+	weight: 1,
+	opacity: 1,
+	fillOpacity: .8,
+	fillColor: fillColorHover,
 };
 
 const styleFunction = computed(() => {
-  return () => {
-    return defaultStyle;
-  };
+	return () => {
+		return defaultStyle;
+	};
 });
 
 // Define a reactive constant to store the clicked department's ID
@@ -615,104 +628,104 @@ const mapLayers = new Map(); // To map department codes to layers
 
 // Function to bind to each feature on geojson map
 const onEachFeatureFunction = computed(() => {
-  return (feature:any, layer:L.Layer) => {
-	if (!feature.properties) return;
-	// Load layers to layersMap to reuse in a watcher
-	// Assuming 'code' is a unique identifier for each feature
-	mapLayers.set(feature.properties.code, layer);
+	return (feature: any, layer: L.Layer) => {
+		if (!feature.properties) return;
+		// Load layers to layersMap to reuse in a watcher
+		// Assuming 'code' is a unique identifier for each feature
+		mapLayers.set(feature.properties.code, layer);
 
-	// Tooltip
-    layer.bindTooltip(
-      `<span class="properties-name">${feature.properties.nom}</span>`,
-      { permanent: false, sticky: true, className: 'leaflet-custom-tooltip' }
-    );
-	// Popup
-	//layer.bindPopup(feature.properties.nom, { className: 'leaflet-custom-popup' });
-	// Click
-    layer.on({
-      click: (e: L.LeafletMouseEvent) => {
-		const departmentId = feature.properties.code; // Assuming 'code' is the department ID property
-		const index = selectedDepartmentIds.value.indexOf(departmentId);
+		// Tooltip
+		layer.bindTooltip(
+			`<span class="properties-name">${feature.properties.nom}</span>`,
+			{ permanent: false, sticky: true, className: 'leaflet-custom-tooltip' }
+		);
+		// Popup
+		//layer.bindPopup(feature.properties.nom, { className: 'leaflet-custom-popup' });
+		// Click
+		layer.on({
+			click: (e: L.LeafletMouseEvent) => {
+				const departmentId = feature.properties.code; // Assuming 'code' is the department ID property
+				const index = selectedDepartmentIds.value.indexOf(departmentId);
 
-		if (index > -1) {
-			// Department is already selected, remove it from the array (deselect)
-			selectedDepartmentIds.value.splice(index, 1);
-			(layer as L.Path).setStyle(defaultStyle); // Reset style to default
-		} else {
-			// Department is not selected, add it to the array (select)
-			selectedDepartmentIds.value.push(departmentId);
-			(layer as L.Path).setStyle(highlightStyle); // Apply highlight style
+				if (index > -1) {
+					// Department is already selected, remove it from the array (deselect)
+					selectedDepartmentIds.value.splice(index, 1);
+					(layer as L.Path).setStyle(defaultStyle); // Reset style to default
+				} else {
+					// Department is not selected, add it to the array (select)
+					selectedDepartmentIds.value.push(departmentId);
+					(layer as L.Path).setStyle(highlightStyle); // Apply highlight style
 
-			// Centering and zoom logic
-			// Assuming 'layer' is of type L.GeoJSON (or similar Leaflet layer type)
-			// which supports getBounds().
-			// const bounds = (layer as L.GeoJSON).getBounds();
-			// const centerPoint = bounds.getCenter();
-			// center.value = [centerPoint.lat, centerPoint.lng];
-			// zoom.value = 7; // Adjust zoom level as needed
-		}
+					// Centering and zoom logic
+					// Assuming 'layer' is of type L.GeoJSON (or similar Leaflet layer type)
+					// which supports getBounds().
+					// const bounds = (layer as L.GeoJSON).getBounds();
+					// const centerPoint = bounds.getCenter();
+					// center.value = [centerPoint.lat, centerPoint.lng];
+					// zoom.value = 7; // Adjust zoom level as needed
+				}
 
-		geographyFilter.value = selectedDepartmentIds.value;
+				geographyFilter.value = selectedDepartmentIds.value;
 
-		// Console
-		console.log(`Department clicked: ${feature.properties.nom} | ${e} `);
-      },
-    });
-  }
+				// Console
+				console.log(`Department clicked: ${feature.properties.nom} | ${e} `);
+			},
+		});
+	}
 });
 
 // watch geographyFilter
 watch(geographyFilter, (newFilter) => {
 	// Set styles for features in the new filter
 	newFilter.forEach(code => {
-        const layer = mapLayers.get(code);
-        if (layer) {
-            (layer as L.Path).setStyle(highlightStyle);  // Apply highlight style
-        }
-    });
+		const layer = mapLayers.get(code);
+		if (layer) {
+			(layer as L.Path).setStyle(highlightStyle);  // Apply highlight style
+		}
+	});
 
-    // Optionally reset styles for features not in the new filter
-    mapLayers.forEach((layer, code) => {
-        if (!newFilter.includes(code)) {
-            (layer as L.Path).setStyle(defaultStyle);  // Reset to default style
-        }
-    });
+	// Optionally reset styles for features not in the new filter
+	mapLayers.forEach((layer, code) => {
+		if (!newFilter.includes(code)) {
+			(layer as L.Path).setStyle(defaultStyle);  // Reset to default style
+		}
+	});
 });
 
 // Cluster and marker styles
-function clusterIcon(cluster:any) {
-      return L.divIcon({
-        html: `<div style="background-color: var(--waff-action-1, rgb(255, 100, 75)); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: white;">
+function clusterIcon(cluster: any) {
+	return L.divIcon({
+		html: `<div style="background-color: var(--waff-action-1, rgb(255, 100, 75)); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: white;">
                   <strong>${cluster.getChildCount()}</strong>
                </div>`,
-        className: 'marker-cluster-custom',
-        iconSize: L.point(40 * (cluster.getChildCount()/40), 40  * (cluster.getChildCount()/40), true),
-      });
-    }
+		className: 'marker-cluster-custom',
+		iconSize: L.point(40 * (cluster.getChildCount() / 40), 40 * (cluster.getChildCount() / 40), true),
+	});
+}
 
 // Before mount load geojson map
 onBeforeMount(async () => {
-  // Fetch GeoJSON data from GitHub
-  try {
-    const response = await fetch(franceDepartments);
-    if (response.ok) {
-      const data = await response.json();
-	  console.info('Success loading the GeoJSON data.', data);
-      geojson.value = data;
-      mapLoaded.value = true;
-	  if( map.value !== null ) map.value.invalidateSize();
-    } else {
-      console.error('Failed to load the GeoJSON data.');
-    }
-  } catch (error) {
-    console.error('Error fetching the GeoJSON data:', error);
-  }
+	// Fetch GeoJSON data from GitHub
+	try {
+		const response = await fetch(franceDepartments);
+		if (response.ok) {
+			const data = await response.json();
+			console.info('Success loading the GeoJSON data.', data);
+			geojson.value = data;
+			mapLoaded.value = true;
+			if (map.value !== null) map.value.invalidateSize();
+		} else {
+			console.error('Failed to load the GeoJSON data.');
+		}
+	} catch (error) {
+		console.error('Error fetching the GeoJSON data:', error);
+	}
 });
 
 // Function to adjust the map view once the GeoJSON layer is
 const onGeoJsonReady = (event: { map: L.Map; target: L.GeoJSON }) => {
 	const m = event.map;
-	if ( event.target !== undefined )
+	if (event.target !== undefined)
 		m.fitBounds(event.target.getBounds());
 };
 
@@ -721,20 +734,20 @@ onMounted(() => {
 	// Center on map
 	if (map.value) {
 		const bounds = markers.value.reduce((bounds, marker) => {
-		return bounds.extend(marker.latLng);
+			return bounds.extend(marker.latLng);
 		}, L.latLngBounds(markers.value[0].latLng, markers.value[0].latLng));
 
-		if ( bounds !== undefined )
+		if (bounds !== undefined)
 			map.value.fitBounds(bounds);
 	}
 });
 
 // Watcher that reacts to changes in the markers array
 watch(markers, (newMarkers) => {
-  if (map.value && newMarkers.length > 0) {
-    const bounds = newMarkers.reduce((bounds, marker) => bounds.extend(marker.latLng), L.latLngBounds(newMarkers[0].latLng, newMarkers[0].latLng));
-    map.value.fitBounds(bounds);
-  }
+	if (map.value && newMarkers.length > 0) {
+		const bounds = newMarkers.reduce((bounds, marker) => bounds.extend(marker.latLng), L.latLngBounds(newMarkers[0].latLng, newMarkers[0].latLng));
+		map.value.fitBounds(bounds);
+	}
 }, { deep: true });
 
 // Multicriteria search
@@ -792,11 +805,11 @@ Map
 	transition: 500ms;
 }
 
-.switch input:checked + .category-toggle {
+.switch input:checked+.category-toggle {
 	background-color: #42b883;
 }
 
-.switch input:checked + .category-toggle:before {
+.switch input:checked+.category-toggle:before {
 	-webkit-transform: translateX(26px);
 	-ms-transform: translateX(26px);
 	transform: translateX(26px);
