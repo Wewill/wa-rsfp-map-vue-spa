@@ -48,91 +48,137 @@ Les thematiques =
 
 </div> -->
 
+		##TEST
+
 		<!-- BEGIN: #Map integration -->
 		<section id="map" class="mt-2 mb-2 contrast--light is-formatted">
-			<div class="container-fluid mb-n6">
-				<div class="row f-w px-4 pb-4">
-					<div class="col-12 --zi-max"
-						style="--padding-left: calc( calc(var(--modified-bs-gutter-x) / 2) - 1.5rem ) !important;z-index: 410;">
+			<div class="container-fluid mb-4">
 
-						<div class="flex-fill px-2" data-aos="fade-left" data-aos-delay="200">
-							<span class="bullet bullet-action-3 ml-0"></span>
-							<h5 class="text-action-3">Le répertoire</h5>
+				<!-- Search panel -->
+				<div class="row f-w px-4 min-h-100px">
+					<div
+						class="col bg-white rounded-top-4 p-0 d-flex --h-100 justify-content-center align-items-center shadow-custom">
+
+						<!-- Search-->
+						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3" data-aos="fade-top">
+							<div class="form-floating mb-1">
+								<!-- Search Box -->
+								<!-- <input v-model="searchTerm" type="text"
+									class="form-control form-control-lg --border-action-3 --focus-action-3 px-4"
+									id="floatingInput" placeholder="Découvrir..." aria-label="Search">
+								<label for="floatingInput" class="ms-3 fs-18">Découvrir...</label>
+								<div
+									class="input__search-toggle position-absolute top-50 end-0 translate-middle-y pe-4">
+									<svg role="img" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+										<path
+											d="m18.0553691 9.08577774c0-4.92630404-4.02005-8.94635404-8.94635408-8.94635404-4.92630404 0-8.96959132 4.02005-8.96959132 8.94635404 0 4.92630406 4.02005 8.94635406 8.94635404 8.94635406 2.13783006 0 4.08976186-.7435931 5.64665986-1.9984064l3.8109144 3.8109145 1.3245252-1.3245252-3.8341518-3.7876771c1.2548133-1.5336607 2.0216437-3.5088298 2.0216437-5.64665986zm-8.96959136 7.11060866c-3.90386358 0-7.08737138-3.1835078-7.08737138-7.08737138s3.1835078-7.08737138 7.08737138-7.08737138c3.90386356 0 7.08737136 3.1835078 7.08737136 7.08737138s-3.1602705 7.08737138-7.08737136 7.08737138z">
+										</path>
+									</svg>
+								</div> -->
+
+								<!-- Search Box 2 -->
+								<div class="position-relative">
+									<input v-model="searchTerm" type="text" class="px-4 border-0" id="floatingInput"
+										placeholder="Découvrir..." aria-label="Search">
+									<div
+										class="input__search-toggle position-absolute top-50 end-0 translate-middle-y pe-4">
+										<svg role="img" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+											<path
+												d="m18.0553691 9.08577774c0-4.92630404-4.02005-8.94635404-8.94635408-8.94635404-4.92630404 0-8.96959132 4.02005-8.96959132 8.94635404 0 4.92630406 4.02005 8.94635406 8.94635404 8.94635406 2.13783006 0 4.08976186-.7435931 5.64665986-1.9984064l3.8109144 3.8109145 1.3245252-1.3245252-3.8341518-3.7876771c1.2548133-1.5336607 2.0216437-3.5088298 2.0216437-5.64665986zm-8.96959136 7.11060866c-3.90386358 0-7.08737138-3.1835078-7.08737138-7.08737138s3.1835078-7.08737138 7.08737138-7.08737138c3.90386356 0 7.08737136 3.1835078 7.08737136 7.08737138s-3.1602705 7.08737138-7.08737136 7.08737138z">
+											</path>
+										</svg>
+									</div>
+								</div>
+
+							</div>
+
+						</div>
+						<!-- Filters -->
+						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3" data-aos="fade-top"
+							data-aos-delay="100">
+							<p class="f-12 font-weight-bold m-0"><span class="subline text-action-3 f-xs">Filtrer
+									par </span> Production <span class="fw-medium op-5">{{
+										wpProduction.length }}</span></p>
+							<Multiselect class="multiselect-tag-production multiselect-flat" v-model="productionFilter"
+								:options="wpProduction" mode="tags" :close-on-select="false" :searchable="true"
+								placeholder="..." @click.stop.prevent />
+						</div>
+						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3" data-aos="fade-top"
+							data-aos-delay="200">
+							<p class="f-12 font-weight-bold m-0">Thématique <span class="fw-medium op-5">{{
+								wpThematic.length }}</span></p>
+							<Multiselect class="multiselect-tag-thematic multiselect-flat" v-model="thematicFilter"
+								:options="wpThematic" mode="tags" :close-on-select="false" :searchable="true"
+								placeholder="..." @click.stop.prevent />
+						</div>
+						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3" data-aos="fade-top"
+							data-aos-delay="300">
+							<app-get-geographies :display-title="true" :app-filters="geographyFilter"
+								@onFilterChange="geographyFilter = $event" />
+						</div>
+						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3" data-aos="fade-top"
+							data-aos-delay="400">
+							<app-get-labels :display-title="true" :app-filters="labelFilter"
+								@onFilterChange="labelFilter = $event" />
+						</div>
+						<div class="w-120px px-2 h-100 py-3" style="min-width: 110px;" data-aos="fade-top"
+							data-aos-delay="500">
+							<p class="f-12 font-weight-bold m-0"><i class="icon icon-filters"></i> Ouvert aux...</p>
+							<form>
+								<fieldset class="">
+									<div class="form-check mb-1">
+										<input class="form-check-input" type="checkbox" id="opentostageFilter"
+											name="opentostageFilter" v-model="opentostageFilter">
+										<label class="form-check-label" for="opentostageFilter">Stages</label>
+									</div>
+									<div class="form-check mb-1">
+										<input class="form-check-input" type="checkbox" id="opentovisitFilter"
+											name="opentovisitFilter" v-model="opentovisitFilter">
+										<label class="form-check-label" for="opentovisitFilter">Visites</label>
+									</div>
+								</fieldset>
+							</form>
 						</div>
 
-
-						<div class="d-none d-sm-flex align-items-center justify-content-between">
-							<!-- <div class="flex-fill px-2" data-aos="fade-left" data-aos-delay="200">
-								<span class="bullet bullet-action-3 ml-0"></span>
-								<h5 class="text-action-3">Le répertoire</h5>
-							</div> -->
-							<div class="flex-fill px-2 w-20" data-aos="fade-left" data-aos-delay="200">
-								<p class="f-12 font-weight-bold m-0">Production <span
-										class="--text-muted --muted fw-medium op-5">{{ wpProduction.length }}</span></p>
-								<Multiselect class="multiselect-tag-production" v-model="productionFilter"
-									:options="wpProduction" mode="tags" :close-on-select="false" :searchable="true"
-									placeholder="Filtrer" @click.stop.prevent />
-							</div>
-							<div class="flex-fill px-2 w-20" data-aos="fade-left" data-aos-delay="300">
-								<p class="f-12 font-weight-bold m-0">Thématique <span
-										class="--text-muted --muted fw-medium op-5">{{ wpThematic.length }}</span></p>
-								<Multiselect class="multiselect-tag-thematic" v-model="thematicFilter"
-									:options="wpThematic" mode="tags" :close-on-select="false" :searchable="true"
-									placeholder="Filtrer" @click.stop.prevent />
-							</div>
-							<div class="flex-fill px-2 w-20" data-aos="fade-left" data-aos-delay="300">
-								<app-get-geographies :display-title="true" :app-filters="geographyFilter"
-									@onFilterChange="geographyFilter = $event" />
-							</div>
-
-							<div class="flex-fill px-2 w-20" data-aos="fade-left" data-aos-delay="300">
-								<app-get-labels :display-title="true" :app-filters="labelFilter"
-									@onFilterChange="labelFilter = $event" />
-							</div>
-
-							<div class="flex-fill px-2 w-20" data-aos="fade-left" data-aos-delay="300">
-								<p class="f-12 font-weight-bold m-0"><i class="icon icon-filters"></i> Ouvert aux...</p>
-								<form>
-									<!-- <label class="form-label f-12 font-weight-bold text-uppercase mb-3 color-gray" for="Options"><i class="icon icon-filter"></i> Ouvert aux...</label> -->
-									<fieldset class="d-flex">
-										<div class="form-check mb-1">
-											<input class="form-check-input" type="checkbox" id="opentostageFilter"
-												name="opentostageFilter" v-model="opentostageFilter">
-											<label class="form-check-label" for="opentostageFilter">Stages</label>
-										</div>
-										<div class="form-check mb-1 ms-3">
-											<input class="form-check-input" type="checkbox" id="opentovisitFilter"
-												name="opentovisitFilter" v-model="opentovisitFilter">
-											<label class="form-check-label" for="opentovisitFilter">Visites</label>
-										</div>
-									</fieldset>
-								</form>
-							</div>
-						</div>
 
 					</div>
 				</div>
 
-				<div class="row f-w px-4 min-vh-80">
+				<!-- Map panel-->
+				<div class="row f-w px-4 --min-vh-80" style="min-height: 750px;">
+					<!-- Map -->
 					<div
-						class="col-sm-6 bg-color-bg rounded-start-4 p-0 d-flex --h-100 justify-content-center align-items-center">
-						<l-map class="rounded-start-4" v-if="mapLoaded && isDataAvailable"
+						class=" col-sm-6 bg-color-bg rounded-bottom-4 rounded-bottom-right-0 p-0 d-flex --h-100 justify-content-center align-items-center">
+						<l-map class="rounded-bottom-4 rounded-bottom-right-0" v-if="mapLoaded && isDataAvailable"
 							style="min-height: 750px; height: 100%; min-width: 400px; width: 100%;" ref="map"
 							:min-zoom="5" :max-zoom="19" v-model:zoom="zoom" v-model:center="center"
 							:zoomAnimation="true" :markerZoomAnimation="true" :useGlobalLeaflet="true" :options="{
-								zoomControl: true,
+								zoomControl: false,
 								dragging: true,
 								touchZoom: false,
 								scrollWheelZoom: false,
 								doubleClickZoom: false,
 								boxZoom: false,
-								keyboard: false
+								keyboard: false,
 							}" @ready="onLeafletReady">
+							<!-- Control views -->
+							<l-control position="topleft">
+								<div>
+									<ul>
+										<li>Thématiques</li>
+										<li>Carte</li>
+										<li>Carte + liste</li>
+										<li>Liste</li>
+									</ul>
+								</div>
+							</l-control>
 							<!-- Control map -->
-							<l-control position="topright">
+							<l-control position="bottomleft">
 								<button class="btn btn-sm btn-outline-action-2"
 									@click="showTileLayer = !showTileLayer"><i class="bi bi-map-fill"></i></button>
 							</l-control>
+							<!-- Control zoom -->
+							<l-control-zoom position="bottomleft"></l-control-zoom>
 							<!-- Omit the <l-tile-layer> to not display the base map -->
 							<l-tile-layer :url="url" :attribution="attribution" v-if="showTileLayer" />
 							<!-- Geojson -->
@@ -206,22 +252,8 @@ Les thematiques =
 							</l-marker-cluster-group>
 						</l-map>
 					</div>
-					<div class="col-sm-6 bg-action-3 rounded-end-4 p-4 --pb-10 mb-0">
-
-						<div class="form-floating mb-1">
-							<!-- Search Box -->
-							<input v-model="searchTerm" type="text"
-								class="form-control --form-control-lg border-action-3 focus-action-3 px-4"
-								id="floatingInput" placeholder="Rechercher..." aria-label="Search">
-							<label for="floatingInput" class="ms-3 fs-18">Rechercher dans le contenu...</label>
-							<div class="input__search-toggle position-absolute top-50 end-0 translate-middle-y pe-4">
-								<svg role="img" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-									<path
-										d="m18.0553691 9.08577774c0-4.92630404-4.02005-8.94635404-8.94635408-8.94635404-4.92630404 0-8.96959132 4.02005-8.96959132 8.94635404 0 4.92630406 4.02005 8.94635406 8.94635404 8.94635406 2.13783006 0 4.08976186-.7435931 5.64665986-1.9984064l3.8109144 3.8109145 1.3245252-1.3245252-3.8341518-3.7876771c1.2548133-1.5336607 2.0216437-3.5088298 2.0216437-5.64665986zm-8.96959136 7.11060866c-3.90386358 0-7.08737138-3.1835078-7.08737138-7.08737138s3.1835078-7.08737138 7.08737138-7.08737138c3.90386356 0 7.08737136 3.1835078 7.08737136 7.08737138s-3.1602705 7.08737138-7.08737136 7.08737138z">
-									</path>
-								</svg>
-							</div>
-						</div>
+					<!-- Results -->
+					<div class="col-sm-6 bg-action-3 rounded-bottom-4 rounded-bottom-left-0 p-4 --pb-10 mb-0">
 
 						<div class="row">
 
@@ -230,13 +262,6 @@ Les thematiques =
 									:opentostage-filter="opentostageFilter" :opentovisit-filter="opentovisitFilter"
 									:route="'directory'" />
 							</div>
-
-							<!-- <div class="col-6">
-								<app-get-posts
-									:search-term="searchTerm"
-									:route="'farm'"
-								/>
-							</div> -->
 
 							<div class="col-sm-6">
 								<app-get-thematics :search-term="searchTerm" :app-filters="thematicFilter" />
@@ -390,7 +415,7 @@ import L from 'leaflet'
 globalThis.L = L
 
 //import type L from "leaflet";
-import { LTileLayer, LMap, LGeoJson, LMarker, LIcon, LPopup, LControl } from "@vue-leaflet/vue-leaflet";
+import { LTileLayer, LMap, LGeoJson, LMarker, LIcon, LPopup, LControl, LControlZoom } from "@vue-leaflet/vue-leaflet";
 import { LMarkerClusterGroup } from 'vue-leaflet-markercluster'
 // import 'leaflet/dist/leaflet.css' imported and modified in styles.css
 import 'vue-leaflet-markercluster/dist/style.css'
@@ -772,7 +797,7 @@ Map
  */
 
 /* CSS for Toggle Switch:  https://www.w3schools.com/howto/howto_css_switch.asp */
-.switch {
+/* .switch {
 	position: relative;
 	display: inline-block;
 
@@ -818,5 +843,5 @@ Map
 	-webkit-transform: translateX(26px);
 	-ms-transform: translateX(26px);
 	transform: translateX(26px);
-}
+} */
 </style>
