@@ -105,19 +105,34 @@ async function fetchData() {
 async function getTerms(route = 'category', namespace = 'wp/v2') {
 	console.log('getTerms::', route);
 	try {
-		const termsPerPage = 999;
 		const restURL = window.wpData.rest_url;
 		const fields = 'id,slug,name,description,link,count,parent,vue_meta';
+		const perPage = 100; // Maximum allowed per page
+		let page = 1;
+		let allTerms: WpTerms = []; // Array to store all terms
 
-		const response = await axios(`${restURL}/${namespace}/${route}?per_page=${termsPerPage}&page=1&_fields=${fields}`);
+		let hasMoreData = true;
 
-		wpTerms.value = buildHierarchy(response.data);
+		while (hasMoreData) {
+			const response = await axios(`${restURL}/${namespace}/${route}?per_page=${perPage}&page=${page}&_fields=${fields}`);
+			const terms = buildHierarchy(response.data);
+
+			allTerms = [...allTerms, ...terms];
+
+			// Check if there are more pages
+			const totalPages = parseInt(response.headers['x-wp-totalpages'], 10);
+			if (page >= totalPages) {
+				hasMoreData = false;
+			} else {
+				page++;
+			}
+		}
+
+		wpTerms.value = allTerms;
 		isDataAvailable.value = true;
-
-		// Handle pagination...
-		// Refer to the original method for additional pagination logic
+		console.log('Fetched all terms:', allTerms);
 	} catch (error) {
-		apiResponse.value = `The request could not be processed! <br> <strong>${error}</strong>`;
+		apiResponse.value = `<small>La demande n'a pas pu être traitée! <br> <strong>${error}</strong></small>`;
 	}
 }
 
