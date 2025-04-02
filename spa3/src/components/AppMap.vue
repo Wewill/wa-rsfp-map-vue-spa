@@ -48,6 +48,20 @@ Les thematiques =
 
 </div> -->
 
+globalSearch:
+{{  globalSearch }}
+globalThematicFilter:
+{{ globalThematicFilter }}
+
+thematicFilter:
+{{  thematicFilter  }}
+productionFilter:
+{{  productionFilter  }}
+geographyFilter:
+{{  geographyFilter  }}
+labelFilter:
+{{  labelFilter }}
+
 	<!-- BEGIN: #Map integration -->
 	<section id="map" class="mt-2 mb-2 contrast--light is-formatted">
 		<div class="container-fluid mb-n6">
@@ -89,12 +103,36 @@ Les thematiques =
 									class="multiselect-tag-thematic"
 									v-model="thematicFilter"
 									:options="wpThematic"
+									:object="true"
 									mode="tags"
 									:close-on-select="false"
 									:searchable="true"
 									placeholder="Filtrer"
 									@click.stop.prevent
 								/>
+								<Multiselect
+									class="multiselect-tag-thematic"
+									v-model="globalThematicFilter"
+									:options="wpThematic"
+									:object="true"
+									mode="tags"
+									:close-on-select="false"
+									:searchable="true"
+									placeholder="Filtrer"
+									@click.stop.prevent
+									@select="(value, options, $e) => {
+    console.log('#####', value, options, $e, globalSearch.filter(o => o.term !== 'thematic'), [
+        ...globalSearch.filter(o => o.term !== 'thematic'),
+        ...(Array.isArray(value) ? value : [value]), // Ensure value is iterable
+    ]);
+    // Update globalSearch only if the values are different
+    globalSearch = [
+        ...globalSearch.filter(o => o.term !== 'thematic'),
+        ...(Array.isArray(value) ? value : [value]), // Same check when updating globalSearch
+    ];
+}"
+								/>
+
 							</div>
 							<div class="flex-fill px-2 w-20" data-aos="fade-left" data-aos-delay="300">
 								<app-get-geographies
@@ -205,13 +243,7 @@ Les thematiques =
 					</div>
 					<div class="col-sm-6 bg-action-3 rounded-end-4 p-4 --pb-10 mb-0">
 
-						<div class="form-floating mb-1">
-							<!-- Search Box -->
-							<input  v-model="searchTerm" type="text" class="d-none form-control --form-control-lg border-action-3 focus-action-3 px-4" id="floatingInput" placeholder="Rechercher..." aria-label="Search">
-							<label for="floatingInput" class="ms-3 fs-18">Rechercher dans le contenu...</label>
-							<div class="input__search-toggle position-absolute top-50 end-0 translate-middle-y pe-4">
-								<svg role="img" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="m18.0553691 9.08577774c0-4.92630404-4.02005-8.94635404-8.94635408-8.94635404-4.92630404 0-8.96959132 4.02005-8.96959132 8.94635404 0 4.92630406 4.02005 8.94635406 8.94635404 8.94635406 2.13783006 0 4.08976186-.7435931 5.64665986-1.9984064l3.8109144 3.8109145 1.3245252-1.3245252-3.8341518-3.7876771c1.2548133-1.5336607 2.0216437-3.5088298 2.0216437-5.64665986zm-8.96959136 7.11060866c-3.90386358 0-7.08737138-3.1835078-7.08737138-7.08737138s3.1835078-7.08737138 7.08737138-7.08737138c3.90386356 0 7.08737136 3.1835078 7.08737136 7.08737138s-3.1602705 7.08737138-7.08737136 7.08737138z"></path></svg>
-							</div>
+						<div class="global-search form-floating mb-1">
 
 							<!-- BEGIN: Use the GlobalSearch component -->
 							<GlobalSearch
@@ -245,7 +277,7 @@ Les thematiques =
 							<div class="col-sm-6">
 								<app-get-thematics
 									:search-term="searchTerm"
-									:app-filters="thematicFilter"
+									:app-filters="thematicFilter.map(o => o.value)"
 								/>
 							</div>
 
@@ -329,7 +361,7 @@ import AppGetPosts from './AppGetPosts.vue';
 import AppGetThematics from './AppGetThematics.vue';
 import AppGetGeographies from './AppGetGeographies.vue';
 import AppGetLabels from './AppGetLabels.vue'
-import { WpPosts, WpPost, Marker} from '../types/wpTypes'; // WpTerm
+import { WpPosts, WpPost, Marker, option} from '../types/wpTypes'; // WpTerm
 import _ from "lodash";
 
 // https://dev.to/camptocamp-geo/the-3-best-open-source-web-mapping-libraries-57o7
@@ -358,7 +390,7 @@ const searchTerm = ref('');
 const categoryFilter = ref([]);
 const geographyFilter = ref<string[]>([]);
 const productionFilter = ref([]);
-const thematicFilter = ref([]);
+const thematicFilter = ref<option[]>([]);
 const labelFilter = ref([]);
 const opentostageFilter = ref(false);
 const opentovisitFilter = ref(false);
@@ -375,11 +407,63 @@ const wpLabel = ref(window.wpData.label);
 
 // Merge arrays reactively
 const mergedFilters = computed<string[]>(() => {
-  return [...categoryFilter.value, ...geographyFilter.value, ...productionFilter.value, ...thematicFilter.value, ...labelFilter.value];
+  return [...categoryFilter.value, ...geographyFilter.value, ...productionFilter.value, ...thematicFilter.value.map(o => o.value), ...labelFilter.value];
 });
 
-const globalSearch = ref([]);
+const globalSearch = ref<option[]>([]);
 
+// Mise à jour des valeurs de recherche globale
+watch(globalSearch, (newVal:  option[]) => {
+	// Synchronisation avec thematicFilter (ajouter uniquement les options "thematic")
+	const thematicOptions = newVal.filter(option => option.term === 'thematic');
+	thematicFilter.value = thematicOptions.map(option => ({
+		value: option.value,
+		label: option.label,
+		term: option.term,
+	}));
+});
+
+// Mise à jour des filtres thématiques
+// watch(thematicFilter, (newVal) => {
+// 	const otherTerms = globalSearch.value.filter(option => option.term !== 'thematic');
+
+// 	// Synchroniser globalSearch avec thematicFilter
+// 	globalSearch.value = [
+// 		...otherTerms,
+// 		...newVal.map(option => ({
+// 			value: option.value,
+// 			label: option.label,
+// 			term: 'thematic',
+// 		})),
+// 	];
+// });
+
+// Synchronisation de thematicFilter -> selectedSearch
+watch(
+  thematicFilter,
+  (newVal: option[]) => {
+    // Garder les termes qui ne sont pas de type 'thematic' dans selectedSearch
+    const otherTerms = globalSearch.value.filter(option => option.term !== 'thematic');
+
+    // Ne met à jour selectedSearch que si les valeurs sont différentes
+    const updatedSelectedSearch = [
+      ...otherTerms,
+      ...newVal.map(option => ({
+        value: option.value,
+        label: option.label,
+        term: 'thematic',
+      })),
+    ];
+
+    if (JSON.stringify(updatedSelectedSearch) !== JSON.stringify(globalSearch.value)) {
+		globalSearch.value = updatedSelectedSearch;
+    }
+  },
+  { deep: true }
+);
+
+
+const globalThematicFilter = computed<option[]>(() => globalSearch.value.filter(o => o.term === "thematic") as option[]);
 
 /**
  * Get directory posts
