@@ -13,24 +13,25 @@ export interface WpPost {
 	vue_meta: {
 		additionnal_content: string;
 		custom_excerpt: string;
+		content: string;
 		taxonomies: [string];
 		post_terms: [number];
 		post_type: string;
 		post_object: object;
 		terms_data: [WpTerm];
-		terms:[string];
-		term_links:[string];
-		media_alt:string
-		media_url:string;
-		thumbnail_url:string;
+		terms: [string];
+		term_links: [string];
+		media_alt: string;
+		media_url: string;
+		thumbnail_url: string;
 		relationships?: relationships;
 		geolocation?: geolocation;
-		opentostage?:boolean;
-		opentovisit?:boolean;
-		label:[string];
-		farm_title?:string;
+		opentostage?: boolean;
+		opentovisit?: boolean;
+		label: [string];
+		farm_title?: string;
 		//
-		errors:[string];
+		errors: [string];
 	};
 	link: string;
 	// Add any custom fields or other fields you use here
@@ -43,7 +44,7 @@ export interface relationships {
 }
 export interface geolocation {
 	code: [string];
-	latLng: [number | null, number | null]
+	latLng: [number | null, number | null];
 }
 
 export type WpPosts = WpPost[];
@@ -65,14 +66,14 @@ export interface WpTerm {
 		content: string;
 		t_general_image: string;
 		g_special_code: number;
-		media_alt:string
-		media_url:string;
-		thumbnail_url:string;
-		errors:[string]
+		media_alt: string;
+		media_url: string;
+		thumbnail_url: string;
+		errors: [string];
 	};
 	code?: number;
-	label?:string;
-	value?:string
+	label?: string;
+	value?: string;
 	children?: WpTerm[];
 }
 
@@ -82,5 +83,3 @@ export type WpTerms = WpTerm[];
 export interface WpUser {
 	// Fields...
 }
-
-

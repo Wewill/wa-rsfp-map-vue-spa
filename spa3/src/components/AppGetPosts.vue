@@ -1,8 +1,6 @@
 <template>
 
-  <div
-    v-if="isDataAvailable"
-    class="rest-data">
+	<div v-if="isDataAvailable" class="rest-data">
 
 		<!-- Template considering route -->
 		<!-- Directory -->
@@ -10,8 +8,12 @@
 
 			<!-- Title + number of Posts -->
 			<div class="d-flex justify-content-between align-items-center">
-				<h6 class="fw-bold">Savoir-faire <span class="----text-muted --muted fw-medium op-5 --muted fw-medium op-5" v-if="filteredResults.length === wpPosts.length">{{ wpPosts.length }}</span><span class="--text-muted --muted fw-medium op-5" v-else>{{ filteredResults.length }}+</span></h6>
-				<div class=""><button type="button" class="btn --btn-sm --p-0 --btn-light py-0 px-1 mb-0"><i class="bi bi-plus h3 text-light"></i></button></div>
+				<h6 class="fw-bold">Savoir-faire <span
+						class="----text-muted --muted fw-medium op-5 --muted fw-medium op-5"
+						v-if="filteredResults.length === wpPosts.length">{{ wpPosts.length }}</span><span
+						class="--text-muted --muted fw-medium op-5" v-else>{{ filteredResults.length }}+</span></h6>
+				<div class=""><button type="button" class="btn --btn-sm --p-0 --btn-light py-0 px-1 mb-0"><i
+							class="bi bi-plus h3 text-light"></i></button></div>
 			</div>
 
 			<!-- Results -->
@@ -19,21 +21,16 @@
 				<div class="h-550-px overflow-y-scroll scrollbar-white me-n3 pe-3">
 					<ul class="list-unstyled card-items d-flex flex-column align-items-center mb-2">
 
-							<!-- AppDisplayDirectory Component -->
-							<app-display-directory
-							v-if="route === 'directory'"
-							v-for="postType in filteredResults"
-							:key="postType.id"
-							:search-term="searchTerm"
-							:post-type="postType"
-							role="article" >
+						<!-- AppDisplayDirectory Component -->
+						<app-display-directory v-for="postType in filteredResults" :key="postType.id"
+							:search-term="searchTerm" :post-type="postType" role="article">
 							<!-- AppDisplayDirectory is called for each post in the filteredResults -->
-							</app-display-directory>
+						</app-display-directory>
 
 						<!-- <li class="d-flex align-items-center justify-content-center"><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></li> -->
 					</ul>
-				<!-- Plus button -->
-				<!-- <div class="d-flex flex-center"><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></div> -->
+					<!-- Plus button -->
+					<!-- <div class="d-flex flex-center"><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></div> -->
 
 				</div>
 				<div class="position-absolute w-100 h-20-px w-100 bottom-0 left-0 bg-v-gradient-action-3"></div>
@@ -46,22 +43,21 @@
 
 			<!-- Title + number of Posts -->
 			<div class="d-flex justify-content-between align-items-center">
-				<h6 class="fw-bold">Ferme <span class="--text-muted --muted fw-medium op-5" v-if="filteredResults.length === wpPosts.length">{{ wpPosts.length }}</span><span class="--text-muted --muted fw-medium op-5" v-else>{{ filteredResults.length }}+</span></h6>
-				<div class=""><button type="button" class="btn --btn-sm --p-0 --btn-light py-0 px-1 mb-0"><i class="bi bi-plus h3 text-light"></i></button></div>
+				<h6 class="fw-bold">Ferme <span class="--text-muted --muted fw-medium op-5"
+						v-if="filteredResults.length === wpPosts.length">{{ wpPosts.length }}</span><span
+						class="--text-muted --muted fw-medium op-5" v-else>{{ filteredResults.length }}+</span></h6>
+				<div class=""><button type="button" class="btn --btn-sm --p-0 --btn-light py-0 px-1 mb-0"><i
+							class="bi bi-plus h3 text-light"></i></button></div>
 			</div>
 
 			<div class="h-300-px overflow-y-scroll scrollbar-white me-n3 pe-3">
-				<ul class="--farm-slide list-unstyled card-items --d-flex --flex-grid row g-2 g-lg-1 align-items-start justify-content-between --mb-4">
+				<ul
+					class="--farm-slide list-unstyled card-items --d-flex --flex-grid row g-2 g-lg-1 align-items-start justify-content-between --mb-4">
 
 					<!-- AppDisplayFarm Component -->
-					<app-display-farm
-					v-if="route === 'farm'"
-					v-for="postType in filteredResults"
-					:key="postType.id"
-					:search-term="searchTerm"
-					:post-type="postType"
-					role="article" >
-					<!-- AppDisplayFarm is called for each post in the filteredResults -->
+					<app-display-farm v-for="postType in filteredResults" :key="postType.id" :search-term="searchTerm"
+						:post-type="postType" role="article">
+						<!-- AppDisplayFarm is called for each post in the filteredResults -->
 					</app-display-farm>
 
 					<!-- <li class="d-flex align-items-center justify-content-center"><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></li> -->
@@ -75,40 +71,33 @@
 		<!-- Posts -->
 		<template v-else>
 
-					<!-- Number of Posts -->
-					<small v-if="filteredResults.length === wpPosts.length">
-						{{ wpPosts.length }} Posts
-					</small>
-					<small v-else>
-						Found {{ filteredResults.length }} of {{ wpPosts.length }}
-					</small>
+			<!-- Number of Posts -->
+			<small v-if="filteredResults.length === wpPosts.length">
+				{{ wpPosts.length }} Posts
+			</small>
+			<small v-else>
+				Found {{ filteredResults.length }} of {{ wpPosts.length }}
+			</small>
 
-					<div class="card-group">
+			<div class="card-group" v-if="route === 'posts'">
 
-						<!-- AppDisplayPost Component -->
-						<app-display-post
-						v-if="route === 'posts'"
-						v-for="postType in filteredResults"
-						:key="postType.id"
-						:search-term="searchTerm"
-						:post-type="postType"
-						role="article" >
-						<!-- AppDisplayPost is called for each post in the filteredResults -->
-						</app-display-post>
+				<!-- AppDisplayPost Component -->
+				<app-display-post v-for="postType in filteredResults" :key="postType.id" :search-term="searchTerm"
+					:post-type="postType" role="article">
+					<!-- AppDisplayPost is called for each post in the filteredResults -->
+				</app-display-post>
 
-					</div><!-- .card-group -->
+			</div><!-- .card-group -->
 		</template>
 
-  </div><!-- .rest-data -->
-  <div v-else>
-    <p
-      class="text-center"
-      v-html="apiResponse" />
-  </div>
+	</div><!-- .rest-data -->
+	<div v-else>
+		<p class="text-center" v-html="apiResponse" />
+	</div>
 
-<!-- <code>DEBUG : {{ route }}</code>
+	<!-- <code>DEBUG : {{ route }}</code>
 <code>wpPosts = {{ wpPosts }}</code> -->
-<!-- <pre>wpData = {{ wpData }}</pre> -->
+	<!-- <pre>wpData = {{ wpData }}</pre> -->
 
 </template>
 
@@ -123,19 +112,19 @@ import _ from "lodash";
 
 // Define props with TypeScript
 const props = withDefaults(defineProps<{
-  searchTerm?: string;
-  appFilters?: string[];
-  opentostageFilter?: boolean;
-  opentovisitFilter?: boolean;
-  route?: string;
-  fetchNow?: number;
+	searchTerm?: string;
+	appFilters?: string[];
+	opentostageFilter?: boolean;
+	opentovisitFilter?: boolean;
+	route?: string;
+	fetchNow?: number;
 }>(), {
-  searchTerm: '',
-  appFilters: () => [], // Use a factory function for default array to avoid shared state
-  opentostageFilter: false,
-  opentovisitFilter: false,
-  route: 'posts',
-  fetchNow: 1,
+	searchTerm: '',
+	appFilters: () => [], // Use a factory function for default array to avoid shared state
+	opentostageFilter: false,
+	opentovisitFilter: false,
+	route: 'posts',
+	fetchNow: 1,
 });
 
 // const wpData = ref(window.wpData); // Use a more specific type if available
@@ -148,78 +137,78 @@ const isDataAvailable = ref<boolean>(false);
 
 // Computed property for filtered results
 const filteredResults = computed(() => {
-  if (wpPosts.value.length) {
-    const pattern = new RegExp(_.lowerCase(_.deburr(props.searchTerm)), 'i');
-    // const filteredPosts = wpPosts.value.filter((post) =>
-    //   post.title.rendered.match(pattern) ||
-    //   post.vue_meta.custom_excerpt.match(pattern)
-    // );
-	const filteredPosts = wpPosts.value.filter((post) =>
-      (
-		_.lowerCase(_.deburr(post.title.rendered)).match(pattern) ||
-		_.lowerCase(_.deburr(post.vue_meta.additionnal_content)).match(pattern) ||
-		_.lowerCase(_.deburr(post.vue_meta.custom_excerpt)).match(pattern)
-	  )
-	  &&
-	  (
-        (!props.opentostageFilter && !props.opentovisitFilter) ||
-        (props.opentostageFilter && post.vue_meta.opentostage) ||
-        (props.opentovisitFilter && post.vue_meta.opentovisit) ||
-        (props.opentostageFilter && props.opentovisitFilter && post.vue_meta.opentostage && post.vue_meta.opentovisit)
-	  )
-    );
+	if (wpPosts.value.length) {
+		const pattern = new RegExp(_.lowerCase(_.deburr(props.searchTerm)), 'i');
+		// const filteredPosts = wpPosts.value.filter((post) =>
+		//   post.title.rendered.match(pattern) ||
+		//   post.vue_meta.custom_excerpt.match(pattern)
+		// );
+		const filteredPosts = wpPosts.value.filter((post) =>
+			(
+				_.lowerCase(_.deburr(post.title.rendered)).match(pattern) ||
+				_.lowerCase(_.deburr(post.vue_meta.additionnal_content)).match(pattern) ||
+				_.lowerCase(_.deburr(post.vue_meta.custom_excerpt)).match(pattern) ||
+				_.lowerCase(_.deburr(post.vue_meta.content)).match(pattern)
+			)
+			&&
+			(
+				(!props.opentostageFilter && !props.opentovisitFilter) ||
+				(props.opentostageFilter && post.vue_meta.opentostage) ||
+				(props.opentovisitFilter && post.vue_meta.opentovisit) ||
+				(props.opentostageFilter && props.opentovisitFilter && post.vue_meta.opentostage && post.vue_meta.opentovisit)
+			)
+		);
 
 
-    if (props.appFilters && props.appFilters.length) {
-      return filteredPosts.filter((post) =>
-        post.vue_meta.terms.some((term) =>
-          props.appFilters.includes(term.toLowerCase())
-        )
-      );
-    } else {
-      return filteredPosts;
-    }
-  }
-  return [];
+		if (props.appFilters && props.appFilters.length) {
+			return filteredPosts.filter((post) =>
+				post.vue_meta.terms.some((term) =>
+					props.appFilters.includes(term.toLowerCase())
+				)
+			);
+		} else {
+			return filteredPosts;
+		}
+	}
+	return [];
 });
 
 // Watching `fetchNow` prop for changes to trigger `fetchData`
 watch(() => props.fetchNow, (newVal) => {
-  if (newVal > 0) {
-    fetchData();
-  }
+	if (newVal > 0) {
+		fetchData();
+	}
 });
 
 // Mounted lifecycle hook
 onMounted(() => {
-  fetchData();
+	fetchData();
 });
 
 // Methods
 async function fetchData() {
-  apiResponse.value = 'Loading ⏳';
-  await getPosts(props.route);
+	apiResponse.value = 'Loading ⏳';
+	await getPosts(props.route);
 }
 
 async function getPosts(route = 'posts', namespace = 'wp/v2') {
 	console.log('getPosts::', route)
-  try {
-    const postsPerPage = 100;
-    const restURL = window.wpData.rest_url;
-    const fields = 'id,title,link,vue_meta'; //content,author,parent,menu_order
+	try {
+		const postsPerPage = 100;
+		const restURL = window.wpData.rest_url;
+		const fields = 'id,title,link,vue_meta'; //content,author,parent,menu_order
 
-    const response = await axios(`${restURL}/${namespace}/${route}?per_page=${postsPerPage}&page=1&_fields=${fields}`);
+		const response = await axios(`${restURL}/${namespace}/${route}?per_page=${postsPerPage}&page=1&_fields=${fields}`);
 
-    wpPosts.value = response.data;
-    isDataAvailable.value = true;
+		wpPosts.value = response.data;
+		isDataAvailable.value = true;
 
-    // Handle pagination...
-    // Refer to the original method for additional pagination logic
-  } catch (error) {
-    apiResponse.value = `The request could not be processed! <br> <strong>${error}</strong>`;
-  }
+		// Handle pagination...
+		// Refer to the original method for additional pagination logic
+	} catch (error) {
+		apiResponse.value = `The request could not be processed! <br> <strong>${error}</strong>`;
+	}
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
