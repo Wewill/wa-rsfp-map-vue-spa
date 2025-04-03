@@ -99,7 +99,7 @@ Les thematiques =
 							data-aos-delay="100">
 							<p class="f-12 font-weight-bold m-0"><span class="subline text-action-3 f-xs">Filtrer
 									par </span> Production <span class="fw-medium op-5">{{
-										wpProduction.length }}</span></p>
+										wpProduction?.length }}</span></p>
 							<Multiselect class="multiselect-tag-production multiselect-flat" v-model="productionFilter"
 								:options="wpProduction" mode="tags" :close-on-select="false" :searchable="true"
 								placeholder="..." @click.stop.prevent />
@@ -107,7 +107,7 @@ Les thematiques =
 						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3" data-aos="fade-top"
 							data-aos-delay="200">
 							<p class="f-12 font-weight-bold m-0">Thématique <span class="fw-medium op-5">{{
-								wpThematic.length }}</span></p>
+								wpThematic?.length }}</span></p>
 							<Multiselect class="multiselect-tag-thematic multiselect-flat" v-model="thematicFilter"
 								:options="wpThematic" mode="tags" :close-on-select="false" :searchable="true"
 								placeholder="..." @click.stop.prevent />
@@ -265,7 +265,8 @@ Les thematiques =
 							</div>
 
 							<div class="col-sm-6">
-								<app-get-thematics :search-term="searchTerm" :app-filters="thematicFilter ?? undefined" />
+								<app-get-thematics :search-term="searchTerm"
+									:app-filters="thematicFilter ?? undefined" />
 							</div>
 
 						</div>
@@ -443,8 +444,8 @@ const opentovisitFilter = ref(false);
 
 // const wpCategories = ref(window.wpData.post_categories.map((term: string) => term.toLowerCase())); // Default
 // const wpGeography = ref(window.wpData.geography.map((term: string) => {return {value:term.toLowerCase(), label: term}}));
-const wpProduction = ref(window.wpData.production.map((term: string) => { return { value: term.toLowerCase(), label: term } }));
-const wpThematic = ref(window.wpData.thematic.map((term: string) => { return { value: term.toLowerCase(), label: term } }));
+const wpProduction = ref(window.wpData?.production.map((term: string) => { return { value: term.toLowerCase(), label: term } }));
+const wpThematic = ref(window.wpData?.thematic.map((term: string) => { return { value: term.toLowerCase(), label: term } }));
 // const wpLabel = ref(window.wpData.label);
 
 // Merge arrays reactively
@@ -512,7 +513,7 @@ async function getPosts(route = 'posts', namespace = 'wp/v2') {
 	console.log('getPosts::', route)
 	try {
 		const postsPerPage = 100;
-		const restURL = window.wpData.rest_url;
+		const restURL = window.wpData?.rest_url;
 		const fields = 'id,title,link,vue_meta'; //content,author,parent,menu_order
 
 		const response = await axios(`${restURL}/${namespace}/${route}?per_page=${postsPerPage}&page=1&_fields=${fields}`);

@@ -5,6 +5,13 @@ import AppMap from "./AppMap.vue";
 
 /*global wpData:true*/
 /*eslint no-undef: "error"*/
+// Assuming wpData is globally defined, you might want to provide a more specific type here
+// declare global {
+// 	interface Window {
+// 		wpData: any;
+// 	}
+// }
+
 // Check if `wpData` is not already defined
 if (typeof window.wpData === "undefined") {
 	// Define a mock `wpData` object

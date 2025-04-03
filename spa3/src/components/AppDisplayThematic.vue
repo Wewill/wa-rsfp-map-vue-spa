@@ -10,7 +10,7 @@
 					<div class="d-flex justify-content-between align-items-center text-white text-shadow-1 p-4 z-2">
 						<p class="text-white m-0 fw-bold ps-3" v-html="highlightedPostTitle || item.name"></p>
 						<span class="badge text-bg-color-accent-2 fw-bold py-2">{{ item.count
-							}}<!-- id:{{  item.id  }} p:{{  item.parent  }}--></span>
+						}}<!-- id:{{  item.id  }} p:{{  item.parent  }}--></span>
 					</div>
 				</a>
 				<button class="accordion-button collapsed position-absolute top-50 start-0 translate-middle-y w-40-px"
@@ -22,7 +22,8 @@
 				</button>
 			</div>
 			<!-- Display overlay -->
-			<div class="overlay card-overlay bg-image op-5 z-0" :class="item.parent !== 0 ? 'bg-action-2' : 'bg-action-2'">
+			<div class="overlay card-overlay bg-image op-5 z-0"
+				:class="item.parent !== 0 ? 'bg-action-2' : 'bg-action-2'">
 			</div>
 		</div>
 		<!-- Accordion content : list children -->
@@ -32,7 +33,7 @@
 				<!-- Check if the item has children and display them in an accordion -->
 				<ul v-if="filteredItemChildren && filteredItemChildren.length" class="list-unstyled ms-4">
 					<app-display-thematic v-for="child in filteredItemChildren" :key="child.id" :item="child"
-						:search-term="searchTerm" :collapse-states="collapseStates" />
+						:search-term="searchTerm" :collapse-states="collapseStates" :app-filters="appFilters" />
 				</ul>
 			</div>
 		</div>

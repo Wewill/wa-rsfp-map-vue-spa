@@ -1,7 +1,6 @@
-// wpData.d.ts
 declare global {
 	interface Window {
-		wpData: {
+		wpData?: {
 			app_path: string;
 			rest_url: string;
 			nonce: string;
@@ -16,5 +15,5 @@ declare global {
 	}
 }
 
-// If using in a module where there are no other imports/exports, you may need to add:
+// This is to ensure that the global variable `wpData` is recognized in TypeScript
 export {};

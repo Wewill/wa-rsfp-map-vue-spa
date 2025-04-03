@@ -36,7 +36,7 @@ const props = withDefaults(defineProps<{
 const { appFilters } = toRefs(props);
 
 // Get datas
-const wpLabels = ref<any>(window.wpData.label);
+const wpLabels = ref<any>(window.wpData?.label);
 
 // Reactive state
 const selectedwpLabels = ref<any>([]); // Use a more specific type if available

@@ -195,7 +195,7 @@ async function getPosts(route = 'posts', namespace = 'wp/v2') {
 	console.log('getPosts::', route)
 	try {
 		const postsPerPage = 100;
-		const restURL = window.wpData.rest_url;
+		const restURL = window.wpData?.rest_url;
 		const fields = 'id,title,link,vue_meta'; //content,author,parent,menu_order
 
 		const response = await axios(`${restURL}/${namespace}/${route}?per_page=${postsPerPage}&page=1&_fields=${fields}`);

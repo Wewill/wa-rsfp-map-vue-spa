@@ -101,7 +101,7 @@ async function fetchData() {
 async function getTerms(route = 'category', namespace = 'wp/v2') {
 	console.log('getTerms::', route);
 	try {
-		const restURL = window.wpData.rest_url;
+		const restURL = window.wpData?.rest_url;
 		const fields = 'id,slug,name,description,link,count,vue_meta';
 		const perPage = 100; // Maximum allowed per page
 		let page = 1;
