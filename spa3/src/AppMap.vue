@@ -21,7 +21,7 @@
 
 		##TestCols
 
-		<TestCols />
+		<test-cols />
 
 		<!-- BEGIN: #Map integration -->
 		<section id="map" class="mt-2 mb-2 contrast--light is-formatted">
@@ -123,16 +123,35 @@
 					<!-- Switch control -->
 					<div class="position-absolute top-0 start-0 m-3 zi-5 w-200-px" data-aos="fade">
 						<code>Current view : {{ currentView }}</code>
-						<ul>
-							<li @click="currentView = 'thematics'" :class="{ active: currentView === 'thematics' }">
-								Thématiques</li>
-							<li @click="currentView = 'map'" :class="{ active: currentView === 'map' }">
-								Carte</li>
-							<li @click="currentView = 'map-list'" :class="{ active: currentView === 'map-list' }">Carte
-								+
-								liste</li>
-							<li @click="currentView = 'list'" :class="{ active: currentView === 'list' }">
-								Liste</li>
+						<ul class="bg-light rounded-4 shadow-lg m-0 p-0">
+							<li @click="currentView = 'thematics'"
+								:class="{ 'text-action-2': currentView === 'thematics', 'text-action-3': currentView !== 'thematics' }">
+								<span>Thématiques</span>
+								<i class="icons" alt="icone">
+									<IconThematics />
+								</i>
+							</li>
+							<li @click="currentView = 'map'"
+								:class="{ 'text-action-2': currentView === 'map', 'text-action-3': currentView !== 'map' }">
+								<span>Carte</span>
+								<i class="icons" alt="icone">
+									<IconMap />
+								</i>
+							</li>
+							<li @click="currentView = 'map-list'"
+								:class="{ 'text-action-2': currentView === 'map-list', 'text-action-3': currentView !== 'map-list' }">
+								<span>Carte + liste</span>
+								<i class="icons" alt="icone">
+									<IconMapList />
+								</i>
+							</li>
+							<li @click="currentView = 'list'"
+								:class="{ 'text-action-2': currentView === 'list', 'text-action-3': currentView !== 'list' }">
+								<span>Liste</span>
+								<i class="icons" alt="icone">
+									<IconList />
+								</i>
+							</li>
 						</ul>
 					</div>
 
@@ -148,7 +167,7 @@
 					<div v-if="currentView === 'map' || currentView === 'map-list'"
 						class=" col bg-color-bg rounded-bottom-4 rounded-bottom-right-0 p-0 d-flex --h-100 justify-content-center align-items-center">
 						<l-map class="rounded-bottom-4 rounded-bottom-right-0" v-if="mapLoaded && isDataAvailable"
-							style="min-height: 750px; height: 100%; min-width: 400px; width: 100%;" ref="map"
+							style="min-height: 750px; height: 100%; min-width: 400px; width: 100%;" ref="mapRef"
 							:min-zoom="5" :max-zoom="19" v-model:zoom="zoom" v-model:center="center"
 							:zoomAnimation="true" :markerZoomAnimation="true" :useGlobalLeaflet="true" :options="{
 								zoomControl: false,
@@ -189,19 +208,19 @@
 														<h5 class="card-title mb-2"><a :href="marker.popupLink"
 																v-html="marker.popupTitle"></a></h5>
 														<template
-															v-for="t_production in marker.terms_data.filter((t: any) => t.taxonomy == 'production')">
+															v-for="t_production in marker.terms_data?.filter((t: any) => t.taxonomy == 'production')">
 															<div class="production-list d-inline-block"><a
 																	:href="t_production.link" class="production-item"
 																	tabindex="-1">{{ t_production.name }}</a></div>
 														</template>
 														<template
-															v-for="t_thematic in marker.terms_data.filter((t: any) => t.taxonomy == 'thematic')">
+															v-for="t_thematic in marker.terms_data?.filter((t: any) => t.taxonomy == 'thematic')">
 															<div class="thematic-list d-inline-block"><a
 																	:href="t_thematic.link" class="thematic-item"
 																	tabindex="-1">{{ t_thematic.name }}</a></div>
 														</template>
 														<template
-															v-for="t_geography in marker.terms_data.filter((t: any) => t.taxonomy == 'geography')">
+															v-for="t_geography in marker.terms_data?.filter((t: any) => t.taxonomy == 'geography')">
 															<div class="geography-list d-inline-block"><a
 																	:href="t_geography.link" class="geography-item"
 																	tabindex="-1">{{ t_geography.name }}</a></div>
@@ -255,6 +274,13 @@ import AppGetGeographies from './components/AppGetGeographies.vue';
 import AppGetLabels from './components/AppGetLabels.vue'
 
 import TestCols from "./components/TestCols.vue";
+
+import IconThematics from "./icons/Thematics.vue";
+import IconMap from "./icons/Map.vue";
+import IconList from "./icons/List.vue";
+import IconMapList from "./icons/MapList.vue";
+// import IconResizer from "./icons/Resizer.vue";
+// import IconChevron from "./icons/Chevron.vue";
 
 // Import leaflet
 // https://dev.to/camptocamp-geo/the-3-best-open-source-web-mapping-libraries-57o7
@@ -339,6 +365,7 @@ onMounted(() => {
 
 // Methods
 async function fetchData() {
+	console.log('fetchData::');
 	apiResponse.value = 'Loading ⏳';
 	await getPosts('directory');
 }
@@ -366,7 +393,7 @@ async function getPosts(route = 'posts', namespace = 'wp/v2') {
 
 // Map
 const url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-const attribution = '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors';
+const attribution = '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>';
 const showTileLayer = ref<Boolean>(false);
 const franceDepartments = 'https://rawgit.com/gregoiredavid/france-geojson/master/departements-version-simplifiee.geojson';
 const zoom = ref<number>(6);
@@ -374,7 +401,7 @@ const center = ref<[number, number]>([47.665496, 2.428034])
 const mapLoaded = ref<Boolean>(false);
 const leafletReady = ref<Boolean>(false);
 const geojson = ref<FeatureCollection<Geometry> | undefined>(undefined);
-const map = ref<L.Map | null>(null);
+const mapRef = ref<L.Map | undefined>(undefined);
 
 // Define your marker type
 interface Marker {
@@ -399,38 +426,42 @@ const markers = ref<Marker[]>([
 	// Add more markers here
 ]);
 
-function findDepartmentCenter(departmentCode: string | undefined): [number, number] | null {
-	if (geojson.value === undefined || !departmentCode) return null;
+const nulledLatLngExpression: L.LatLngExpression = [46.6, 2.4];
+
+function findDepartmentCenter(departmentCode: string | undefined): L.LatLngExpression {
+	if (geojson.value === undefined || !departmentCode) return nulledLatLngExpression;
 	else {
 		const department = geojson.value.features.find(feature => feature.properties && 'code' in feature.properties && feature.properties.code === departmentCode);
-		if (!department) return null;
-
+		if (!department) return nulledLatLngExpression;
 		const departmentLayer = L.geoJSON(department);
 		const bounds = (departmentLayer as L.GeoJSON).getBounds();
 		const centerPoint = bounds.getCenter();
-		return [centerPoint.lat, centerPoint.lng];
+		return (centerPoint.lat && centerPoint.lng) ? [centerPoint.lat, centerPoint.lng] as L.LatLngExpression : nulledLatLngExpression;
 	}
 }
 
-const computedMarkers = computed<Marker[] | any>(() => {
-	return filteredResults.value.map((p: WpPost) => {
-		console.log(p);
+const computedMarkers = computed<Marker[]>(() => {
+	return filteredResults.value.map((p: WpPost): Marker => {
+		// console.log(p);
 		return {
 			latLng: (p.vue_meta.geolocation?.latLng.every(el => el !== null)) ? p.vue_meta.geolocation?.latLng : findDepartmentCenter(p.vue_meta.geolocation?.code[0]),
 			popupTitle: (p.title.rendered) ? p.title.rendered : '',
-			//			popupContent: (p.excerpt.rendered)?p.excerpt.rendered:'',
+			// popupContent: (p.excerpt.rendered)?p.excerpt.rendered:'',
 			popupContent: (p.vue_meta.farm_title) ? p.vue_meta.farm_title : '', // Lorem ipsum
 			popupLink: p.link,
 			popupImage: p.vue_meta.media_url,
 			terms_data: p.vue_meta.terms_data
-		}
+		} as Marker
 	});
 });
 
 
 // On leafleft ready func
-async function onLeafletReady() {
+const map = ref<L.Map | null>(null);
+async function onLeafletReady(event: L.Map) {
 	await nextTick();
+	map.value = event; // Assign the map instance
+	console.log('[onLeafletReady]:: Leaflet map is ready:', event, map.value);
 	leafletReady.value = true;
 }
 
@@ -514,6 +545,7 @@ const onEachFeatureFunction = computed(() => {
 
 // watch geographyFilter
 watch(geographyFilter, (newFilter) => {
+	console.log('[WATCH] geographyFilter::', newFilter);
 	// Set styles for features in the new filter
 	newFilter.forEach(code => {
 		const layer = mapLayers.get(code);
@@ -543,6 +575,7 @@ function clusterIcon(cluster: any) {
 
 // Before mount load geojson map
 onBeforeMount(async () => {
+	console.log('[onBeforeMount]:: fetch GeoJSON data...');
 	// Fetch GeoJSON data from GitHub
 	try {
 		const response = await fetch(franceDepartments);
@@ -551,7 +584,7 @@ onBeforeMount(async () => {
 			console.info('Success loading the GeoJSON data.', data);
 			geojson.value = data;
 			mapLoaded.value = true;
-			if (map.value !== null) map.value.invalidateSize();
+			if (map.value) map.value.invalidateSize();
 		} else {
 			console.error('Failed to load the GeoJSON data.');
 		}
@@ -562,15 +595,18 @@ onBeforeMount(async () => {
 
 // Function to adjust the map view once the GeoJSON layer is
 const onGeoJsonReady = (event: { map: L.Map; target: L.GeoJSON }) => {
+	console.log('onGeoJsonReady:: First fitBounds');
 	const m = event.map;
-	if (event.target !== undefined)
+	if (event.target !== undefined) {
 		m.fitBounds(event.target.getBounds());
+	}
 };
 
-// On mount zoom to fit markers
-onMounted(() => {
+const centerMap = () => {
+	console.log('centerMap::');
 	// Center on map
 	if (map.value) {
+		// map.value.invalidateSize();
 		const bounds = markers.value.reduce((bounds, marker) => {
 			return bounds.extend(marker.latLng);
 		}, L.latLngBounds(markers.value[0].latLng, markers.value[0].latLng));
@@ -578,15 +614,21 @@ onMounted(() => {
 		if (bounds !== undefined)
 			map.value.fitBounds(bounds);
 	}
-});
+}
 
 // Watcher that reacts to changes in the markers array
-watch(markers, (newMarkers) => {
-	if (map.value && newMarkers.length > 0) {
-		const bounds = newMarkers.reduce((bounds, marker) => bounds.extend(marker.latLng), L.latLngBounds(newMarkers[0].latLng, newMarkers[0].latLng));
-		map.value.fitBounds(bounds);
-	}
+watch(computedMarkers, (newMarkers) => {
+	console.log('[WATCH] newMarkers::', newMarkers, map.value);
+	centerMap();
 }, { deep: true });
+
+watch(currentView, (newView) => {
+	console.log('[WATCH] currentView::', newView, map.value);
+	// Center on map
+	if (newView === 'map' || newView === 'map-list') {
+		centerMap();
+	}
+});
 
 
 </script>
