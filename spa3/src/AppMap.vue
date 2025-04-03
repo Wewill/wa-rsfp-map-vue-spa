@@ -1,23 +1,24 @@
 <template>
 	<div>
+		#APPMAP
 		<!-- isDataAvailable:: {{ isDataAvailable }} -->
 		<!-- <pre><b>filteredResults::</b> {{  filteredResults }}</pre> -->
 		<!-- <pre><b>computedMarkers::</b> {{  computedMarkers }}</pre> -->
 
 		<code class="d-none">
-MAP =
-zoom:: {{ zoom }}
-center:: {{ center }}
-mapLoaded:: {{ mapLoaded }}
-leafletReady:: {{ leafletReady }}
-selectedDepartmentIds: {{ selectedDepartmentIds }}
-showTileLayer: {{ showTileLayer }}
-geographyFilter: {{ geographyFilter }}
-opentostageFilter: {{ opentostageFilter }}
-opentovisitFilter: {{ opentovisitFilter }}
-mergedFilters:: {{ mergedFilters }}
-filteredResults.length:: {{ filteredResults.length }}
-</code>
+		MAP =
+		zoom:: {{ zoom }}
+		center:: {{ center }}
+		mapLoaded:: {{ mapLoaded }}
+		leafletReady:: {{ leafletReady }}
+		selectedDepartmentIds: {{ selectedDepartmentIds }}
+		showTileLayer: {{ showTileLayer }}
+		geographyFilter: {{ geographyFilter }}
+		opentostageFilter: {{ opentostageFilter }}
+		opentovisitFilter: {{ opentovisitFilter }}
+		mergedFilters:: {{ mergedFilters }}
+		filteredResults.length:: {{ filteredResults.length }}
+		</code>
 
 		<!-- <div class="d-none">
 
