@@ -1,11 +1,10 @@
 <template>
 	<div>
-		#APPMAP
-		<!-- isDataAvailable:: {{ isDataAvailable }} -->
-		<!-- <pre><b>filteredResults::</b> {{  filteredResults }}</pre> -->
-		<!-- <pre><b>computedMarkers::</b> {{  computedMarkers }}</pre> -->
+		<code>isDataAvailable:: {{ isDataAvailable }}</code>
+		<!-- <pre><b>filteredResults::</b> {{ filteredResults }}</pre>
+		<pre><b>computedMarkers::</b> {{ computedMarkers }}</pre> -->
 
-		<code class="d-none">
+		<code class="--d-none">
 		MAP =
 		zoom:: {{ zoom }}
 		center:: {{ center }}
@@ -20,40 +19,13 @@
 		filteredResults.length:: {{ filteredResults.length }}
 		</code>
 
-		<!-- <div class="d-none">
+		##TestCols
 
-Les thematiques =
-{{  wpThematic  }}
-{{  wpGeography  }}
-
-<app-filter-switches
-	:app-filters="wpCategories"
-	@onFilterToggle="categoryFilter = $event"
-/>
-{{  categoryFilter  }}
-<app-filter-switches
-	:app-filters="wpGeography"
-	@onFilterToggle="geographyFilter = $event"
-/>
-	{{  geographyFilter  }}
-<app-filter-switches
-	:app-filters="wpProduction"
-	@onFilterToggle="productionFilter = $event"
-/>
-	{{  productionFilter  }}
-<app-filter-switches
-	:app-filters="wpThematic"
-	@onFilterToggle="thematicFilter = $event"
-/>
-	{{  thematicFilter  }}
-
-</div> -->
-
-		##TESTDEV
+		<TestCols />
 
 		<!-- BEGIN: #Map integration -->
 		<section id="map" class="mt-2 mb-2 contrast--light is-formatted">
-			<div class="container-fluid mb-4">
+			<div class="container-fluid mb-4 position-relative">
 
 				<!-- Search panel -->
 				<div class="row f-w px-4 min-h-100px">
@@ -146,10 +118,35 @@ Les thematiques =
 				</div>
 
 				<!-- Map panel-->
-				<div class="row f-w px-4 --min-vh-80" style="min-height: 750px;">
+				<div class="row f-w px-4 --min-vh-80 position-relative" style="min-height: 750px;">
+
+					<!-- Switch control -->
+					<div class="position-absolute top-0 start-0 m-3 zi-5 w-200-px" data-aos="fade">
+						<code>Current view : {{ currentView }}</code>
+						<ul>
+							<li @click="currentView = 'thematics'" :class="{ active: currentView === 'thematics' }">
+								Thématiques</li>
+							<li @click="currentView = 'map'" :class="{ active: currentView === 'map' }">
+								Carte</li>
+							<li @click="currentView = 'map-list'" :class="{ active: currentView === 'map-list' }">Carte
+								+
+								liste</li>
+							<li @click="currentView = 'list'" :class="{ active: currentView === 'list' }">
+								Liste</li>
+						</ul>
+					</div>
+
+					<!-- Thematics -->
+					<div v-if="currentView === 'thematics'"
+						class="col bg-color-bg rounded-bottom-4 rounded-bottom-right-0 p-0 d-flex --h-100 justify-content-center align-items-center">
+
+						<app-get-thematics :search-term="searchTerm" :app-filters="thematicFilter ?? undefined" />
+
+					</div>
+
 					<!-- Map -->
-					<div
-						class=" col-sm-6 bg-color-bg rounded-bottom-4 rounded-bottom-right-0 p-0 d-flex --h-100 justify-content-center align-items-center">
+					<div v-if="currentView === 'map' || currentView === 'map-list'"
+						class=" col bg-color-bg rounded-bottom-4 rounded-bottom-right-0 p-0 d-flex --h-100 justify-content-center align-items-center">
 						<l-map class="rounded-bottom-4 rounded-bottom-right-0" v-if="mapLoaded && isDataAvailable"
 							style="min-height: 750px; height: 100%; min-width: 400px; width: 100%;" ref="map"
 							:min-zoom="5" :max-zoom="19" v-model:zoom="zoom" v-model:center="center"
@@ -162,17 +159,6 @@ Les thematiques =
 								boxZoom: false,
 								keyboard: false,
 							}" @ready="onLeafletReady">
-							<!-- Control views -->
-							<l-control position="topleft">
-								<div>
-									<ul>
-										<li>Thématiques</li>
-										<li>Carte</li>
-										<li>Carte + liste</li>
-										<li>Liste</li>
-									</ul>
-								</div>
-							</l-control>
 							<!-- Control map -->
 							<l-control position="bottomleft">
 								<button class="btn btn-sm btn-outline-action-2"
@@ -191,22 +177,6 @@ Les thematiques =
 									v-for="(marker, index) in computedMarkers.filter((m: Marker) => m.latLng !== null)"
 									:key="index" :lat-lng="marker.latLng">
 									<l-popup>
-										<!-- <div class="card">
-											<img :src="marker.popupImage" class="card-img-top" :alt="marker.popupTitle">
-											<div class="card-body">
-												<h5 class="card-title"><a :href="marker.popupLink" v-html="marker.popupTitle"></a></h5>
-												<template v-for="t_production in marker.terms_data.filter((t:any) => t.taxonomy == 'production' )" >
-													<div class="production-list d-inline-block"><a :href="t_production.link" class="production-item" tabindex="-1">{{ t_production.name}}</a></div>
-												</template>
-<template v-for="t_thematic in marker.terms_data.filter((t:any) => t.taxonomy == 'thematic' )">
-													<div class="thematic-list d-inline-block"><a :href="t_thematic.link" class="thematic-item" tabindex="-1">{{ t_thematic.name}}</a></div>
-												</template>
-<template v-for="t_geography in marker.terms_data.filter((t:any) => t.taxonomy == 'geography' )">
-													<div class="geography-list d-inline-block"><a :href="t_geography.link" class="geography-item" tabindex="-1">{{ t_geography.name}}</a></div>
-												</template>
-<p class="card-text" v-html="marker.popupContent"></p>
-</div>
-</div> -->
 										<div class="card border-0"> <!-- style="width:400px; max-width: 500px;" -->
 											<div class="row g-0">
 												<div class="col-md-4 d-flex justify-content-stretch align-items-center ---- bg-cover bg-position-center-center rounded-start"
@@ -254,183 +224,53 @@ Les thematiques =
 						</l-map>
 					</div>
 					<!-- Results -->
-					<div class="col-sm-6 bg-action-3 rounded-bottom-4 rounded-bottom-left-0 p-4 --pb-10 mb-0">
+					<div v-if="currentView === 'list' || currentView === 'map-list' || currentView === 'thematics'"
+						class="col bg-action-3 rounded-bottom-4 rounded-bottom-left-0 p-4 --pb-10 mb-0">
 
-						<div class="row">
-
-							<div class="col-sm-6">
-								<app-get-posts :search-term="searchTerm" :app-filters="mergedFilters"
-									:opentostage-filter="opentostageFilter" :opentovisit-filter="opentovisitFilter"
-									:route="'directory'" />
-							</div>
-
-							<div class="col-sm-6">
-								<app-get-thematics :search-term="searchTerm"
-									:app-filters="thematicFilter ?? undefined" />
-							</div>
-
-						</div>
+						<app-get-posts :search-term="searchTerm" :app-filters="mergedFilters"
+							:opentostage-filter="opentostageFilter" :opentovisit-filter="opentovisitFilter"
+							:route="'directory'" />
 
 					</div>
 				</div>
 			</div>
 
-			<!-- Begin: CTA -->
-			<!-- <div class="d-flex align-items-center justify-content-center py-4 px-5 bg-body rounded-4 shadow mx-20 mb-6 --z-2 position-relative" style="z-index:1000;">
-			<div class="d-flex align-items-center" data-aos="flip-up" data-aos-delay="200">
-				<div class="flex-shrink-0 me-3">
-					<i class="bi bi-bootstrap h2 text-action-1"></i>
-					<h5 class="text-action-1">100+</h5>
-				</div>
-				<div>
-				<h6 class="fw-bold text-action-1">Lorem ipsum</h6>
-				<p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-				</div>
-			</div>
-
-			<div class="d-flex align-items-center justify-content-center px-5">
-				<span class="bullet bullet-action-3 ml-0"></span>
-			</div>
-
-			<div class="d-flex align-items-center" data-aos="flip-up" data-aos-delay="400">
-				<div class="flex-shrink-0 me-3">
-					<i class="bi bi-bootstrap h2"></i>
-					<h5>100+</h5>
-				</div>
-				<div>
-				<h6 class="fw-bold">Lorem ipsum</h6>
-				<p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-				</div>
-			</div>
-
-			<div class="d-flex align-items-center justify-content-center px-5">
-				<span class="bullet bullet-action-3 ml-0"></span>
-			</div>
-
-			<div class="d-flex align-items-center" data-aos="flip-up" data-aos-delay="600">
-				<div class="flex-shrink-0 me-3">
-					<i class="bi bi-bootstrap h2"></i>
-					<h5>100+</h5>
-				</div>
-				<div>
-				<h6 class="fw-bold">Lorem ipsum</h6>
-				<p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-				</div>
-			</div>
-
-
-			<div class="d-flex align-items-center justify-content-center px-5">
-				<span class="bullet bullet-action-3 ml-0"></span>
-			</div>
-
-			<div class="d-flex align-items-center" data-aos="flip-up" data-aos-delay="800">
-				<div class="flex-shrink-0 me-3">
-					<i class="bi bi-bootstrap h2"></i>
-					<h5>100+</h5>
-				</div>
-				<div>
-				<h6 class="fw-bold">Lorem ipsum</h6>
-				<p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-				</div>
-			</div>
-
-		</div> -->
-			<!-- End: CTA -->
 
 		</section>
 		<!-- END : #Map integration -->
-
-		<!--
-
-	<app-get-geographies
-		:display-title="true"
-		:search-term="searchTerm"
-		:app-filters="geographyFilter"
-		@onFilterChange="geographyFilter = $event"
-	/>
-
-	<app-get-posts
-		:search-term="searchTerm"
-		:app-filters="thematicFilter"
-		:route="'operation'"
-	/>
-
-	<app-get-posts
-		:search-term="searchTerm"
-		:app-filters="geographyFilter"
-		:route="'structure'"
-	/>
-
-	Posts=
-    <app-get-posts
-      :search-term="searchTerm"
-      :app-filters="mergedFilters"
-      :route="cptSelected"
-    />
-
-	Directory=
-    <app-get-posts
-      :search-term="searchTerm"
-      :app-filters="mergedFilters"
-      :route="'directory'"
-    />
-
-	Farm=
-	<app-get-posts
-      :search-term="searchTerm"
-      :app-filters="mergedFilters"
-      :route="'farm'"
-    />
-
-	Operation=
-	<app-get-posts
-      :search-term="searchTerm"
-      :app-filters="mergedFilters"
-      :route="'operation'"
-    />
-
-	Structure=
-	<app-get-posts
-      :search-term="searchTerm"
-      :app-filters="mergedFilters"
-      :route="'structure'"
-    /> -->
 
 	</div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onBeforeMount, onMounted, nextTick, watch } from 'vue';
+import { WpPosts, WpPost, WpTerm } from './types/wpTypes'; // Assuming you have a type definition for posts
 import axios from 'axios';
+import _ from "lodash";
+import Multiselect from '@vueform/multiselect'
+
 import AppGetPosts from './components/AppGetPosts.vue';
 import AppGetThematics from './components/AppGetThematics.vue';
 import AppGetGeographies from './components/AppGetGeographies.vue';
 import AppGetLabels from './components/AppGetLabels.vue'
-import { WpPosts, WpPost, WpTerm } from './types/wpTypes'; // Assuming you have a type definition for posts
-import _ from "lodash";
 
+import TestCols from "./components/TestCols.vue";
+
+// Import leaflet
 // https://dev.to/camptocamp-geo/the-3-best-open-source-web-mapping-libraries-57o7
 // https://vue3openlayers.netlify.app
-
 // https://github.com/veitbjarsch/vue-leaflet-markercluster?tab=readme-ov-file
 import L from 'leaflet'
 globalThis.L = L
-
-//import type L from "leaflet";
 import { LTileLayer, LMap, LGeoJson, LMarker, LIcon, LPopup, LControl, LControlZoom } from "@vue-leaflet/vue-leaflet";
 import { LMarkerClusterGroup } from 'vue-leaflet-markercluster'
-// import 'leaflet/dist/leaflet.css' imported and modified in styles.css
 import 'vue-leaflet-markercluster/dist/style.css'
 import { FeatureCollection, Geometry } from 'geojson';
 
-import Multiselect from '@vueform/multiselect'
 
-
-// import { wpData } from './path-to-wpData'; // You need to import wpData or declare it globally
-
-// Assuming wpData is available here, either imported or declared globally
-// const cptSelected = ref('posts'); // default post type
 const searchTerm = ref('');
+type Views = 'thematics' | 'map' | 'list' | 'map-list';
+const currentView = ref<Views>('map-list'); // 'map' or 'list'
 
 const categoryFilter = ref([]);
 const geographyFilter = ref<string[]>([]);
@@ -440,13 +280,8 @@ const labelFilter = ref([]);
 const opentostageFilter = ref(false);
 const opentovisitFilter = ref(false);
 
-// console.info(window.wpData);
-
-// const wpCategories = ref(window.wpData.post_categories.map((term: string) => term.toLowerCase())); // Default
-// const wpGeography = ref(window.wpData.geography.map((term: string) => {return {value:term.toLowerCase(), label: term}}));
 const wpProduction = ref(window.wpData?.production.map((term: string) => { return { value: term.toLowerCase(), label: term } }));
 const wpThematic = ref(window.wpData?.thematic.map((term: string) => { return { value: term.toLowerCase(), label: term } }));
-// const wpLabel = ref(window.wpData.label);
 
 // Merge arrays reactively
 const mergedFilters = computed<string[]>(() => {
@@ -529,7 +364,6 @@ async function getPosts(route = 'posts', namespace = 'wp/v2') {
 }
 
 
-
 // Map
 const url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const attribution = '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors';
@@ -594,15 +428,11 @@ const computedMarkers = computed<Marker[] | any>(() => {
 });
 
 
-// Ready funcs
+// On leafleft ready func
 async function onLeafletReady() {
 	await nextTick();
 	leafletReady.value = true;
 }
-
-// function toggleTileLayer() {
-// 	showTileLayer.value = !showTileLayer.value;
-// }
 
 //Styling funcs
 let borderColor: string = "rgb(215, 190, 150)";
@@ -656,7 +486,7 @@ const onEachFeatureFunction = computed(() => {
 			{ permanent: false, sticky: true, className: 'leaflet-custom-tooltip' }
 		);
 		// Popup
-		//layer.bindPopup(feature.properties.nom, { className: 'leaflet-custom-popup' });
+		// layer.bindPopup(feature.properties.nom, { className: 'leaflet-custom-popup' });
 		// Click
 		layer.on({
 			click: (e: L.LeafletMouseEvent) => {
@@ -671,14 +501,6 @@ const onEachFeatureFunction = computed(() => {
 					// Department is not selected, add it to the array (select)
 					selectedDepartmentIds.value.push(departmentId);
 					(layer as L.Path).setStyle(highlightStyle); // Apply highlight style
-
-					// Centering and zoom logic
-					// Assuming 'layer' is of type L.GeoJSON (or similar Leaflet layer type)
-					// which supports getBounds().
-					// const bounds = (layer as L.GeoJSON).getBounds();
-					// const centerPoint = bounds.getCenter();
-					// center.value = [centerPoint.lat, centerPoint.lng];
-					// zoom.value = 7; // Adjust zoom level as needed
 				}
 
 				geographyFilter.value = selectedDepartmentIds.value;
@@ -718,30 +540,6 @@ function clusterIcon(cluster: any) {
 		iconSize: L.point(40 * (cluster.getChildCount() / 40), 40 * (cluster.getChildCount() / 40), true),
 	});
 }
-
-// 	function markerIcon() {
-// 		return L.divIcon({
-// 	// 		iconUrl: 'path/to/your/icon.png',
-//     //   iconSize: [38, 95], // Size of the icon
-//     //   iconAnchor: [22, 94], // Point of the icon which will correspond to marker's location
-//     //   popupAnchor: [-3, -76] // Point from which the popup should open relative to the iconAnchor
-// 	html: `<div style="background-color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #f28f43;">
-//                   PIN
-//                </div>`,
-//         className: 'marker-cluster-custom',
-//         iconSize: L.point(40, 40, true),
-
-//       });
-// }
-
-// function markerIcon() {
-// return L.icon({
-// 	iconUrl: 'path/to/your/icon.png',
-// 	iconSize: [38, 95], // Size of the icon
-// 	iconAnchor: [22, 94], // Point of the icon which will correspond to marker's location
-// 	popupAnchor: [-3, -76] // Point from which the popup should open relative to the iconAnchor
-// 	});
-// }
 
 // Before mount load geojson map
 onBeforeMount(async () => {
@@ -793,57 +591,4 @@ watch(markers, (newMarkers) => {
 
 </script>
 
-<style>
-/**
-Map
- */
-
-/* CSS for Toggle Switch:  https://www.w3schools.com/howto/howto_css_switch.asp */
-/* .switch {
-	position: relative;
-	display: inline-block;
-
-	height: 24px;
-}
-
-.switch .category-toggle {
-	position: absolute;
-	cursor: pointer;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	width: 50px;
-	background-color: #eee;
-	-webkit-transition: 0.4s;
-	transition: 0.4s;
-}
-
-.switch .label {
-	display: inline-block;
-	margin: 0 20px 0 30px;
-	font-weight: 400;
-}
-
-.switch .category-toggle:before {
-	position: absolute;
-	content: "";
-	height: 16px;
-	width: 16px;
-	left: 4px;
-	bottom: 4px;
-	background-color: white;
-	-webkit-transition: 0.1s;
-	transition: 500ms;
-}
-
-.switch input:checked+.category-toggle {
-	background-color: #42b883;
-}
-
-.switch input:checked+.category-toggle:before {
-	-webkit-transform: translateX(26px);
-	-ms-transform: translateX(26px);
-	transform: translateX(26px);
-} */
-</style>
+<style scoped></style>
