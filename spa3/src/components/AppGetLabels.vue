@@ -2,11 +2,12 @@
 	<div class="rest-data">
 		<!-- BEGIN: Labels -->
 		<p v-if="displayTitle" class="f-12 font-weight-bold m-0">Label <span class="--text-muted --muted fw-medium op-5"
-				v-if="filteredResults.length === wpLabels.length">{{ wpLabels.length }}</span><span class="fw-medium op-5"
-				v-else>{{ filteredResults.length }}+</span></p>
+				v-if="filteredResults.length === wpLabels.length">{{ wpLabels.length }}</span><span
+				class="fw-medium op-5" v-else>{{ filteredResults.length }}+</span></p>
 
-		<Multiselect class="multiselect-tag-label multiselect-flat" v-model="selectedwpLabels" :options="filteredResults"
-			mode="tags" :close-on-select="false" :searchable="true" placeholder="..." @click.stop.prevent />
+		<Multiselect class="multiselect-tag-label multiselect-flat" v-model="selectedwpLabels"
+			:options="filteredResults" mode="tags" :close-on-select="false" :searchable="true" placeholder="..."
+			@click.stop.prevent />
 
 		<!-- END: Labels -->
 	</div>

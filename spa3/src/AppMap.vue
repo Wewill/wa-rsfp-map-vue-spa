@@ -49,7 +49,7 @@ Les thematiques =
 
 </div> -->
 
-		##TEST
+		##TESTDEV
 
 		<!-- BEGIN: #Map integration -->
 		<section id="map" class="mt-2 mb-2 contrast--light is-formatted">
@@ -265,7 +265,7 @@ Les thematiques =
 							</div>
 
 							<div class="col-sm-6">
-								<app-get-thematics :search-term="searchTerm" :app-filters="thematicFilter" />
+								<app-get-thematics :search-term="searchTerm" :app-filters="thematicFilter ?? undefined" />
 							</div>
 
 						</div>
@@ -401,11 +401,11 @@ Les thematiques =
 <script setup lang="ts">
 import { ref, computed, onBeforeMount, onMounted, nextTick, watch } from 'vue';
 import axios from 'axios';
-import AppGetPosts from './AppGetPosts.vue';
-import AppGetThematics from './AppGetThematics.vue';
-import AppGetGeographies from './AppGetGeographies.vue';
-import AppGetLabels from './AppGetLabels.vue'
-import { WpPosts, WpPost, WpTerm } from '../types/wpTypes'; // Assuming you have a type definition for posts
+import AppGetPosts from './components/AppGetPosts.vue';
+import AppGetThematics from './components/AppGetThematics.vue';
+import AppGetGeographies from './components/AppGetGeographies.vue';
+import AppGetLabels from './components/AppGetLabels.vue'
+import { WpPosts, WpPost, WpTerm } from './types/wpTypes'; // Assuming you have a type definition for posts
 import _ from "lodash";
 
 // https://dev.to/camptocamp-geo/the-3-best-open-source-web-mapping-libraries-57o7

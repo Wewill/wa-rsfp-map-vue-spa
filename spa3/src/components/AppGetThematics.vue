@@ -15,7 +15,7 @@
 			<div class="h-550-px overflow-y-scroll scrollbar-white me-n3 pe-3">
 				<ul class="list-unstyled card-items">
 					<app-display-thematic v-for="item in filteredResults" :key="item.id" :search-term="searchTerm"
-						:appFilters="appFilters" :item="item" role="article" :collapse-states="{}" />
+						:appFilters="appFilters ?? undefined" :item="item" role="article" :collapse-states="{}" />
 				</ul>
 			</div>
 			<div class="position-absolute w-100 h-20-px w-100 bottom-0 left-0 bg-v-gradient-action-3"></div>
@@ -37,7 +37,7 @@ import _ from "lodash";
 // Define props with TypeScript
 const props = withDefaults(defineProps<{
 	searchTerm?: string;
-	appFilters?: string[];
+	appFilters?: string[] | undefined;
 }>(), {
 	searchTerm: '',
 	appFilters: () => [],
