@@ -463,6 +463,9 @@ async function onLeafletReady(event: L.Map) {
 	map.value = event; // Assign the map instance
 	console.log('[onLeafletReady]:: Leaflet map is ready:', event, map.value);
 	leafletReady.value = true;
+
+	// Center map on markers
+	centerMap();
 }
 
 //Styling funcs
@@ -595,38 +598,70 @@ onBeforeMount(async () => {
 
 // Function to adjust the map view once the GeoJSON layer is
 const onGeoJsonReady = (event: { map: L.Map; target: L.GeoJSON }) => {
-	console.log('onGeoJsonReady:: First fitBounds');
-	const m = event.map;
-	if (event.target !== undefined) {
-		m.fitBounds(event.target.getBounds());
-	}
+	console.log('onGeoJsonReady::', event);
+	// const m = event.map;
+	// if (event.target !== undefined) {
+	// 	// m.fitBounds(event.target.getBounds());
+	// 	// centerMap();
+	// }
 };
 
-const centerMap = () => {
+const centerMap = (canZoom: Boolean = false) => {
 	console.log('centerMap::');
 	// Center on map
 	if (map.value) {
-		// map.value.invalidateSize();
-		const bounds = markers.value.reduce((bounds, marker) => {
+		map.value.invalidateSize();
+
+		// Calculate bounds based on markers
+		const bounds = computedMarkers.value.reduce((bounds, marker) => {
 			return bounds.extend(marker.latLng);
 		}, L.latLngBounds(markers.value[0].latLng, markers.value[0].latLng));
 
-		if (bounds !== undefined)
-			map.value.fitBounds(bounds);
+		console.log('bounds::', bounds, map.value.getBoundsZoom(bounds), map.value.getZoom());
+
+		if (bounds !== undefined) {
+			// Adjust the center based on container width
+			const containerWidth = map.value.getContainer().clientWidth;
+
+			console.log('containerWidth::', containerWidth);
+			// const containerHeight = map.value.getContainer().clientHeight;
+
+			// If the container width is larger than a threshold, adjust the center
+			// if (containerWidth > 0 && containerHeight > 0) {
+			const offsetX = -120; // Adjust offset as needed (e.g., 25% of width)
+			const offsetY = -120; // No vertical offset
+			const offsetPoint = L.point(offsetX, offsetY);
+
+			// Calculate the new zoom level based on the bounds
+			let newZoom = 6;
+			if (canZoom) {
+				newZoom = map.value.getBoundsZoom(bounds);
+			}
+
+			// Calculate the new center with the offset
+			// map.value.getBoundsZoom(bounds);
+			const newCenter = map.value.project(bounds.getCenter(), newZoom).subtract(offsetPoint);
+			map.value.setView(map.value.unproject(newCenter, newZoom), newZoom);
+			// } else {
+			// map.value.fitBounds(bounds);
+			// }
+		}
 	}
-}
+};
 
 // Watcher that reacts to changes in the markers array
-watch(computedMarkers, (newMarkers) => {
+watch(computedMarkers, async (newMarkers) => {
 	console.log('[WATCH] newMarkers::', newMarkers, map.value);
-	centerMap();
+	await nextTick();
+	centerMap(true);
 }, { deep: true });
 
-watch(currentView, (newView) => {
+watch(currentView, async (newView) => {
 	console.log('[WATCH] currentView::', newView, map.value);
 	// Center on map
 	if (newView === 'map' || newView === 'map-list') {
-		centerMap();
+		await nextTick();
+		centerMap(false);
 	}
 });
 
