@@ -555,7 +555,7 @@ const onEachFeatureFunction = computed(() => {
 
 // watch geographyFilter
 watch(geographyFilter, (newFilter) => {
-	console.log('[WATCH] geographyFilter::', newFilter);
+	console.log('[WATCH] geographyFilter::', newFilter, newFilter.length);
 	// Set styles for features in the new filter
 	newFilter.forEach(code => {
 		const layer = mapLayers.get(code);
@@ -566,10 +566,13 @@ watch(geographyFilter, (newFilter) => {
 
 	// Optionally reset styles for features not in the new filter
 	mapLayers.forEach((layer, code) => {
-		if (!newFilter.includes(code)) {
+		if (!newFilter.includes(code) || newFilter.length === 0) {
 			(layer as L.Path).setStyle(defaultStyle);  // Reset to default style
 		}
 	});
+
+	// Update selectedDepartmentIds based on the new filter
+	selectedDepartmentIds.value = newFilter;
 });
 
 // Cluster and marker styles
