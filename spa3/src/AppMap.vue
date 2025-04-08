@@ -12,14 +12,17 @@
 		leafletReady:: {{ leafletReady }}
 		selectedDepartmentIds: {{ selectedDepartmentIds }}
 		showTileLayer: {{ showTileLayer }}
+		<br/>
 		geographyFilter: {{ geographyFilter }}
 		opentostageFilter: {{ opentostageFilter }}
 		opentovisitFilter: {{ opentovisitFilter }}
 		mergedFilters:: {{ mergedFilters }}
+		<br/>
 		filteredResults.length:: {{ filteredResults.length }}
+		<br/>
+		Current view : {{ currentView }}
 		</code>
 
-		##TestCols
 
 		<test-cols />
 
@@ -63,10 +66,10 @@
 									</div>
 								</div>
 
-								<button class="btn btn-primary" @click="centerMap()">Center Map</button>
+								<!-- <button class="btn btn-primary" @click="centerMap()">Center Map</button>
 								<button class="btn btn-secondary" @click="centerMap(true)">Center+Zoom Map</button>
 								<button class="btn btn-primary" @click="centerMap(false, true)">Center Map NoOffset</button>
-								<button class="btn btn-secondary" @click="centerMap(true, true)">Center+Zoom Map NoOffset</button>
+								<button class="btn btn-secondary" @click="centerMap(true, true)">Center+Zoom Map NoOffset</button> -->
 
 							</div>
 
@@ -126,45 +129,44 @@
 				<div class="row f-w px-4 --min-vh-80 position-relative" style="min-height: 750px;">
 
 					<!-- Switch control -->
-					<div class="position-absolute top-0 start-0 m-3 zi-5 w-200-px" data-aos="fade">
-						<code>Current view : {{ currentView }}</code>
-						<ul class="bg-light rounded-4 shadow-lg m-0 p-0">
+					<div class="position-absolute top-0 start-10 m-4 zi-5 w-200-px" data-aos="fade">
+						<ul class="m-0 p-0 animated-hover">
 							<li @click="currentView = 'thematics'"
-								:class="{ 'text-action-2': currentView === 'thematics', 'text-action-3': currentView !== 'thematics' }">
-								<span>Thématiques</span>
+								:class="{ 'current text-action-2': currentView === 'thematics' }">
 								<i class="icons" alt="icone">
 									<IconThematics />
 								</i>
+								<span class="subline text-action-3 f-xs">Thématiques</span>
 							</li>
 							<li @click="currentView = 'map'"
-								:class="{ 'text-action-2': currentView === 'map', 'text-action-3': currentView !== 'map' }">
-								<span>Carte</span>
+								:class="{ 'current text-action-2': currentView === 'map' }">
 								<i class="icons" alt="icone">
 									<IconMap />
 								</i>
+								<span class="subline text-action-3 f-xs">Carte</span>
 							</li>
 							<li @click="currentView = 'map-list'"
-								:class="{ 'text-action-2': currentView === 'map-list', 'text-action-3': currentView !== 'map-list' }">
-								<span>Carte + liste</span>
+								:class="{ 'current text-action-2': currentView === 'map-list'}">
 								<i class="icons" alt="icone">
 									<IconMapList />
 								</i>
+								<span class="subline text-action-3 f-xs">Carte + liste</span>
 							</li>
 							<li @click="currentView = 'list'"
-								:class="{ 'text-action-2': currentView === 'list', 'text-action-3': currentView !== 'list' }">
-								<span>Liste</span>
+								:class="{ 'current text-action-2': currentView === 'list' }">
 								<i class="icons" alt="icone">
 									<IconList />
 								</i>
+								<span class="subline text-action-3 f-xs">Liste</span>
 							</li>
 						</ul>
 					</div>
 
 					<!-- Thematics -->
 					<div v-if="currentView === 'thematics'"
-						class="col bg-color-bg rounded-bottom-4 rounded-bottom-right-0 p-0 d-flex --h-100 justify-content-center align-items-center">
+						class="col bg-color-bg rounded-bottom-4 rounded-bottom-right-0 p-4">
 
-						<app-get-thematics :search-term="searchTerm" :app-filters="thematicFilter ?? undefined" />
+						<app-get-thematics :search-term="searchTerm" :app-filters="thematicFilter ?? undefined" class="mx-5 ms-10"/>
 
 					</div>
 
