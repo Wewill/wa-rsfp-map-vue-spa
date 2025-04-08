@@ -63,6 +63,11 @@
 									</div>
 								</div>
 
+								<button class="btn btn-primary" @click="centerMap()">Center Map</button>
+								<button class="btn btn-secondary" @click="centerMap(true)">Center+Zoom Map</button>
+								<button class="btn btn-primary" @click="centerMap(false, true)">Center Map NoOffset</button>
+								<button class="btn btn-secondary" @click="centerMap(true, true)">Center+Zoom Map NoOffset</button>
+
 							</div>
 
 						</div>
@@ -413,18 +418,18 @@ interface Marker {
 	terms_data?: [WpTerm];
 }
 
-const markers = ref<Marker[]>([
-	{ latLng: [47.413220, -4.219482], popupTitle: 'Marker 1', popupContent: 'Marker 1', popupLink: '#' },
-	{ latLng: [48.413220, -7.219482], popupTitle: 'Marker 1', popupContent: 'Marker 2', popupLink: '#' },
-	{ latLng: [46.413220, 8.219482], popupTitle: 'Marker 1', popupContent: 'Marker 3', popupLink: '#' },
-	{ latLng: [47.413220, 2.219482], popupTitle: 'Marker 1', popupContent: 'Marker 4', popupLink: '#' },
-	{ latLng: [45.413220, 4.219482], popupTitle: 'Marker 1', popupContent: 'Marker 5', popupLink: '#' },
-	{ latLng: [50.413220, 0.219482], popupTitle: 'Marker 1', popupContent: 'Marker 6', popupLink: '#' },
-	{ latLng: [47.113220, 10.219482], popupTitle: 'Marker 1', popupContent: 'Marker 7', popupLink: '#' },
-	{ latLng: [47.113220, 10.119482], popupTitle: 'Marker 1', popupContent: 'Marker 8', popupLink: '#' },
-	{ latLng: [47.013220, 10.119482], popupTitle: 'Marker 1', popupContent: 'Marker 9', popupLink: '#' },
-	// Add more markers here
-]);
+// const markers = ref<Marker[]>([
+// 	{ latLng: [47.413220, -4.219482], popupTitle: 'Marker 1', popupContent: 'Marker 1', popupLink: '#' },
+// 	{ latLng: [48.413220, -7.219482], popupTitle: 'Marker 1', popupContent: 'Marker 2', popupLink: '#' },
+// 	{ latLng: [46.413220, 8.219482], popupTitle: 'Marker 1', popupContent: 'Marker 3', popupLink: '#' },
+// 	{ latLng: [47.413220, 2.219482], popupTitle: 'Marker 1', popupContent: 'Marker 4', popupLink: '#' },
+// 	{ latLng: [45.413220, 4.219482], popupTitle: 'Marker 1', popupContent: 'Marker 5', popupLink: '#' },
+// 	{ latLng: [50.413220, 0.219482], popupTitle: 'Marker 1', popupContent: 'Marker 6', popupLink: '#' },
+// 	{ latLng: [47.113220, 10.219482], popupTitle: 'Marker 1', popupContent: 'Marker 7', popupLink: '#' },
+// 	{ latLng: [47.113220, 10.119482], popupTitle: 'Marker 1', popupContent: 'Marker 8', popupLink: '#' },
+// 	{ latLng: [47.013220, 10.119482], popupTitle: 'Marker 1', popupContent: 'Marker 9', popupLink: '#' },
+// 	// Add more markers here
+// ]);
 
 const nulledLatLngExpression: L.LatLngExpression = [46.6, 2.4];
 
@@ -606,45 +611,37 @@ const onGeoJsonReady = (event: { map: L.Map; target: L.GeoJSON }) => {
 	// }
 };
 
-const centerMap = (canZoom: Boolean = false) => {
+const centerMap = (canZoom: Boolean = false, noOffset: Boolean = false) => {
 	console.log('centerMap::');
 	// Center on map
 	if (map.value) {
+
+		// Checks if the map container size changed and updates the map if so
+		// https://leafletjs.com/reference.html#map-invalidatesize
 		map.value.invalidateSize();
 
-		// Calculate bounds based on markers
-		const bounds = computedMarkers.value.reduce((bounds, marker) => {
-			return bounds.extend(marker.latLng);
-		}, L.latLngBounds(markers.value[0].latLng, markers.value[0].latLng));
-
-		console.log('bounds::', bounds, map.value.getBoundsZoom(bounds), map.value.getZoom());
+		// Calculate bounds based on computed markers
+		const bounds = L.latLngBounds(computedMarkers.value.map(marker => marker.latLng));
+		console.log('bounds::', bounds, map.value.getBoundsZoom(bounds), map.value.getZoom(), computedMarkers.value.length);
 
 		if (bounds !== undefined) {
-			// Adjust the center based on container width
-			const containerWidth = map.value.getContainer().clientWidth;
-
-			console.log('containerWidth::', containerWidth);
-			// const containerHeight = map.value.getContainer().clientHeight;
-
-			// If the container width is larger than a threshold, adjust the center
-			// if (containerWidth > 0 && containerHeight > 0) {
-			const offsetX = -120; // Adjust offset as needed (e.g., 25% of width)
-			const offsetY = -120; // No vertical offset
-			const offsetPoint = L.point(offsetX, offsetY);
-
 			// Calculate the new zoom level based on the bounds
+			// Do not change zoom considering canZoom
 			let newZoom = 6;
 			if (canZoom) {
 				newZoom = map.value.getBoundsZoom(bounds);
 			}
 
+			// Ajust offset as needed
+			const offsetX = !noOffset ? -0 : 0; // Horizontal
+			const offsetY = !noOffset ? -20 : 0; // Vertical
+			const offsetPoint = L.point(offsetX, offsetY);
+
 			// Calculate the new center with the offset
-			// map.value.getBoundsZoom(bounds);
 			const newCenter = map.value.project(bounds.getCenter(), newZoom).subtract(offsetPoint);
 			map.value.setView(map.value.unproject(newCenter, newZoom), newZoom);
-			// } else {
+			// Calculate the new center
 			// map.value.fitBounds(bounds);
-			// }
 		}
 	}
 };
@@ -653,7 +650,7 @@ const centerMap = (canZoom: Boolean = false) => {
 watch(computedMarkers, async (newMarkers) => {
 	console.log('[WATCH] newMarkers::', newMarkers, map.value);
 	await nextTick();
-	centerMap(true);
+	centerMap(false);
 }, { deep: true });
 
 watch(currentView, async (newView) => {
@@ -664,8 +661,6 @@ watch(currentView, async (newView) => {
 		centerMap(false);
 	}
 });
-
-
 </script>
 
 <style scoped></style>
