@@ -4,7 +4,7 @@
 		<!-- <pre><b>filteredResults::</b> {{ filteredResults }}</pre>
 		<pre><b>computedMarkers::</b> {{ computedMarkers }}</pre> -->
 
-		<code class="--d-none">
+		<code class="--d-none" style="position: absolute; left: 0; top: 0; background-color: honeydew; width: 500px; padding: 10px; opacity: .8; z-index: 9999;">
 		MAP =
 		zoom:: {{ zoom }}
 		center:: {{ center }}
@@ -24,8 +24,8 @@
 		</code>
 
 		<!-- BEGIN: #Map integration -->
-		<section id="map" class="mt-2 mb-2 contrast--light is-formatted">
-			<div class="container-fluid mb-4 position-relative">
+		<section id="map" class="mt-2 mb-2 contrast--light is-formatted mt-n8">
+			<div class="container-fluid mb-4 position-relative pt-4">
 
 				<!-- Search panel -->
 				<div class="row f-w px-4 min-h-100px">
@@ -34,7 +34,7 @@
 
 						<!-- Search-->
 						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3 d-flex align-items-center justify-content-stretch" data-aos="fade-top">
-							<div class="form-floating">
+							<div class="form-floating w-100">
 								<!-- Search Box -->
 								<!-- <input v-model="searchTerm" type="text"
 									class="form-control form-control-lg --border-action-3 --focus-action-3 px-4"
