@@ -23,9 +23,6 @@
 		Current view : {{ currentView }}
 		</code>
 
-
-		<test-cols />
-
 		<!-- BEGIN: #Map integration -->
 		<section id="map" class="mt-2 mb-2 contrast--light is-formatted">
 			<div class="container-fluid mb-4 position-relative">
@@ -36,7 +33,7 @@
 						class="col bg-white rounded-top-4 p-0 d-flex --h-100 justify-content-center align-items-center shadow-custom">
 
 						<!-- Search-->
-						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3 d-flex align-items-center" data-aos="fade-top">
+						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3 d-flex align-items-center justify-content-stretch" data-aos="fade-top">
 							<div class="form-floating">
 								<!-- Search Box -->
 								<!-- <input v-model="searchTerm" type="text"
@@ -57,7 +54,7 @@
 									<input v-model="searchTerm" type="text" class="px-3 border-0" id="floatingInput"
 										placeholder="Découvrir..." aria-label="Search">
 									<div
-										class="input__search-toggle position-absolute top-50 end-0 translate-middle-y pe-4">
+										class="input__search-toggle position-absolute top-50 end-0 translate-middle-y pe-3">
 										<svg role="img" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
 											<path
 												d="m18.0553691 9.08577774c0-4.92630404-4.02005-8.94635404-8.94635408-8.94635404-4.92630404 0-8.96959132 4.02005-8.96959132 8.94635404 0 4.92630406 4.02005 8.94635406 8.94635404 8.94635406 2.13783006 0 4.08976186-.7435931 5.64665986-1.9984064l3.8109144 3.8109145 1.3245252-1.3245252-3.8341518-3.7876771c1.2548133-1.5336607 2.0216437-3.5088298 2.0216437-5.64665986zm-8.96959136 7.11060866c-3.90386358 0-7.08737138-3.1835078-7.08737138-7.08737138s3.1835078-7.08737138 7.08737138-7.08737138c3.90386356 0 7.08737136 3.1835078 7.08737136 7.08737138s-3.1602705 7.08737138-7.08737136 7.08737138z">
@@ -77,7 +74,7 @@
 						<!-- Filters -->
 						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3" data-aos="fade-top"
 							data-aos-delay="100">
-							<p class="f-12 font-weight-bolder m-0"><span class="subline text-action-3 f-xs me-1">Filtrer
+							<p class="f-12 font-weight-bolder m-0 mt-2"><span class="subline text-action-3 f-xs me-1">Filtrer
 									par </span> Production <span class="fw-medium op-5">{{
 										wpProduction?.length }}</span></p>
 							<Multiselect class="multiselect-tag-production multiselect-flat" v-model="productionFilter"
@@ -86,7 +83,7 @@
 						</div>
 						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3" data-aos="fade-top"
 							data-aos-delay="200">
-							<p class="f-12 font-weight-bolder m-0">Thématique <span class="fw-medium op-5">{{
+							<p class="f-12 font-weight-bolder m-0 mt-2">Thématique <span class="fw-medium op-5">{{
 								wpThematic?.length }}</span></p>
 							<Multiselect class="multiselect-tag-thematic multiselect-flat" v-model="thematicFilter"
 								:options="wpThematic" mode="tags" :close-on-select="false" :searchable="true"
@@ -283,8 +280,6 @@ import AppGetPosts from './components/AppGetPosts.vue';
 import AppGetThematics from './components/AppGetThematics.vue';
 import AppGetGeographies from './components/AppGetGeographies.vue';
 import AppGetLabels from './components/AppGetLabels.vue'
-
-import TestCols from "./components/TestCols.vue";
 
 import IconThematics from "./icons/Thematics.vue";
 import IconMap from "./icons/Map.vue";
