@@ -770,6 +770,13 @@ Project : Multiselect custom styles
 			padding-left: 0;
 		}
 
+		.multiselect-placeholder {
+			font-size: 1.1rem !important;
+			font-weight: 500;
+			padding: 0;
+			opacity: .7;
+		}
+
 		&.is-active {
 			box-shadow: none !important;
 		}

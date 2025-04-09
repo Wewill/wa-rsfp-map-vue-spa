@@ -36,8 +36,8 @@
 						class="col bg-white rounded-top-4 p-0 d-flex --h-100 justify-content-center align-items-center shadow-custom">
 
 						<!-- Search-->
-						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3" data-aos="fade-top">
-							<div class="form-floating mb-1">
+						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3 d-flex align-items-center" data-aos="fade-top">
+							<div class="form-floating">
 								<!-- Search Box -->
 								<!-- <input v-model="searchTerm" type="text"
 									class="form-control form-control-lg --border-action-3 --focus-action-3 px-4"
@@ -54,7 +54,7 @@
 
 								<!-- Search Box 2 -->
 								<div class="position-relative">
-									<input v-model="searchTerm" type="text" class="px-4 border-0" id="floatingInput"
+									<input v-model="searchTerm" type="text" class="px-3 border-0" id="floatingInput"
 										placeholder="Découvrir..." aria-label="Search">
 									<div
 										class="input__search-toggle position-absolute top-50 end-0 translate-middle-y pe-4">
@@ -77,20 +77,20 @@
 						<!-- Filters -->
 						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3" data-aos="fade-top"
 							data-aos-delay="100">
-							<p class="f-12 font-weight-bold m-0"><span class="subline text-action-3 f-xs">Filtrer
+							<p class="f-12 font-weight-bolder m-0"><span class="subline text-action-3 f-xs me-1">Filtrer
 									par </span> Production <span class="fw-medium op-5">{{
 										wpProduction?.length }}</span></p>
 							<Multiselect class="multiselect-tag-production multiselect-flat" v-model="productionFilter"
 								:options="wpProduction" mode="tags" :close-on-select="false" :searchable="true"
-								placeholder="..." @click.stop.prevent />
+								placeholder="Élevage, maraichage..." @click.stop.prevent />
 						</div>
 						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3" data-aos="fade-top"
 							data-aos-delay="200">
-							<p class="f-12 font-weight-bold m-0">Thématique <span class="fw-medium op-5">{{
+							<p class="f-12 font-weight-bolder m-0">Thématique <span class="fw-medium op-5">{{
 								wpThematic?.length }}</span></p>
 							<Multiselect class="multiselect-tag-thematic multiselect-flat" v-model="thematicFilter"
 								:options="wpThematic" mode="tags" :close-on-select="false" :searchable="true"
-								placeholder="..." @click.stop.prevent />
+								placeholder="Qualité, transmission..." @click.stop.prevent />
 						</div>
 						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3" data-aos="fade-top"
 							data-aos-delay="300">
@@ -126,9 +126,9 @@
 				</div>
 
 				<!-- Map panel-->
-				<div class="row f-w px-4 --min-vh-80 position-relative" style="min-height: 750px;">
+				<div class="row is-resizeable f-w px-4 --min-vh-80 position-relative" style="min-height: 750px;">
 
-					<!-- Switch control -->
+					<!-- Switch control : absolute-->
 					<div class="position-absolute top-0 start-10 m-4 zi-5 w-200-px" data-aos="fade">
 						<ul class="m-0 p-0 animated-hover">
 							<li @click="currentView = 'thematics'"
@@ -165,14 +165,13 @@
 					<!-- Thematics -->
 					<div v-if="currentView === 'thematics'"
 						class="col bg-color-bg rounded-bottom-4 rounded-bottom-right-0 p-4">
-
 						<app-get-thematics :search-term="searchTerm" :app-filters="thematicFilter ?? undefined" class="mx-5 ms-10"/>
-
 					</div>
 
-					<!-- Map -->
-					<div v-if="currentView === 'map' || currentView === 'map-list'"
-						class=" col bg-color-bg rounded-bottom-4 rounded-bottom-right-0 p-0 d-flex --h-100 justify-content-center align-items-center">
+
+					<!-- Map : resizeable -->
+					<div ref="col1Ref" :style="{ flexBasis: col1Width + 'px' }" v-if="currentView === 'map' || currentView === 'map-list'"
+						class="col resizeable bg-color-bg rounded-bottom-4 rounded-bottom-right-0 p-0 d-flex --h-100 justify-content-center align-items-center">
 						<l-map class="rounded-bottom-4 rounded-bottom-right-0" v-if="mapLoaded && isDataAvailable"
 							style="min-height: 750px; height: 100%; min-width: 400px; width: 100%;" ref="mapRef"
 							:min-zoom="5" :max-zoom="19" v-model:zoom="zoom" v-model:center="center"
@@ -249,9 +248,14 @@
 							</l-marker-cluster-group>
 						</l-map>
 					</div>
-					<!-- Results -->
-					<div v-if="currentView === 'list' || currentView === 'map-list' || currentView === 'thematics'"
-						class="col bg-action-3 rounded-bottom-4 rounded-bottom-left-0 p-4 --pb-10 mb-0">
+
+
+					<!-- List : resizeable -->
+					<div ref="col2Ref" :style="{ flexBasis: col2Width + 'px' }" v-if="currentView === 'list' || currentView === 'map-list' || currentView === 'thematics'"
+						class="col resizeable bg-action-3 rounded-bottom-4 rounded-bottom-left-0 p-4 --pb-10 mb-0">
+
+						<!-- Resizer Handle -->
+						<div class="resizer" @mousedown="startResize"></div>
 
 						<app-get-posts :search-term="searchTerm" :app-filters="mergedFilters"
 							:opentostage-filter="opentostageFilter" :opentovisit-filter="opentovisitFilter"
@@ -666,6 +670,84 @@ watch(currentView, async (newView) => {
 		centerMap(false);
 	}
 });
+
+/**
+ * Resizeable columns
+ */
+
+const colsWidth = ref(0);
+const col1Ref = ref<HTMLDivElement | null>(null);
+const col2Ref = ref<HTMLDivElement | null>(null);
+const col1Width = ref(0);
+const col2Width = ref(0);
+let startX = 0;
+let startWidth1 = 0;
+let startWidth2 = 0;
+let offset = 4;
+
+onMounted(() => {
+	if (col1Ref.value && col2Ref.value) {
+		col1Width.value = (col1Ref.value.clientWidth ?? 0) - offset/2;
+		col2Width.value =( col2Ref.value.clientWidth ?? 0) - offset/2;
+
+		colsWidth.value = col1Width.value + col2Width.value;
+	}
+});
+
+const startResize = (event: MouseEvent) => {
+	startX = event.clientX;
+	startWidth1 = col1Width.value;
+	startWidth2 = col2Width.value;
+
+	document.addEventListener('mousemove', doResize);
+	document.addEventListener('mouseup', stopResize);
+};
+
+const doResize = (event: MouseEvent) => {
+	const deltaX = event.clientX - startX;
+
+	// Calculate new widths with a maximum width of 150px for each column to prevent overflow
+	const newCol1Width = Math.max(500, startWidth1 + deltaX);
+	const newCol2Width = Math.max(500, startWidth2 - deltaX);
+
+	// Ensure columns stay within their minimum widths and prevent overflow
+	if (newCol1Width + newCol2Width <= startWidth1 + startWidth2) {
+		col1Width.value = newCol1Width - offset/2;
+		col2Width.value = newCol2Width - offset/2;
+	}
+
+	console.log('NEW> startWidth:', (startWidth1 + startWidth2) + ' / ' + (newCol1Width + newCol2Width), 'col1Width', col1Width.value, 'col2Width', col2Width.value, 'startWidth1', startWidth1, 'startWidth2', startWidth2, 'deltaX', deltaX, 'startX', startX, 'event.clientX', event.clientX);
+};
+
+const stopResize = () => {
+	document.removeEventListener('mousemove', doResize);
+	document.removeEventListener('mouseup', stopResize);
+};
+
+
 </script>
 
-<style scoped></style>
+<style scoped>
+
+.row.is-resizeable {
+	display: flex;
+	align-items: stretch;
+}
+
+.col.resizeable {
+	position: relative;
+	transition: flex-basis 0.1s;
+}
+
+.resizer {
+	width: 8px;
+	cursor: ew-resize;
+	background: #007bff;
+	/* margin: 0 4px; */
+	position: absolute;
+	height: 24px;
+	top: 0;
+	left: -4px;
+}
+
+</style>
