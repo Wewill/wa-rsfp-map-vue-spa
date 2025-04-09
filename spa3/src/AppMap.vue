@@ -1,11 +1,10 @@
 <template>
 	<div>
-		<code>isDataAvailable:: {{ isDataAvailable }}</code>
-		<!-- <pre><b>filteredResults::</b> {{ filteredResults }}</pre>
-		<pre><b>computedMarkers::</b> {{ computedMarkers }}</pre> -->
-
-		<code class="--d-none" style="position: absolute; left: 0; top: 0; background-color: honeydew; width: 500px; padding: 10px; opacity: .8; z-index: 9999;">
-		MAP =
+		<code class="--d-none" style="position: absolute; left: 0; top: 0; background-color: honeydew; width: 370px; height: 195px; padding: 10px; opacity: .8; z-index: 9999; overflow-y:scroll; border-radius:4px; margin: 10px;">
+		<span class="bg-color-accent-1 text-white px-1 me-1">LOADED:</span>
+		<b>isDataAvailable::</b> {{ isDataAvailable }}
+		<br/>
+		<span class="bg-color-accent-1 text-white px-1 me-1">MAP:</span>
 		zoom:: {{ zoom }}
 		center:: {{ center }}
 		mapLoaded:: {{ mapLoaded }}
@@ -13,6 +12,7 @@
 		selectedDepartmentIds: {{ selectedDepartmentIds }}
 		showTileLayer: {{ showTileLayer }}
 		<br/>
+		<span class="bg-color-accent-1 text-white px-1 me-1">FILTERS:</span>
 		geographyFilter: {{ geographyFilter }}
 		opentostageFilter: {{ opentostageFilter }}
 		opentovisitFilter: {{ opentovisitFilter }}
@@ -21,14 +21,18 @@
 		filteredResults.length:: {{ filteredResults.length }}
 		<br/>
 		Current view : {{ currentView }}
+		<br/>
+		<span class="bg-color-accent-1 text-white px-1 me-1 d-inline-block">DATA:</span>
+		<pre><b>filteredResults::</b> {{ filteredResults }}</pre>
+		<pre><b>computedMarkers::</b> {{ computedMarkers }}</pre>
 		</code>
 
 		<!-- BEGIN: #Map integration -->
-		<section id="map" class="mt-2 mb-2 contrast--light is-formatted mt-n8">
+		<section id="map" class="mt-2 mb-2 contrast--light is-formatted">
 			<div class="container-fluid mb-4 position-relative pt-4">
 
 				<!-- Search panel -->
-				<div class="row f-w px-4 min-h-100px">
+				<div class="row f-w px-4 min-h-100px zi-10">
 					<div
 						class="col bg-white rounded-top-4 p-0 d-flex --h-100 justify-content-center align-items-center shadow-custom">
 
