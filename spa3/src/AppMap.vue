@@ -242,7 +242,7 @@
 									</l-popup>
 									<l-icon :icon-anchor="[10, 10]" class-name="someExtraClass">
 										<div
-											style="background-color: var(--waff-color-heading, rgb(60, 10, 10)); border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; color: white;">
+											style="background-color: var(--waff-color-heading, rgb(60, 10, 10)); border-radius: 50%; width: 10px; height: 10px; display: flex; align-items: center; justify-content: center; color: white;">
 										</div>
 									</l-icon>
 								</l-marker>
