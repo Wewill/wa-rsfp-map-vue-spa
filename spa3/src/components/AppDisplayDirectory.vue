@@ -30,18 +30,18 @@
 						<div class="more-container">
 							<!-- Production -->
 							<div class="productions d-inline-block align-top">
-								<template v-if="postType.vue_meta.terms_data.filter((t) => t.taxonomy == 'production').length > maxListElements">
+								<template v-if="postType.vue_meta.terms_data.filter((t) => t.taxonomy == 'production').length > maxListElementsProductions">
 									<template v-for="(t_production, index) in postType.vue_meta.terms_data.filter((t) => t.taxonomy == 'production')" >
-										<div v-if="index < maxListElements" class="production-list d-inline-block">
+										<div v-if="index < maxListElementsProductions" class="production-list d-inline-block">
 											<a :href="t_production.link" class="production-item" tabindex="-1">{{ t_production.name }}</a>
 										</div>
 									</template>
 									<div class="production-list more-trigger d-inline-block">
-										<span class="production-more">+{{ postType.vue_meta.terms_data.filter((t) => t.taxonomy == 'production').length - maxListElements }}</span>
+										<span class="production-more">+{{ postType.vue_meta.terms_data.filter((t) => t.taxonomy == 'production').length - maxListElementsProductions }}</span>
 									</div>
 									<div class="more d-inline-block">
 										<template v-for="(t_production, index) in postType.vue_meta.terms_data.filter((t) => t.taxonomy == 'production')" >
-											<div v-if="index >= maxListElements" class="production-list d-inline-block">
+											<div v-if="index >= maxListElementsProductions" class="production-list d-inline-block">
 												<a :href="t_production.link" class="production-item" tabindex="-1">{{ t_production.name }}</a>
 											</div>
 										</template>
@@ -58,18 +58,18 @@
 
 							<!-- Thematics -->
 							<div class="thematics d-inline-block align-top">
-								<template v-if="postType.vue_meta.terms_data.filter((t) => t.taxonomy == 'thematic' && t.parent !== 0 ).length > maxListElements">
+								<template v-if="postType.vue_meta.terms_data.filter((t) => t.taxonomy == 'thematic' && t.parent !== 0 ).length > maxListElementsThematics">
 									<template v-for="(t_thematic, index) in postType.vue_meta.terms_data.filter((t) => t.taxonomy == 'thematic' && t.parent !== 0 )" >
-										<div v-if="index < maxListElements" class="thematic-list d-inline-block">
+										<div v-if="index < maxListElementsThematics" class="thematic-list d-inline-block">
 											<a :href="t_thematic.link" class="thematic-item" tabindex="-1">{{ t_thematic.name }}</a>
 										</div>
 									</template>
 									<div class="thematic-list more-trigger d-inline-block">
-										<span class="thematic-more">+{{ postType.vue_meta.terms_data.filter((t) => t.taxonomy == 'thematic' && t.parent !== 0 ).length - maxListElements }}</span>
+										<span class="thematic-more">+{{ postType.vue_meta.terms_data.filter((t) => t.taxonomy == 'thematic' && t.parent !== 0 ).length - maxListElementsThematics }}</span>
 									</div>
 									<div class="more d-inline-block">
 										<template v-for="(t_thematic, index) in postType.vue_meta.terms_data.filter((t) => t.taxonomy == 'thematic' && t.parent !== 0 )" >
-											<div v-if="index >= maxListElements" class="thematic-list d-inline-block">
+											<div v-if="index >= maxListElementsThematics" class="thematic-list d-inline-block">
 												<a :href="t_thematic.link" class="thematic-item" tabindex="-1">{{ t_thematic.name }}</a>
 											</div>
 										</template>
@@ -86,18 +86,18 @@
 
 							<!-- Geography -->
 							<div class="geographys d-inline-block align-top">
-								<template v-if="postType.vue_meta.terms_data.filter((t) => t.taxonomy == 'geography').length > maxListElements">
+								<template v-if="postType.vue_meta.terms_data.filter((t) => t.taxonomy == 'geography').length > maxListElementsGeographys">
 									<template v-for="(t_geography, index) in postType.vue_meta.terms_data.filter((t) => t.taxonomy == 'geography')" >
-										<div v-if="index < maxListElements" class="geography-list d-inline-block">
+										<div v-if="index < maxListElementsGeographys" class="geography-list d-inline-block">
 											<a :href="t_geography.link" class="geography-item" tabindex="-1">{{ t_geography.name }}</a>
 										</div>
 									</template>
 									<div class="geography-list more-trigger d-inline-block">
-										<span class="geography-more">+{{ postType.vue_meta.terms_data.filter((t) => t.taxonomy == 'geography').length - maxListElements }}</span>
+										<span class="geography-more">+{{ postType.vue_meta.terms_data.filter((t) => t.taxonomy == 'geography').length - maxListElementsGeographys }}</span>
 									</div>
 									<div class="more d-inline-block">
 										<template v-for="(t_geography, index) in postType.vue_meta.terms_data.filter((t) => t.taxonomy == 'geography')" >
-											<div v-if="index >= maxListElements" class="geography-list d-inline-block">
+											<div v-if="index >= maxListElementsGeographys" class="geography-list d-inline-block">
 												<a :href="t_geography.link" class="geography-item" tabindex="-1">{{ t_geography.name }}</a>
 											</div>
 										</template>
@@ -187,7 +187,9 @@ import { computed } from 'vue';
 import { WpPost } from '../types/wpTypes'; // Assuming you have a type definition for posts
 import _ from "lodash";
 
-const maxListElements = 1;
+const maxListElementsProductions = 2;
+const maxListElementsThematics = 1;
+const maxListElementsGeographys = 1;
 
 // Defining props with TypeScript types
 // Note: Vue 3 `<script setup>` uses `defineProps` to declare props.
