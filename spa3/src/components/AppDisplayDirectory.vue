@@ -128,6 +128,7 @@
 	// vertical-align: top;
 	--delayW: 0s;
 	--delayH: 0s;
+	--delayT: 0s;
 
 	z-index: 2; /* https://stackoverflow.com/questions/73912957/how-to-escape-stretched-link-in-html-block-content */
     position: relative;
@@ -159,11 +160,13 @@
 		// overflow: hidden;
 		overflow: hidden;
 		vertical-align: top;
-		transition: max-width .5s ease-in-out;
+		--delayT: .5s;
+		transition: max-width .5s ease-in-out var(--delayT);
 	}
 
 	&:hover {
 		.more-trigger {
+			--delayT: 0s;
 			max-width: 0px;
 		}
 	}
