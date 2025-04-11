@@ -140,6 +140,11 @@ function vue_get_post_meta_fields( $post_object, $field_name, $request ) {
 		$f_geolocation_lng 		= get_post_meta( $d_relationships_farm, 'f_geolocation_lng', true );
 	}
 
+	// Get videos
+	$d_medias_videos 			= get_post_meta( $post_id, 'd_medias_video', true );
+	$d_medias_video_links 		= get_post_meta( $post_id, 'd_medias_video_link', true );
+	$d_have_videos 				= !empty($d_medias_videos) || !empty($d_medias_video_links);
+
 	// add categories, custom excerpt, featured image to the api response.
 	// Render
 	$additional_post_data = array(
@@ -185,6 +190,7 @@ function vue_get_post_meta_fields( $post_object, $field_name, $request ) {
 		'opentovisit' 		=> !empty($d_stage_opentovisit)?true:false,
 		'label' 			=> $d_identity_label,
 		'farm_title'		=> html_entity_decode( get_the_title( $d_relationships_farm ) ),
+		'videos'			=> $d_have_videos,
 		//
 		'errors' 			=> $errors,
 	);

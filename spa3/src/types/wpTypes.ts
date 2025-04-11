@@ -30,6 +30,7 @@ export interface WpPost {
 		opentovisit?: boolean;
 		label: [string];
 		farm_title?: string;
+		videos?: boolean;
 		//
 		errors: [string];
 	};

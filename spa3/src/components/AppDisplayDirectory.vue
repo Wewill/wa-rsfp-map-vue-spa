@@ -2,12 +2,18 @@
 	<!-- BEGIN: Directory item -->
 	<li class="list-item card-item p-0 bg-transparent w-100 mb-2">
 		<div class="card my-0 border-0 bg-transparent">
-			<div class="d-flex align-items-center">
-				<!-- <div class="h-100-px w-100-px"> -->
-					<img v-if="postType.vue_meta.thumbnail_url" :src="postType.vue_meta.thumbnail_url" :alt="postType.vue_meta.media_alt || 'post thumbnail'" class="img-fluid fit-image rounded-4 img-transition-scale h-100-px w-100-px">
-					<div v-else class="h-100-px w-100-px"><div class="h-100-px w-100-px rounded-4 bg-color-layout d-flex flex-center"><i class="bi bi-image text-action-3"></i></div></div>
-				<!-- </div> -->
-				<div class="">
+				<div class="d-flex align-items-center">
+					<div class="min-w-100-px position-relative">
+						<img v-if="postType.vue_meta.thumbnail_url" :src="postType.vue_meta.thumbnail_url" :alt="postType.vue_meta.media_alt || 'post thumbnail'" class="img-fluid fit-image rounded-4 img-transition-scale h-100-px w-100-px">
+						<div v-else class="h-100-px w-100-px">
+							<div class="h-100-px w-100-px rounded-4 bg-color-layout d-flex flex-center"><i class="bi bi-image text-action-3"></i></div>
+						</div>
+
+						<div v-if="postType.vue_meta.videos" class="absolute position-absolute top-0 h-100 w-100 btn_holder">
+							<span class="btn --action-3 color-light play play-xs d-flex flex-center"><i class="bi bi-play-fill h5 m-0 p-0 ms-1 mt-1"></i></span>
+						</div>
+					</div>
+
 					<div class="card-body py-2 pe-0">
 
 						<!-- Example <div class="production--s-list d-inline-block">
@@ -115,8 +121,8 @@
 						<p class="card-text mt-n1 mb-0" v-if="postType.vue_meta.farm_title != ''"><small class="text-muted">{{ postType.vue_meta.farm_title }}</small></p>
 					</div>
 				</div>
+
 			</div>
-		</div>
 	</li>
 	<!-- END: Directory item -->
 </template>
