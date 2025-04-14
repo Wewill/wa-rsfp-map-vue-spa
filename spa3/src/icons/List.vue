@@ -2,7 +2,7 @@
 </script>
 
 <template>
-	<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+	<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.2">
 		<path d="M17.36,7.56H6.64c-.21,0-.37.17-.37.37s.17.37.37.37h10.71c.21,0,.37-.17.37-.37s-.17-.37-.37-.37Z" />
 		<path d="M6.64,11.02h7.6c.21,0,.37-.17.37-.37s-.17-.37-.37-.37h-7.6c-.21,0-.37.17-.37.37s.17.37.37.37Z" />
 		<path d="M16.32,12.98H6.64c-.21,0-.37.17-.37.37s.17.37.37.37h9.68c.21,0,.37-.17.37-.37s-.17-.37-.37-.37Z" />
