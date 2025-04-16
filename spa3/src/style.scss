@@ -6,12 +6,10 @@
 	user-select: none;
 }
 
-.is-home {
-	#main {
-		z-index: 1;
-		position: relative;
-		margin-top: -3.5rem!important;
-	}
+.is-home#main {
+	z-index: 1;
+	position: relative;
+	margin-top: -3.5rem!important;
 }
 
 /**
