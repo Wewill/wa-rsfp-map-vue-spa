@@ -192,7 +192,7 @@ function vue_get_post_meta_fields( $post_object, $field_name, $request ) {
 		'opentostage' 		=> !empty($d_stage_opentostage)?true:false,
 		'opentovisit' 		=> !empty($d_stage_opentovisit)?true:false,
 		'label' 			=> $d_identity_label,
-		'farm_title'		=> html_entity_decode( get_the_title( $d_relationships_farm ) ),
+		'farm_title'		=> $d_relationships_farm ? html_entity_decode( get_the_title( $d_relationships_farm ) ) : '',
 		'videos'			=> $d_have_videos,
 		//
 		'errors' 			=> $errors,
