@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<code class="--d-none" style="position: absolute; left: 0; top: 0; background-color: honeydew; width: 370px; height: 195px; padding: 10px; opacity: .8; z-index: 9999; overflow-y:scroll; border-radius:4px; margin: 10px;">
+		<code class="d-none" style="position: absolute; left: 0; top: 0; background-color: honeydew; width: 370px; height: 195px; padding: 10px; opacity: .8; z-index: 9999; overflow-y:scroll; border-radius:4px; margin: 10px;">
 		<span class="bg-color-accent-1 text-white px-1 me-1">LOADED:</span>
 		<b>isDataAvailable::</b> {{ isDataAvailable }}
 		<br/>
@@ -16,6 +16,7 @@
 		geographyFilter: {{ geographyFilter }}
 		opentostageFilter: {{ opentostageFilter }}
 		opentovisitFilter: {{ opentovisitFilter }}
+		thematicFilter: {{ thematicFilter }}
 		mergedFilters:: {{ mergedFilters }}
 		<br/>
 		filteredResults.length:: {{ filteredResults.length }}
@@ -127,10 +128,10 @@
 				</div>
 
 				<!-- Map panel-->
-				<div class="row is-resizeable f-w px-4 --min-vh-80 position-relative" style="min-height: 750px;">
+				<div ref="rowRef" class="row is-resizeable f-w px-4 --min-vh-80 position-relative" style="min-height: 750px;">
 
 					<!-- Switch control : absolute-->
-					<div class="position-absolute top-0 start-10 m-4 zi-5 w-200-px" data-aos="fade">
+					<div class="position-absolute top-0 start-10 ms-4 mt-4 p-0 zi-5 w-auto" data-aos="fade">
 						<ul class="m-0 p-0 animated-hover">
 							<li @click="currentView = 'thematics'"
 								:class="{ 'current text-action-2': currentView === 'thematics' }">
@@ -166,12 +167,12 @@
 					<!-- Thematics -->
 					<div v-if="currentView === 'thematics'"
 						class="col bg-color-bg rounded-bottom-4 rounded-bottom-right-0 p-4">
-						<app-get-thematics :search-term="searchTerm" :app-filters="thematicFilter ?? undefined" class="mx-5 ms-10"/>
+						<app-get-thematics :search-term="searchTerm" :app-filters="thematicFilter ?? undefined" @onFilterChange="thematicFilter = $event" class="mx-5 ms-10"/>
 					</div>
 
 
 					<!-- Map : resizeable -->
-					<div ref="col1Ref" :style="{ flexBasis: col1Width + 'px' }" v-if="currentView === 'map' || currentView === 'map-list'"
+					<div ref="col1Ref" :style="currentView === 'map-list' ? { 'width': col1Width + 'px', 'max-width': col1Width + 'px' } : {}" v-if="currentView === 'map' || currentView === 'map-list'"
 						class="col resizeable bg-color-bg rounded-bottom-4 rounded-bottom-right-0 p-0 d-flex --h-100 justify-content-center align-items-center">
 						<l-map class="rounded-bottom-4 rounded-bottom-right-0" v-if="mapLoaded && isDataAvailable"
 							style="min-height: 750px; height: 100%; min-width: 400px; width: 100%;" ref="mapRef"
@@ -242,7 +243,7 @@
 									</l-popup>
 									<l-icon :icon-anchor="[10, 10]" class-name="someExtraClass">
 										<div
-											style="background-color: var(--waff-color-heading, rgb(60, 10, 10)); border-radius: 50%; width: 10px; height: 10px; display: flex; align-items: center; justify-content: center; color: white;">
+											style="background-color: var(--waff-color-heading, rgb(60, 10, 10)); border-radius: 50%; width: 14px; height: 14px; display: flex; align-items: center; justify-content: center; color: white;">
 										</div>
 									</l-icon>
 								</l-marker>
@@ -252,8 +253,8 @@
 
 
 					<!-- List : resizeable -->
-					<div ref="col2Ref" :style="{ flexBasis: col2Width + 'px' }" v-if="currentView === 'list' || currentView === 'map-list' || currentView === 'thematics'"
-						class="col resizeable bg-action-3 rounded-bottom-4 rounded-bottom-left-0 p-4 --pb-10 mb-0">
+					<div ref="col2Ref" :style="currentView === 'map-list' || currentView === 'thematics' ?{ 'width': col2Width + 'px', 'max-width': col2Width + 'px' } : {}" v-if="currentView === 'list' || currentView === 'map-list' || currentView === 'thematics'"
+						class="col resizeable bg-color-layout --bg-action-3 rounded-bottom-4 rounded-bottom-left-0 p-4 --pb-10 mb-0 shadow-list z-10" :class="{ 'ps-12': currentView === 'list' }" >
 
 						<!-- Resizer Handle -->
 						<div class="resizer" @mousedown="startResize"></div>
@@ -261,6 +262,10 @@
 						<app-get-posts :search-term="searchTerm" :app-filters="mergedFilters"
 							:opentostage-filter="opentostageFilter" :opentovisit-filter="opentovisitFilter"
 							:route="'directory'" />
+
+						<!-- <app-get-posts :search-term="searchTerm" :app-filters="mergedFilters"
+							:opentostage-filter="opentostageFilter" :opentovisit-filter="opentovisitFilter"
+							:route="'farm'" /> -->
 
 					</div>
 				</div>
@@ -579,13 +584,25 @@ watch(geographyFilter, (newFilter) => {
 });
 
 // Cluster and marker styles
+// function clusterIcon(cluster: any) {
+// 	return L.divIcon({
+// 		html: `<div style="background-color: var(--waff-action-1, rgb(255, 100, 75)); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: white;">
+//                   <strong>${cluster.getChildCount()}</strong>
+//                </div>`,
+// 		className: 'marker-cluster-custom',
+// 		iconSize: L.point(40 * (cluster.getChildCount() / 40), 40 * (cluster.getChildCount() / 40), true),
+// 	});
+// }
+const sizeThreshold = 10; // Threshold for cluster size
+const clusterIconSize = 36; // Default size for clusters
+const clusterIconSizeLarge = 52; // Size for larger clusters
 function clusterIcon(cluster: any) {
 	return L.divIcon({
-		html: `<div style="background-color: var(--waff-action-1, rgb(255, 100, 75)); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: white;">
-                  <strong>${cluster.getChildCount()}</strong>
-               </div>`,
+		html: `<div style="background-color: var(--waff-action-1, rgb(255, 100, 75)); border-radius: 50%; width: ${cluster.getChildCount() < sizeThreshold ? clusterIconSize : clusterIconSizeLarge}px; height: ${cluster.getChildCount() < sizeThreshold ? clusterIconSize : clusterIconSizeLarge}px; display: flex; align-items: center; justify-content: center; color: white;">
+				  <strong>${cluster.getChildCount()}</strong>
+			   </div>`,
 		className: 'marker-cluster-custom',
-		iconSize: L.point(40 * (cluster.getChildCount() / 40), 40 * (cluster.getChildCount() / 40), true),
+		iconSize: L.point(cluster.getChildCount() < sizeThreshold ? clusterIconSize : clusterIconSizeLarge, cluster.getChildCount() < sizeThreshold ? clusterIconSize : clusterIconSizeLarge, true),
 	});
 }
 
@@ -626,7 +643,7 @@ const centerMap = (canZoom: Boolean = false, noOffset: Boolean = false) => {
 
 		// Checks if the map container size changed and updates the map if so
 		// https://leafletjs.com/reference.html#map-invalidatesize
-		map.value.invalidateSize();
+		map.value.invalidateSize({ animate: true, debounceMoveend: true});
 
 		// Calculate bounds based on computed markers
 		const bounds = L.latLngBounds(computedMarkers.value.map(marker => marker.latLng));
@@ -647,7 +664,14 @@ const centerMap = (canZoom: Boolean = false, noOffset: Boolean = false) => {
 
 			// Calculate the new center with the offset
 			const newCenter = map.value.project(bounds.getCenter(), newZoom).subtract(offsetPoint);
-			map.value.setView(map.value.unproject(newCenter, newZoom), newZoom);
+			map.value.setView(map.value.unproject(newCenter, newZoom), newZoom, {
+				animate: true,
+				duration: 0.5,
+			});
+			// map.value.flyTo(map.value.unproject(newCenter, newZoom), newZoom, {
+			// 	animate: true,
+			// 	duration: 0.5,
+			// });
 			// Calculate the new center
 			// map.value.fitBounds(bounds);
 		}
@@ -658,7 +682,7 @@ const centerMap = (canZoom: Boolean = false, noOffset: Boolean = false) => {
 watch(computedMarkers, async (newMarkers) => {
 	console.log('[WATCH] newMarkers::', newMarkers, map.value);
 	await nextTick();
-	centerMap(false);
+	centerMap(true);
 }, { deep: true });
 
 watch(currentView, async (newView) => {
@@ -666,7 +690,9 @@ watch(currentView, async (newView) => {
 	// Center on map
 	if (newView === 'map' || newView === 'map-list') {
 		await nextTick();
-		centerMap(false);
+		setTimeout(() => {
+			centerMap(false);
+		}, 100);
 	}
 });
 
@@ -675,19 +701,27 @@ watch(currentView, async (newView) => {
  */
 
 const colsWidth = ref(0);
+const rowRef = ref<HTMLDivElement | null>(null);
 const col1Ref = ref<HTMLDivElement | null>(null);
 const col2Ref = ref<HTMLDivElement | null>(null);
-const col1Width = ref(0);
-const col2Width = ref(0);
+const rowWidth = ref();
+const col1Width = ref();
+const col2Width = ref();
 let startX = 0;
 let startWidth1 = 0;
 let startWidth2 = 0;
-let offset = 4;
+let offset = 0;
 
 onMounted(() => {
+	if (rowRef.value) {
+		rowWidth.value = rowRef.value.clientWidth;
+		console.log("rowWidth", rowWidth.value);
+	}
 	if (col1Ref.value && col2Ref.value) {
+		console.log("Set initial widths", col1Ref.value.clientWidth, col2Ref.value.clientWidth);
+		// Set initial widths
 		col1Width.value = (col1Ref.value.clientWidth ?? 0) - offset/2;
-		col2Width.value =( col2Ref.value.clientWidth ?? 0) - offset/2;
+		col2Width.value = (col2Ref.value.clientWidth ?? 0) - offset/2;
 
 		colsWidth.value = col1Width.value + col2Width.value;
 	}
@@ -735,7 +769,7 @@ const stopResize = () => {
 
 .col.resizeable {
 	position: relative;
-	transition: flex-basis 0.1s;
+	transition: flex-basis 0.1s, max-width 0.1s;
 }
 
 .resizer {

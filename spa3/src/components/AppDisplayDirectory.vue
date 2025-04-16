@@ -1,12 +1,14 @@
 <template>
 	<!-- BEGIN: Directory item -->
-	<li class="list-item card-item p-0 bg-transparent w-100 mb-2">
-		<div class="card my-0 border-0 bg-transparent">
+	<!-- <li class="list-item card-item p-0 bg-transparent w-100 mb-2"> -->
+	<!-- <li class="list-item card-item p-0 bg-transparent --w-100 mb-2 col" style="width: 400px;"> -->
+	<li class="list-item card-item p-0 bg-transparent">
+			<div class="card my-0 border-0 bg-transparent">
 				<div class="d-flex align-items-center">
-					<div class="min-w-100-px position-relative">
-						<img v-if="postType.vue_meta.thumbnail_url" :src="postType.vue_meta.thumbnail_url" :alt="postType.vue_meta.media_alt || 'post thumbnail'" class="img-fluid fit-image rounded-4 img-transition-scale h-100-px w-100-px">
-						<div v-else class="h-100-px w-100-px">
-							<div class="h-100-px w-100-px rounded-4 bg-color-layout d-flex flex-center"><i class="bi bi-image text-action-3"></i></div>
+					<div class="min-w-90-px position-relative">
+						<img v-if="postType.vue_meta.thumbnail_url" :src="postType.vue_meta.thumbnail_url" :alt="postType.vue_meta.media_alt || 'post thumbnail'" class="img-fluid fit-image rounded-4 img-transition-scale h-90-px w-90-px">
+						<div v-else class="h-90-px w-90-px">
+							<div class="h-90-px w-90-px rounded-4 bg-color-layout d-flex flex-center"><i class="bi bi-image text-action-3"></i></div>
 						</div>
 
 						<div v-if="postType.vue_meta.videos" class="absolute position-absolute top-0 h-100 w-100 btn_holder">
@@ -14,7 +16,7 @@
 						</div>
 					</div>
 
-					<div class="card-body py-2 pe-0">
+					<div class="card-body py-0 --py-2 pe-0">
 
 						<!-- Example <div class="production--s-list d-inline-block">
 							<template v-for="t_production in postType.vue_meta.terms_data.filter((t) => t.taxonomy == 'production' )" >

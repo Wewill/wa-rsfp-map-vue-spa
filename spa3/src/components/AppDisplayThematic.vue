@@ -6,11 +6,15 @@
 			:style="`background-image: url('${item.vue_meta.media_url}');`">
 			<!-- Accordion header : list parents -->
 			<div class="accordion-header position-relative z-2" :id="`heading_${item.id}`">
-				<a :href="item.link" class="--stretched-link">
+				<a @click="$emit('onFilterChange', item.name.toLowerCase())">
 					<div class="d-flex justify-content-between align-items-center text-white text-shadow-1 p-4 z-2">
-						<p class="text-white m-0 fw-bold ps-3" v-html="highlightedPostTitle || item.name"></p>
+						<p class="text-white m-0 fw-bold ps-3 flex-grow-1" v-html="highlightedPostTitle || item.name"></p>
+						<span v-if="item && appFilters.includes(item.name.toLowerCase())" class="fw-bold bg-transparent h5 m-0">
+							<i class="bi bi-x-square-fill" style="position:relative;top:2px;"></i>
+						</span>
+						<a :href="item.link" class="text-white fw-bold h5 m-0 mx-2"><i class="bi bi-box-arrow-up-right"></i></a>
 						<span class="badge text-bg-color-accent-2 fw-bold py-2">{{ item.count
-						}}<!-- id:{{  item.id  }} p:{{  item.parent  }}--></span>
+						}}<!--id:{{  item.id  }} p:{{  item.parent  }}--></span>
 					</div>
 				</a>
 				<button class="accordion-button collapsed position-absolute top-50 start-0 translate-middle-y w-40-px"
@@ -33,7 +37,7 @@
 				<!-- Check if the item has children and display them in an accordion -->
 				<ul v-if="filteredItemChildren && filteredItemChildren.length" class="list-unstyled ms-4">
 					<app-display-thematic v-for="child in filteredItemChildren" :key="child.id" :item="child"
-						:search-term="searchTerm" :collapse-states="collapseStates" :app-filters="appFilters" />
+						:search-term="searchTerm" :collapse-states="collapseStates" :app-filters="appFilters" @onFilterChange="updateChildFilters($event)"/>
 				</ul>
 			</div>
 		</div>
@@ -43,7 +47,7 @@
 
 <script setup lang="ts">
 import { defineProps } from 'vue';
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { ref, toRefs, computed, onMounted, onBeforeUnmount } from 'vue';
 import { WpTerm } from '../types/wpTypes'; // Assuming you have a type definition for posts
 import _ from "lodash";
 
@@ -57,6 +61,16 @@ const props = withDefaults(defineProps<{
 	searchTerm: '',
 	appFilters: () => [],
 });
+
+// Get props
+const { appFilters } = toRefs(props);
+// Define emit
+const emit = defineEmits(['onFilterChange'])
+
+function updateChildFilters(filter: string) {
+	console.log('updateChildFilters::', filter, appFilters.value);
+	emit('onFilterChange', filter);
+}
 
 // Computed property for filtered results
 const filteredItemChildren = computed(() => {
