@@ -229,9 +229,9 @@ async function getPosts(route = 'posts', namespace = 'wp/v2') {
     .grid-list {
       display: grid;
       grid-auto-flow: column;
-      grid-template-rows: repeat(5, 1fr); /* 5 éléments en hauteur */
+      grid-template-rows: repeat(4, 1fr); /* 4 éléments en hauteur */
       gap: 0; /*.5rem;*/
-	  row-gap: 0.5rem;
+	  column-gap: 1.5rem;
     }
 
     .grid-list li {
