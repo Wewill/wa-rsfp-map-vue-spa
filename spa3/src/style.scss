@@ -6,10 +6,10 @@
 	user-select: none;
 }
 
-#wp-vue-app, #main{
-	z-index: 1;
+#main{
+	z-index: 5;
 	position: relative;
-	margin-top: -3.5rem!important;
+	margin-top: -4rem!important;
 }
 
 /**
