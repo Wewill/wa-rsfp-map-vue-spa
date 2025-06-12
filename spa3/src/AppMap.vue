@@ -315,6 +315,21 @@ const searchTerm = ref('');
 type Views = 'thematics' | 'map' | 'list' | 'map-list';
 const currentView = ref<Views>('map-list'); // 'map' or 'list'
 
+// Mobile checker
+const isMobile = ref(window.innerWidth <= 768);
+watch(isMobile, (val) => {
+	if (val) {
+		currentView.value = 'map';
+	}
+});
+window.addEventListener('resize', () => {
+	isMobile.value = window.innerWidth <= 768;
+});
+// Set initial view for mobile
+if (isMobile.value) {
+	currentView.value = 'map';
+}
+
 const categoryFilter = ref([]);
 const geographyFilter = ref<string[]>([]);
 const productionFilter = ref([]);
@@ -782,6 +797,12 @@ const stopResize = () => {
 	height: 24px;
 	top: 0;
 	left: -12px;
+}
+
+@media (max-width:768px){
+	.resizer {
+		display: none;
+	}
 }
 
 </style>
