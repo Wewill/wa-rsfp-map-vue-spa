@@ -77,7 +77,7 @@
 
 						</div>
 						<!-- Filters -->
-						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3" data-aos="fade-top"
+						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3 d-none d-md-block" data-aos="fade-top"
 							data-aos-delay="100">
 							<p class="f-12 font-weight-bolder m-0 mt-2"><span class="subline text-action-3 f-xs me-1">Filtrer
 									par </span> Production <span class="fw-medium op-5">{{
@@ -86,7 +86,7 @@
 								:options="wpProduction" mode="tags" :close-on-select="false" :searchable="true"
 								placeholder="Élevage, maraichage..." @click.stop.prevent />
 						</div>
-						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3" data-aos="fade-top"
+						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3 d-none d-md-block" data-aos="fade-top"
 							data-aos-delay="200">
 							<p class="f-12 font-weight-bolder m-0 mt-2">Thématique <span class="fw-medium op-5">{{
 								wpThematic?.length }}</span></p>
@@ -94,17 +94,17 @@
 								:options="wpThematic" mode="tags" :close-on-select="false" :searchable="true"
 								placeholder="Qualité, transmission..." @click.stop.prevent />
 						</div>
-						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3" data-aos="fade-top"
+						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3 d-none d-md-block" data-aos="fade-top"
 							data-aos-delay="300">
 							<app-get-geographies :display-title="true" :app-filters="geographyFilter"
 								@onFilterChange="geographyFilter = $event" />
 						</div>
-						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3" data-aos="fade-top"
+						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3 d-none d-md-block" data-aos="fade-top"
 							data-aos-delay="400">
 							<app-get-labels :display-title="true" :app-filters="labelFilter"
 								@onFilterChange="labelFilter = $event" />
 						</div>
-						<div class="w-120px px-2 h-100 py-3" style="min-width: 110px;" data-aos="fade-top"
+						<div class="w-120px px-2 h-100 py-3 d-none d-md-block" style="min-width: 110px;" data-aos="fade-top"
 							data-aos-delay="500">
 							<p class="f-12 font-weight-bold m-0"><i class="icon icon-filters"></i> Ouvert aux...</p>
 							<form>
