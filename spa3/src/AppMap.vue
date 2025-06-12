@@ -128,7 +128,7 @@
 				</div>
 
 				<!-- Map panel-->
-				<div ref="rowRef" class="row is-resizeable f-w px-2 px-md-4 --min-vh-80 position-relative" style="min-height: 750px;">
+				<div ref="rowRef" class="row is-resizeable f-w px-2 px-md-4 --min-vh-80 position-relative min-h-750">
 
 					<!-- Switch control : absolute-->
 					<div class="position-absolute top-0 start-10 ms-4 mt-4 p-0 zi-5 w-auto" data-aos="fade">
@@ -174,8 +174,8 @@
 					<!-- Map : resizeable -->
 					<div ref="col1Ref" :style="currentView === 'map-list' ? { 'width': col1Width + 'px', 'max-width': col1Width + 'px' } : {}" v-if="currentView === 'map' || currentView === 'map-list'"
 						class="col resizeable bg-color-bg rounded-bottom-4 rounded-bottom-right-0 p-0 d-flex --h-100 justify-content-center align-items-center">
-						<l-map class="rounded-bottom-4 rounded-bottom-right-0" v-if="mapLoaded && isDataAvailable"
-							style="min-height: 750px; height: 100%; min-width: 400px; width: 100%;" ref="mapRef"
+						<l-map class="rounded-bottom-4 rounded-bottom-right-0 min-h-750" v-if="mapLoaded && isDataAvailable"
+							style="height: 100%; min-width: 400px; width: 100%;" ref="mapRef"
 							:min-zoom="5" :max-zoom="19" v-model:zoom="zoom" v-model:center="center"
 							:zoomAnimation="true" :markerZoomAnimation="true" :useGlobalLeaflet="true" :options="{
 								zoomControl: false,
@@ -778,6 +778,15 @@ const stopResize = () => {
 </script>
 
 <style scoped>
+
+.min-h-750 {
+	min-height: 750px;
+}
+@media (max-width:768px){
+	.min-h-750 {
+		min-height: 460px !important;
+	}
+}
 
 .row.is-resizeable {
 	display: flex;
