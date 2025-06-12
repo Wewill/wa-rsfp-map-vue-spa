@@ -33,12 +33,12 @@
 			<div class="container-fluid mb-4 position-relative pt-4">
 
 				<!-- Search panel -->
-				<div class="row f-w px-4 min-h-100px zi-10">
+				<div class="row f-w px-2 px-md-4 min-h-100px zi-10">
 					<div
 						class="col bg-white rounded-top-4 p-0 d-flex --h-100 justify-content-center align-items-center shadow-custom">
 
 						<!-- Search-->
-						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3 d-flex align-items-center justify-content-stretch" data-aos="fade-top">
+						<div class="flex-fill px-2 border-0 border-action-2 h-100 py-3 d-flex align-items-center justify-content-stretch" data-aos="fade-top">
 							<div class="form-floating w-100">
 								<!-- Search Box -->
 								<!-- <input v-model="searchTerm" type="text"
@@ -77,7 +77,7 @@
 
 						</div>
 						<!-- Filters -->
-						<div class="flex-fill px-2 border-end border-2 border-action-2 h-100 py-3 d-none d-md-block" data-aos="fade-top"
+						<div class="flex-fill px-2 border-start border-end border-2 border-action-2 h-100 py-3 d-none d-md-block" data-aos="fade-top"
 							data-aos-delay="100">
 							<p class="f-12 font-weight-bolder m-0 mt-2"><span class="subline text-action-3 f-xs me-1">Filtrer
 									par </span> Production <span class="fw-medium op-5">{{
@@ -128,7 +128,7 @@
 				</div>
 
 				<!-- Map panel-->
-				<div ref="rowRef" class="row is-resizeable f-w px-4 --min-vh-80 position-relative" style="min-height: 750px;">
+				<div ref="rowRef" class="row is-resizeable f-w px-2 px-md-4 --min-vh-80 position-relative" style="min-height: 750px;">
 
 					<!-- Switch control : absolute-->
 					<div class="position-absolute top-0 start-10 ms-4 mt-4 p-0 zi-5 w-auto" data-aos="fade">

@@ -3,7 +3,7 @@
 Plugin Name: WA RSFP Map VueJS SPA
 Plugin URI: http://www.wilhemarnoldy.fr
 Description: A plugin to print a great search map with real-time filters using VueJS 3 + TS SPA & WP REST API
-Version: 2.0.0
+Version: 2.1.0
 Author: Wilhem Arnoldy
 Author URI: http://www.wilhemarnoldy.fr
 Text Domain: wa-rsfp-mapvuespa
@@ -20,7 +20,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'WA_MAP_VUE_SPA_VERSION', '2.0.0' );
+define( 'WA_MAP_VUE_SPA_VERSION', '2.1.0' );
 
 // Init custom template
 require plugin_dir_path( __FILE__ ) . '/includes/init-template.php';
