@@ -257,7 +257,9 @@
 						class="col resizeable bg-color-layout --bg-action-3 rounded-bottom-4 rounded-bottom-left-0 p-4 --pb-10 mb-0 shadow-list z-10" :class="{ 'ps-12': currentView === 'list' }" >
 
 						<!-- Resizer Handle -->
-						<div class="resizer" @mousedown="startResize"></div>
+						<div class="resizer" @mousedown="startResize">
+							<i class="bi bi-arrows-collapse-vertical fs-4 lh-0"></i>
+						</div>
 
 						<app-get-posts :search-term="searchTerm" :app-filters="mergedFilters"
 							:opentostage-filter="opentostageFilter" :opentovisit-filter="opentovisitFilter"
@@ -773,14 +775,13 @@ const stopResize = () => {
 }
 
 .resizer {
-	width: 8px;
+	width: 24px;
 	cursor: ew-resize;
-	background: #007bff;
-	/* margin: 0 4px; */
+	/* background: #007bff; */
 	position: absolute;
 	height: 24px;
 	top: 0;
-	left: -4px;
+	left: -12px;
 }
 
 </style>
