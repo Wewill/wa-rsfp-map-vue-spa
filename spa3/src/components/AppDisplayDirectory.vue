@@ -11,7 +11,7 @@
 							<div class="h-90-px w-90-px rounded-4 bg-color-layout d-flex flex-center"><i class="bi bi-image text-action-3"></i></div>
 						</div>
 
-						<div v-if="postType.vue_meta.videos" class="absolute position-absolute top-0 h-100 w-100 btn_holder">
+						<div v-if="postType.vue_meta.videos" class="absolute position-absolute top-50 --h-100 w-100 btn_holder">
 							<span class="btn --action-3 color-light play play-xs d-flex flex-center"><i class="bi bi-play-fill h5 m-0 p-0 ms-1 mt-1"></i></span>
 						</div>
 					</div>
