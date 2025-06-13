@@ -140,10 +140,18 @@ function vue_get_post_meta_fields( $post_object, $field_name, $request ) {
 		$f_geolocation_lng 		= get_post_meta( $d_relationships_farm, 'f_geolocation_lng', true );
 	}
 
+	// Get videos
+	$d_medias_videos 			= get_post_meta( $post_id, 'd_medias_video', true );
+	$d_medias_video_links 		= get_post_meta( $post_id, 'd_medias_video_link', true );
+	$d_have_videos 				= !empty($d_medias_videos) || !empty($d_medias_video_links);
+
+	// Get metas
+	$d_knowledge_installation_period = get_post_meta( $post_id, 'd_knowledge_installation_period', true );
+
 	// add categories, custom excerpt, featured image to the api response.
 	// Render
 	$additional_post_data = array(
-		'additionnal_content' => $d_general_subtitle . ' > ' . $d_general_introduction . ' > ' . $d_identity_location,
+		'additionnal_content' => $d_general_subtitle . ' + ' . $d_general_introduction . ' + ' . $d_identity_location . ' + ' . $d_knowledge_installation_period,
 				'custom_excerpt' 	=> wp_trim_words(
 			$post_object['excerpt']['rendered'] != ''?$post_object['excerpt']['rendered']:$d_general_introduction,
 			9,
@@ -184,7 +192,8 @@ function vue_get_post_meta_fields( $post_object, $field_name, $request ) {
 		'opentostage' 		=> !empty($d_stage_opentostage)?true:false,
 		'opentovisit' 		=> !empty($d_stage_opentovisit)?true:false,
 		'label' 			=> $d_identity_label,
-		'farm_title'		=> html_entity_decode( get_the_title( $d_relationships_farm ) ),
+		'farm_title'		=> $d_relationships_farm ? html_entity_decode( get_the_title( $d_relationships_farm ) ) : '',
+		'videos'			=> $d_have_videos,
 		//
 		'errors' 			=> $errors,
 	);

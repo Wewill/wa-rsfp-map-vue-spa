@@ -12,13 +12,13 @@
 		</h6>
 
 		<div class="wrapper position-relative">
-			<div class="h-550-px overflow-y-scroll scrollbar-white me-n3 pe-3">
+			<div class="h-800-px overflow-y-scroll scrollbar-dark me-n3 pe-3">
 				<ul class="list-unstyled card-items">
 					<app-display-thematic v-for="item in filteredResults" :key="item.id" :search-term="searchTerm"
-						:appFilters="appFilters" :item="item" role="article" :collapse-states="{}" />
+						:appFilters="appFilters ?? undefined" @onFilterChange="updateFilters($event)" :item="item" role="article" :collapse-states="{}" />
 				</ul>
 			</div>
-			<div class="position-absolute w-100 h-20-px w-100 bottom-0 left-0 bg-v-gradient-action-3"></div>
+			<div class="position-absolute w-100 h-20-px w-100 bottom-0 left-0 bg-v-gradient-color-bg"></div>
 		</div>
 		<!-- END: Thematics -->
 	</div>
@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, toRefs, onMounted, computed } from 'vue';
 import axios from 'axios';
 import { WpTerms, WpTerm } from '../types/wpTypes'; // Assuming you have a type definition for posts
 import AppDisplayThematic from './AppDisplayThematic.vue';
@@ -37,7 +37,7 @@ import _ from "lodash";
 // Define props with TypeScript
 const props = withDefaults(defineProps<{
 	searchTerm?: string;
-	appFilters?: string[];
+	appFilters?: string[] | undefined;
 }>(), {
 	searchTerm: '',
 	appFilters: () => [],
@@ -47,6 +47,22 @@ const props = withDefaults(defineProps<{
 const apiResponse = ref<string>('');
 const wpTerms = ref<WpTerms>([]); // Use a more specific type if available
 const isDataAvailable = ref<boolean>(false);
+
+// Get props
+const { appFilters } = toRefs(props);
+// Define emit
+const emit = defineEmits(['onFilterChange'])
+
+function updateFilters(filter: string) {
+	console.log('updateFilters::', filter, appFilters.value);
+	// Emit event to parent component
+	if (appFilters.value.includes(filter)) {
+		appFilters.value = appFilters.value.filter((item) => item !== filter);
+	} else {
+		appFilters.value.push(filter);
+	}
+	emit('onFilterChange', appFilters.value);
+}
 
 // Computed property for filtered results
 const filteredResults = computed(() => {
@@ -105,7 +121,7 @@ async function fetchData() {
 async function getTerms(route = 'category', namespace = 'wp/v2') {
 	console.log('getTerms::', route);
 	try {
-		const restURL = window.wpData.rest_url;
+		const restURL = window.wpData?.rest_url;
 		const fields = 'id,slug,name,description,link,count,parent,vue_meta';
 		const perPage = 100; // Maximum allowed per page
 		let page = 1;

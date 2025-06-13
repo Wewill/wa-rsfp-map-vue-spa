@@ -12,14 +12,23 @@
 						class="----text-muted --muted fw-medium op-5 --muted fw-medium op-5"
 						v-if="filteredResults.length === wpPosts.length">{{ wpPosts.length }}</span><span
 						class="--text-muted --muted fw-medium op-5" v-else>{{ filteredResults.length }}+</span></h6>
-				<div class=""><button type="button" class="btn --btn-sm --p-0 --btn-light py-0 px-1 mb-0"><i
-							class="bi bi-plus h3 text-light"></i></button></div>
+				<!-- <div class=""><button type="button" class="btn --btn-sm --p-0 --btn-light py-0 px-1 mb-0"><i
+							class="bi bi-plus h3 text-light"></i></button></div> -->
 			</div>
 
 			<!-- Results -->
-			<div class="wrapper position-relative">
+			<!-- <div class="wrapper position-relative">
 				<div class="h-550-px overflow-y-scroll scrollbar-white me-n3 pe-3">
-					<ul class="list-unstyled card-items d-flex flex-column align-items-center mb-2">
+					<ul class="list-unstyled card-items d-flex flex-column align-items-center mb-2"> -->
+			<!-- <div class="wrapper position-relative">
+				<div class="--h-550-px overflow-x-scroll scrollbar-white --me-n3 --ps-3 --pe-0 container-xl"> -->
+
+			<!-- Results in a grid w/ x scroll : https://codepen.io/WAGxW/pen/emmORzM -->
+			<!-- <div class="grid-scroll-wrapper border rounded"> -->
+
+			<!-- Results in a grid w/ x scroll : https://codepen.io/WAGxW/pen/emmORzM -->
+			<div class="overflow-y-hidden overflow-x-scroll scrollbar-dark ps-2 ms-n2"><!-- ps-2 ms-n2 prevents overflow for animated thumbs-->
+					<ul class="grid-list p-0 m-0 list-unstyled card-items align-items-center mb-2">
 
 						<!-- AppDisplayDirectory Component -->
 						<app-display-directory v-for="postType in filteredResults" :key="postType.id"
@@ -33,8 +42,8 @@
 					<!-- <div class="d-flex flex-center"><button type="button" class="btn"><i class="bi bi-plus-lg h3 text-light"></i></button></div> -->
 
 				</div>
-				<div class="position-absolute w-100 h-20-px w-100 bottom-0 left-0 bg-v-gradient-action-3"></div>
-			</div>
+				<div class="position-absolute w-100 h-20-px w-100 bottom-0 left-0 bg-v-gradient-action-3 d-none"></div>
+			<!-- </div> -->
 
 		</template>
 
@@ -195,7 +204,7 @@ async function getPosts(route = 'posts', namespace = 'wp/v2') {
 	console.log('getPosts::', route)
 	try {
 		const postsPerPage = 100;
-		const restURL = window.wpData.rest_url;
+		const restURL = window.wpData?.rest_url;
 		const fields = 'id,title,link,vue_meta'; //content,author,parent,menu_order
 
 		const response = await axios(`${restURL}/${namespace}/${route}?per_page=${postsPerPage}&page=1&_fields=${fields}`);
@@ -211,4 +220,22 @@ async function getPosts(route = 'posts', namespace = 'wp/v2') {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+    /* .grid-scroll-wrapper {
+      overflow-x: auto;
+      padding: 1rem;
+    } */
+
+    .grid-list {
+      display: grid;
+      grid-auto-flow: column;
+      grid-template-rows: repeat(4, 1fr); /* 4 éléments en hauteur */
+      gap: 0; /*.5rem;*/
+	  column-gap: 1.5rem;
+    }
+
+    .grid-list li {
+		min-width: 350px;
+		max-width: 450px;
+    }
+  </style>

@@ -1,12 +1,15 @@
 <template>
 	<div v-if="isDataAvailable" class="rest-data">
 		<!-- BEGIN: Geographies -->
-		<p v-if="displayTitle" class="f-12 font-weight-bold m-0">Géographie <span
-				class="--text-muted --muted fw-medium op-5" v-if="filteredResults.length === wpTerms.length">{{ wpTerms.length
-				}}</span><span class="--text-muted --muted fw-medium op-5" v-else>{{ filteredResults.length }}+</span></p>
+		<p v-if="displayTitle" class="f-12 font-weight-bolder m-0 mt-2">Géographie <span
+				class="--text-muted --muted fw-medium op-5" v-if="filteredResults.length === wpTerms.length">{{
+					wpTerms.length
+				}}</span><span class="--text-muted --muted fw-medium op-5" v-else>{{ filteredResults.length }}+</span>
+		</p>
 
-		<Multiselect class="multiselect-tag-geography" v-model="selectedWpTerms" :options="filteredResults" mode="tags"
-			:close-on-select="false" :searchable="true" placeholder="Filtrer" @click.stop.prevent />
+		<Multiselect class="multiselect-tag-geography multiselect-flat" v-model="selectedWpTerms"
+			:options="filteredResults" mode="tags" :close-on-select="false" :searchable="true" placeholder="Ardennes, Marne..."
+			@click.stop.prevent />
 
 		<!-- END: Geographies -->
 	</div><!-- .rest-data -->
@@ -98,7 +101,7 @@ async function fetchData() {
 async function getTerms(route = 'category', namespace = 'wp/v2') {
 	console.log('getTerms::', route);
 	try {
-		const restURL = window.wpData.rest_url;
+		const restURL = window.wpData?.rest_url;
 		const fields = 'id,slug,name,description,link,count,vue_meta';
 		const perPage = 100; // Maximum allowed per page
 		let page = 1;
