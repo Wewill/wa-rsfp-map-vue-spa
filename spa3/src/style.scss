@@ -796,10 +796,15 @@ Project : Multiselect custom styles
 		}
 
 		.multiselect-placeholder {
-			font-size: 1.1rem !important;
 			font-weight: 500;
 			padding: 0;
 			opacity: .7;
+		}
+
+		@media (max-width: 1279px) {
+			.multiselect-placeholder {
+				font-size: 1.1rem !important;
+			}
 		}
 
 		&.is-active {
