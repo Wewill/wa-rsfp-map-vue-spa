@@ -428,7 +428,7 @@ const url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const attribution = '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>';
 const showTileLayer = ref<Boolean>(false);
 //const franceDepartments = 'https://rawgit.com/gregoiredavid/france-geojson/master/departements-version-simplifiee.geojson'; // Not available anymore
-const franceDepartments = '/departements-version-simplifiee.geojson';
+const franceDepartments = window.wpData?.template_directory_uri + '/spa3/dist/departements-version-simplifiee.geojson';
 const zoom = ref<number>(6);
 const center = ref<[number, number]>([47.665496, 2.428034])
 const mapLoaded = ref<Boolean>(false);
